@@ -1,7 +1,7 @@
 import React from 'react';
 import { 
   Home, Bot, Sparkles, GraduationCap, Megaphone, Lock, Layout, X, Settings,
-  FileText, Link, HelpCircle, Shield, Award, BookOpen, MessageSquare, Tool
+  FileText, Link, HelpCircle, Shield, Award, BookOpen, MessageSquare, Wrench
 } from 'lucide-react';
 
 // Mapping string names from Firestore to Lucide components
@@ -18,7 +18,7 @@ export const iconMap = {
   Award,
   BookOpen,
   MessageSquare,
-  Tool
+  Tool: Wrench
 };
 
 const Sidebar = ({ 
