@@ -97,7 +97,9 @@
 }
 
 /* Base body tweaks */
-body {
+html, body {
   overflow-x: hidden;
+}
+body {
   font-family: 'Rubik', 'Outfit', sans-serif;
 }

@@ -97,7 +97,7 @@ const Sidebar = ({
       {/* Sidebar Container */}
       <aside className={`fixed inset-y-0 right-0 w-72 z-50 transform transition-all duration-300 ease-out lg:translate-x-0 lg:static lg:block glass-panel ${
         darkMode ? 'bg-[#0b0f17] border-l border-slate-900' : 'bg-white border-l border-slate-200'
-      } ${sidebarOpen ? 'translate-x-0 shadow-xl' : 'translate-x-full rtl:-translate-x-full'}`}>
+      } ${sidebarOpen ? 'translate-x-0 shadow-xl' : 'translate-x-full lg:translate-x-0'}`}>
         
         <div className="h-full flex flex-col p-6 relative">
           {/* Mobile Close Button */}
