@@ -25,12 +25,18 @@ const Sidebar = ({
     const Icon = cat.icon;
     
     // Custom glowing color classes based on active state
-    const activeColorClasses = {
+    const activeColorClasses = darkMode ? {
       slate: 'bg-slate-500/20 text-slate-300 border-slate-500/30 shadow-[0_0_15px_rgba(148,163,184,0.15)]',
       blue: 'bg-blue-600 text-white shadow-[0_0_20px_rgba(37,99,235,0.3)] border-blue-500/30',
       cyan: 'bg-cyan-500 text-slate-950 shadow-[0_0_20px_rgba(6,182,212,0.4)] border-cyan-400/30 font-black',
       amber: 'bg-amber-500 text-slate-950 shadow-[0_0_20px_rgba(245,158,11,0.3)] border-amber-400/30 font-black',
       purple: 'bg-purple-600 text-white shadow-[0_0_20px_rgba(147,51,234,0.3)] border-purple-500/30'
+    } : {
+      slate: 'bg-slate-200 text-slate-800 border-slate-300/60 shadow-[0_4px_12px_rgba(148,163,184,0.1)]',
+      blue: 'bg-blue-600 text-white shadow-[0_4px_15px_rgba(37,99,235,0.2)] border-blue-500/20',
+      cyan: 'bg-cyan-600 text-white shadow-[0_4px_15px_rgba(8,145,178,0.2)] border-cyan-500/20 font-black',
+      amber: 'bg-amber-500 text-slate-950 shadow-[0_4px_15px_rgba(245,158,11,0.15)] border-amber-500/25 font-black',
+      purple: 'bg-purple-600 text-white shadow-[0_4px_15px_rgba(147,51,234,0.2)] border-purple-500/20'
     };
 
     return (

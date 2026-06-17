@@ -20,12 +20,22 @@ const About = ({ setActiveTab, items, darkMode }) => {
   };
 
   const getCategoryTheme = (id) => {
-    switch(id) {
-      case 'internal': return { border: 'hover:border-blue-500/50', iconBg: 'bg-blue-500/10 text-blue-400 group-hover:bg-blue-600 group-hover:text-white shadow-blue-500/10', colorText: 'text-blue-400', shadow: 'hover:shadow-blue-500/5' };
-      case 'tool': return { border: 'hover:border-cyan-500/50', iconBg: 'bg-cyan-500/10 text-cyan-400 group-hover:bg-cyan-500 group-hover:text-slate-950 shadow-cyan-500/10', colorText: 'text-cyan-400', shadow: 'hover:shadow-cyan-500/5' };
-      case 'training': return { border: 'hover:border-amber-500/50', iconBg: 'bg-amber-500/10 text-amber-400 group-hover:bg-amber-500 group-hover:text-slate-950 shadow-amber-500/10', colorText: 'text-amber-400', shadow: 'hover:shadow-amber-500/5' };
-      case 'updates': return { border: 'hover:border-purple-500/50', iconBg: 'bg-purple-500/10 text-purple-400 group-hover:bg-purple-600 group-hover:text-white shadow-purple-500/10', colorText: 'text-purple-400', shadow: 'hover:shadow-purple-500/5' };
-      default: return { border: 'hover:border-slate-500/30', iconBg: 'bg-slate-500/10 text-slate-400', colorText: 'text-slate-400', shadow: '' };
+    if (darkMode) {
+      switch(id) {
+        case 'internal': return { border: 'hover:border-blue-500/50', iconBg: 'bg-blue-500/10 text-blue-400 group-hover:bg-blue-600 group-hover:text-white shadow-blue-500/10', colorText: 'text-blue-400', shadow: 'hover:shadow-blue-500/5' };
+        case 'tool': return { border: 'hover:border-cyan-500/50', iconBg: 'bg-cyan-500/10 text-cyan-400 group-hover:bg-cyan-50 group-hover:text-slate-950 shadow-cyan-500/10', colorText: 'text-cyan-400', shadow: 'hover:shadow-cyan-500/5' };
+        case 'training': return { border: 'hover:border-amber-500/50', iconBg: 'bg-amber-500/10 text-amber-400 group-hover:bg-amber-500 group-hover:text-slate-950 shadow-amber-500/10', colorText: 'text-amber-400', shadow: 'hover:shadow-amber-500/5' };
+        case 'updates': return { border: 'hover:border-purple-500/50', iconBg: 'bg-purple-500/10 text-purple-400 group-hover:bg-purple-600 group-hover:text-white shadow-purple-500/10', colorText: 'text-purple-400', shadow: 'hover:shadow-purple-500/5' };
+        default: return { border: 'hover:border-slate-500/30', iconBg: 'bg-slate-500/10 text-slate-400', colorText: 'text-slate-400', shadow: '' };
+      }
+    } else {
+      switch(id) {
+        case 'internal': return { border: 'hover:border-blue-500/30', iconBg: 'bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white shadow-blue-500/5', colorText: 'text-blue-600', shadow: 'hover:shadow-blue-500/5' };
+        case 'tool': return { border: 'hover:border-cyan-500/30', iconBg: 'bg-cyan-50 text-cyan-700 group-hover:bg-cyan-600 group-hover:text-white shadow-cyan-500/5', colorText: 'text-cyan-700', shadow: 'hover:shadow-cyan-500/5' };
+        case 'training': return { border: 'hover:border-amber-500/30', iconBg: 'bg-amber-50 text-amber-700 group-hover:bg-amber-500 group-hover:text-slate-950 shadow-amber-500/5', colorText: 'text-amber-700', shadow: 'hover:shadow-amber-500/5' };
+        case 'updates': return { border: 'hover:border-purple-500/30', iconBg: 'bg-purple-50 text-purple-600 group-hover:bg-purple-600 group-hover:text-white shadow-purple-500/5', colorText: 'text-purple-600', shadow: 'hover:shadow-purple-500/5' };
+        default: return { border: 'hover:border-slate-500/20', iconBg: 'bg-slate-100 text-slate-600', colorText: 'text-slate-600', shadow: '' };
+      }
     }
   };
 

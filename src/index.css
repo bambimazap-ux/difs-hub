@@ -50,10 +50,11 @@
 }
 
 .light .glass-card {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(15, 23, 42, 0.04);
+  border: 1px solid rgba(15, 23, 42, 0.09);
+  box-shadow: 0 8px 30px -5px rgba(15, 23, 42, 0.04);
 }
 
 .glass-card:hover {
@@ -63,8 +64,9 @@
 }
 
 .light .glass-card:hover {
-  box-shadow: 0 20px 40px -20px rgba(99, 102, 241, 0.15);
-  border-color: rgba(99, 102, 241, 0.2);
+  background: #ffffff;
+  box-shadow: 0 20px 40px -15px rgba(99, 102, 241, 0.12);
+  border-color: rgba(99, 102, 241, 0.35);
 }
 
 /* Glowing Border for Featured */

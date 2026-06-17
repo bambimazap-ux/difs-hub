@@ -47,12 +47,22 @@ const ItemCard = ({
 
   // Get color configurations
   const getCategoryTheme = (cat) => {
-    switch (cat) {
-      case 'internal': return { text: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/20' };
-      case 'tool': return { text: 'text-cyan-400', bg: 'bg-cyan-500/10', border: 'border-cyan-500/20' };
-      case 'training': return { text: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20' };
-      case 'updates': return { text: 'text-purple-400', bg: 'bg-purple-500/10', border: 'border-purple-500/20' };
-      default: return { text: 'text-slate-400', bg: 'bg-slate-500/10', border: 'border-slate-500/20' };
+    if (darkMode) {
+      switch (cat) {
+        case 'internal': return { text: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/20' };
+        case 'tool': return { text: 'text-cyan-400', bg: 'bg-cyan-500/10', border: 'border-cyan-500/20' };
+        case 'training': return { text: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20' };
+        case 'updates': return { text: 'text-purple-400', bg: 'bg-purple-500/10', border: 'border-purple-500/20' };
+        default: return { text: 'text-slate-400', bg: 'bg-slate-500/10', border: 'border-slate-500/20' };
+      }
+    } else {
+      switch (cat) {
+        case 'internal': return { text: 'text-blue-700', bg: 'bg-blue-50 border border-blue-200/60', border: 'border-blue-200/60' };
+        case 'tool': return { text: 'text-cyan-800', bg: 'bg-cyan-50 border border-cyan-200/60', border: 'border-cyan-200/60' };
+        case 'training': return { text: 'text-amber-800', bg: 'bg-amber-50 border border-amber-200/60', border: 'border-amber-200/60' };
+        case 'updates': return { text: 'text-purple-700', bg: 'bg-purple-50 border border-purple-200/60', border: 'border-purple-200/60' };
+        default: return { text: 'text-slate-700', bg: 'bg-slate-50 border border-slate-200/60', border: 'border-slate-200/60' };
+      }
     }
   };
 
