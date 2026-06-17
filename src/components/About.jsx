@@ -75,14 +75,14 @@ const About = ({
               : 'bg-blue-50 text-blue-700 border-blue-100 shadow-sm'
           }`}>
             <Sparkles size={11} />
-            <span>מדור מחקר ופיתוח</span>
+            <span>DIFS Innovation</span>
           </div>
           
           <h2 className="text-2xl md:text-4xl font-black tracking-tight leading-tight text-slate-900 dark:text-white">
-            פורטל החדשנות והטכנולוגיה - מז"פ
+            מרכז החדשנות והבינה המלאכותית
           </h2>
           <p className="text-xs md:text-sm font-medium leading-relaxed text-slate-500 dark:text-slate-405">
-            הבית הדינמי לריכוז כלי בינה מלאכותית, מדריכים, מחקרים פורנזיים ונהלי עבודה מאושרים עבור חטיבת הזיהוי הפלילי.
+            הפלטפורמה המרכזית של החטיבה לזיהוי פלילי המאגדת בוטים מתקדמים, כלי AI חיצוניים ומאגר הדרכות מקצועי.
           </p>
         </div>
       </div>
