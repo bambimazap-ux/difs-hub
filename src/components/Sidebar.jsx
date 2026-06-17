@@ -80,7 +80,7 @@ const Sidebar = ({
       {/* Sidebar Container */}
       <aside className={`fixed inset-y-0 right-0 w-72 z-50 transform transition-all duration-300 ease-out lg:translate-x-0 lg:static lg:block glass-panel ${
         darkMode ? 'bg-[#0b0f17]/95 border-l border-slate-900/50' : 'bg-white/95 border-l border-slate-200'
-      } ${sidebarOpen ? 'translate-x-0 shadow-2xl' : 'translate-x-full'}`}>
+      } ${sidebarOpen ? 'translate-x-0 shadow-2xl' : 'translate-x-full rtl:-translate-x-full'}`}>
         
         <div className="h-full flex flex-col p-6 relative">
           {/* Mobile Close Button */}
