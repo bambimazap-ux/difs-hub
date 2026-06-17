@@ -281,7 +281,7 @@ const App = () => {
 
   return (
     <div className={`flex h-screen overflow-hidden transition-colors duration-300 ${
-      darkMode ? 'bg-[#080b11] text-slate-100' : 'bg-gradient-to-tr from-slate-100 via-[#f8fafc] to-[#eff6ff]/30 text-slate-900'
+      darkMode ? 'bg-gradient-to-br from-[#030712] via-[#090e1a] to-[#030712] text-slate-100' : 'bg-gradient-to-tr from-slate-100 via-[#f8fafc] to-[#eff6ff]/30 text-slate-900'
     }`} dir="rtl">
       
       {/* Decorative ambient background glowing orbs */}

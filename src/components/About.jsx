@@ -64,7 +64,11 @@ const About = ({ setActiveTab, items, darkMode }) => {
             <Sparkles size={12} className="animate-pulse" />
             <span>מרכז המחקר והחדשנות של מז"פ</span>
           </div>
-          <h2 className="text-3xl md:text-5xl font-black tracking-tight leading-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent dark:from-white dark:via-slate-200 dark:to-slate-500">
+          <h2 className={`text-3xl md:text-5xl font-black tracking-tight leading-tight bg-gradient-to-r bg-clip-text text-transparent ${
+            darkMode 
+              ? 'from-cyan-400 via-blue-400 to-purple-400' 
+              : 'from-slate-900 via-indigo-950 to-blue-900'
+          }`}>
             DIFS AI Innovation Hub
           </h2>
           <p className={`text-base md:text-lg font-medium leading-relaxed max-w-2xl ${

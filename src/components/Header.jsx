@@ -14,7 +14,7 @@ const Header = ({
   return (
     <header className={`h-20 flex items-center justify-between px-8 border-b z-20 transition-all duration-300 ${
       darkMode 
-        ? 'bg-[#0b0f17]/60 border-slate-800/80 text-white' 
+        ? 'bg-[#030712]/50 border-slate-900/40 text-white' 
         : 'bg-white/60 border-slate-200/80 text-slate-900'
     } backdrop-blur-md sticky top-0`}>
       
