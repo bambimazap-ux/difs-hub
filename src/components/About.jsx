@@ -1,128 +1,257 @@
-import React from 'react';
-import { Bot, Sparkles, GraduationCap, Megaphone, ArrowLeft } from 'lucide-react';
-import { CATEGORIES } from './Sidebar.jsx';
+import React, { useMemo } from 'react';
+import { Sparkles, MessageSquare, Megaphone, ArrowLeft, ArrowUpRight, Star, Clock, HelpCircle } from 'lucide-react';
+import { iconMap } from './Sidebar.jsx';
 
-const About = ({ setActiveTab, items, darkMode }) => {
-  // Calculate category counts
-  const internalCount = items.filter(i => i.category === 'internal').length;
-  const toolCount = items.filter(i => i.category === 'tool').length;
-  const trainingCount = items.filter(i => i.category === 'training').length;
-  const updatesCount = items.filter(i => i.category === 'updates').length;
+const About = ({ 
+  setActiveTab, 
+  items = [], 
+  darkMode, 
+  whatsappUrl = 'https://chat.whatsapp.com/default-placeholder-link', 
+  announcement = '', 
+  announcementActive = false, 
+  categories = [], 
+  feedbacks = {} 
+}) => {
 
+  // Calculate item count per category dynamically
   const getCount = (id) => {
-    switch(id) {
-      case 'internal': return internalCount;
-      case 'tool': return toolCount;
-      case 'training': return trainingCount;
-      case 'updates': return updatesCount;
-      default: return 0;
-    }
+    return items.filter(i => i.category === id).length;
   };
 
-  const getCategoryTheme = (id) => {
+  const getCategoryTheme = (color) => {
     if (darkMode) {
-      switch(id) {
-        case 'internal': return { border: 'hover:border-blue-500/50', iconBg: 'bg-blue-500/10 text-blue-400 group-hover:bg-blue-600 group-hover:text-white shadow-blue-500/10', colorText: 'text-blue-400', shadow: 'hover:shadow-blue-500/5' };
-        case 'tool': return { border: 'hover:border-cyan-500/50', iconBg: 'bg-cyan-500/10 text-cyan-400 group-hover:bg-cyan-50 group-hover:text-slate-950 shadow-cyan-500/10', colorText: 'text-cyan-400', shadow: 'hover:shadow-cyan-500/5' };
-        case 'training': return { border: 'hover:border-amber-500/50', iconBg: 'bg-amber-500/10 text-amber-400 group-hover:bg-amber-500 group-hover:text-slate-950 shadow-amber-500/10', colorText: 'text-amber-400', shadow: 'hover:shadow-amber-500/5' };
-        case 'updates': return { border: 'hover:border-purple-500/50', iconBg: 'bg-purple-500/10 text-purple-400 group-hover:bg-purple-600 group-hover:text-white shadow-purple-500/10', colorText: 'text-purple-400', shadow: 'hover:shadow-purple-500/5' };
-        default: return { border: 'hover:border-slate-500/30', iconBg: 'bg-slate-500/10 text-slate-400', colorText: 'text-slate-400', shadow: '' };
+      switch(color) {
+        case 'blue': return { border: 'hover:border-blue-500/50', iconBg: 'bg-blue-500/10 text-blue-400 group-hover:bg-blue-600 group-hover:text-white', colorText: 'text-blue-400', shadow: 'hover:shadow-blue-500/5' };
+        case 'cyan': return { border: 'hover:border-cyan-500/50', iconBg: 'bg-cyan-500/10 text-cyan-400 group-hover:bg-cyan-600 group-hover:text-slate-950', colorText: 'text-cyan-400', shadow: 'hover:shadow-cyan-500/5' };
+        case 'amber': return { border: 'hover:border-amber-500/50', iconBg: 'bg-amber-500/10 text-amber-400 group-hover:bg-amber-600 group-hover:text-slate-950', colorText: 'text-amber-400', shadow: 'hover:shadow-amber-500/5' };
+        case 'purple': return { border: 'hover:border-purple-500/50', iconBg: 'bg-purple-500/10 text-purple-400 group-hover:bg-purple-600 group-hover:text-white', colorText: 'text-purple-400', shadow: 'hover:shadow-purple-500/5' };
+        default: return { border: 'hover:border-slate-500/50', iconBg: 'bg-slate-500/10 text-slate-400 group-hover:bg-slate-700 group-hover:text-white', colorText: 'text-slate-400', shadow: '' };
       }
     } else {
-      switch(id) {
-        case 'internal': return { border: 'hover:border-blue-500/30', iconBg: 'bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white shadow-blue-500/5', colorText: 'text-blue-600', shadow: 'hover:shadow-blue-500/5' };
-        case 'tool': return { border: 'hover:border-cyan-500/30', iconBg: 'bg-cyan-50 text-cyan-700 group-hover:bg-cyan-600 group-hover:text-white shadow-cyan-500/5', colorText: 'text-cyan-700', shadow: 'hover:shadow-cyan-500/5' };
-        case 'training': return { border: 'hover:border-amber-500/30', iconBg: 'bg-amber-50 text-amber-700 group-hover:bg-amber-500 group-hover:text-slate-950 shadow-amber-500/5', colorText: 'text-amber-700', shadow: 'hover:shadow-amber-500/5' };
-        case 'updates': return { border: 'hover:border-purple-500/30', iconBg: 'bg-purple-50 text-purple-600 group-hover:bg-purple-600 group-hover:text-white shadow-purple-500/5', colorText: 'text-purple-600', shadow: 'hover:shadow-purple-500/5' };
-        default: return { border: 'hover:border-slate-500/20', iconBg: 'bg-slate-100 text-slate-600', colorText: 'text-slate-600', shadow: '' };
+      switch(color) {
+        case 'blue': return { border: 'hover:border-blue-500/30', iconBg: 'bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white', colorText: 'text-blue-600', shadow: 'hover:shadow-blue-500/5' };
+        case 'cyan': return { border: 'hover:border-cyan-500/30', iconBg: 'bg-cyan-50 text-cyan-700 group-hover:bg-cyan-600 group-hover:text-white', colorText: 'text-cyan-700', shadow: 'hover:shadow-cyan-500/5' };
+        case 'amber': return { border: 'hover:border-amber-500/30', iconBg: 'bg-amber-50 text-amber-700 group-hover:bg-amber-600 group-hover:text-slate-950', colorText: 'text-amber-700', shadow: 'hover:shadow-amber-500/5' };
+        case 'purple': return { border: 'hover:border-purple-500/30', iconBg: 'bg-purple-50 text-purple-600 group-hover:bg-purple-600 group-hover:text-white', colorText: 'text-purple-600', shadow: 'hover:shadow-purple-500/5' };
+        default: return { border: 'hover:border-slate-500/20', iconBg: 'bg-slate-100 text-slate-600 group-hover:bg-slate-600 group-hover:text-white', colorText: 'text-slate-600', shadow: '' };
       }
     }
   };
 
+  // 3 Top Rated items
+  const trendingTools = useMemo(() => {
+    return items
+      .map(item => {
+        const feedback = feedbacks[item.id] || { totalRating: 0, count: 0 };
+        const avgRating = feedback.count > 0 ? feedback.totalRating / feedback.count : 0;
+        return { ...item, avgRating, feedbackCount: feedback.count };
+      })
+      .filter(item => item.category !== 'updates' && item.avgRating > 0)
+      .sort((a, b) => b.avgRating - a.avgRating || b.feedbackCount - a.feedbackCount)
+      .slice(0, 3);
+  }, [items, feedbacks]);
+
+  // 3 Most Recently Updated tools
+  const recentTools = useMemo(() => {
+    return items
+      .filter(item => item.category !== 'updates')
+      .sort((a, b) => new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0))
+      .slice(0, 3);
+  }, [items]);
+
   return (
-    <div className="animate-in fade-in duration-700 w-full flex flex-col justify-start lg:justify-center min-h-full max-w-6xl mx-auto space-y-10 pb-16 relative">
+    <div className="animate-in fade-in duration-500 w-full flex flex-col justify-start max-w-5xl mx-auto space-y-8 pb-16 relative">
       
       {/* Premium Hero Banner */}
-      <div className={`relative overflow-hidden rounded-[2.5rem] p-10 md:p-14 border transition-all duration-500 ${
+      <div className={`relative overflow-hidden rounded-[2rem] p-8 md:p-12 border transition-all duration-300 ${
         darkMode 
-          ? 'bg-gradient-to-br from-slate-950 via-[#0e1626] to-[#080d19] border-slate-800/80 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)]' 
-          : 'bg-gradient-to-br from-indigo-50 via-white to-cyan-50 text-slate-900 border-slate-200/60 shadow-xl shadow-slate-200/20'
+          ? 'bg-slate-900 border-slate-800/80 shadow-lg' 
+          : 'bg-gradient-to-br from-slate-50 via-white to-slate-50 text-slate-900 border-slate-200/80 shadow-md shadow-slate-200/10'
       }`}>
-        {/* Dynamic mesh graphics behind Hero */}
-        <div className="absolute inset-0 pointer-events-none opacity-20">
-          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-cyan-500/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3"></div>
-          <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-purple-500/25 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/3"></div>
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:24px_24px]"></div>
-        </div>
-        
-        <div className="relative z-10 flex flex-col items-center text-center max-w-3xl mx-auto space-y-6">
-          <div className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border transition-all duration-300 ${
+        <div className="relative z-10 flex flex-col items-center text-center max-w-2xl mx-auto space-y-5">
+          <div className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider border transition-all duration-300 ${
             darkMode 
-              ? 'bg-cyan-500/10 text-cyan-300 border-cyan-500/20 shadow-[0_0_15px_rgba(6,182,212,0.1)]' 
-              : 'bg-indigo-50 text-indigo-700 border-indigo-100 shadow-sm'
+              ? 'bg-blue-500/10 text-blue-300 border-blue-500/20' 
+              : 'bg-blue-50 text-blue-700 border-blue-100 shadow-sm'
           }`}>
-            <Sparkles size={12} className="animate-pulse" />
-            <span>מרכז המחקר והחדשנות של מז"פ</span>
+            <Sparkles size={12} />
+            <span>מדור מחקר ופיתוח</span>
           </div>
-          <h2 className={`text-3xl md:text-5xl font-black tracking-tight leading-tight bg-gradient-to-r bg-clip-text text-transparent ${
-            darkMode 
-              ? 'from-cyan-400 via-blue-400 to-purple-400' 
-              : 'from-slate-900 via-indigo-950 to-blue-900'
-          }`}>
-            DIFS AI Innovation Hub
+          
+          <h2 className="text-3xl md:text-4xl font-black tracking-tight leading-tight text-slate-900 dark:text-white">
+            פורטל החדשנות והטכנולוגיה - מז"פ
           </h2>
-          <p className={`text-base md:text-lg font-medium leading-relaxed max-w-2xl ${
-            darkMode ? 'text-slate-400' : 'text-slate-600'
-          }`}>
-            הפלטפורמה המרכזית של החטיבה לזיהוי פלילי המרכזת פיתוחים ייעודיים, כלי בינה מלאכותית מתקדמים ומאגר הדרכות לשיפור ומקסום היכולות הפורנזיות.
+          <p className="text-xs md:text-sm font-medium leading-relaxed text-slate-500 dark:text-slate-400">
+            הבית הדינמי לריכוז כלי בינה מלאכותית, מדריכים, מחקרים פורנזיים ונהלי עבודה מאושרים עבור חטיבת הזיהוי הפלילי.
           </p>
         </div>
       </div>
 
-      {/* Categories Grid (Interactive Counters) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-        {CATEGORIES.slice(1).map((cat) => {
-          const theme = getCategoryTheme(cat.id);
-          const Icon = cat.icon;
-          const count = getCount(cat.id);
+      {/* Announcement Banner (If Active) */}
+      {announcementActive && announcement && (
+        <div className={`p-4 rounded-2xl border flex items-center gap-3 animate-pulse ${
+          darkMode ? 'bg-blue-950/20 border-blue-900/50 text-blue-300' : 'bg-blue-50 border-blue-200 text-blue-800'
+        }`}>
+          <Megaphone size={16} className="shrink-0 text-blue-500" />
+          <p className="text-xs font-bold text-right w-full leading-relaxed">{announcement}</p>
+        </div>
+      )}
 
-          return (
-            <div 
-              key={cat.id}
-              onClick={() => setActiveTab(cat.id)} 
-              className={`cursor-pointer p-6 rounded-[2.2rem] border glass-card transition-all duration-300 group relative overflow-hidden ${theme.border} ${theme.shadow}`}
-            >
-              {/* Card light decoration */}
-              <div className="absolute inset-0 bg-gradient-to-br from-white/0 to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-              
-              <div className="flex justify-between items-start mb-6">
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500 shadow-md ${theme.iconBg}`}>
-                  <Icon size={22} />
+      {/* WhatsApp Forum Card Widget */}
+      <div className={`p-6 rounded-[2rem] border flex flex-col md:flex-row justify-between items-center gap-6 ${
+        darkMode 
+          ? 'bg-slate-900/40 border-slate-800' 
+          : 'bg-white border-slate-200 shadow-sm'
+      }`}>
+        <div className="flex gap-4 items-start text-right">
+          <div className={`p-3 rounded-2xl ${darkMode ? 'bg-indigo-500/10 text-indigo-400' : 'bg-indigo-50 text-indigo-700'}`}>
+            <MessageSquare size={22} />
+          </div>
+          <div className="space-y-1">
+            <h3 className="text-sm font-bold text-slate-800 dark:text-white">הפורום המקצועי של מז"פ בוואטסאפ</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xl leading-relaxed">
+              קבוצת הדיונים הפנימית של החטיבה לשיתוף פרומפטים מנצחים, התייעצות לגבי כלי AI ותמיכה טכנית הדדית בזמן אמת.
+            </p>
+          </div>
+        </div>
+        <a 
+          href={whatsappUrl} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className={`px-5 py-3 rounded-xl font-bold text-xs whitespace-nowrap transition-all shadow-sm flex items-center gap-2 ${
+            darkMode ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-600/5' : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-600/10'
+          }`}
+        >
+          <span>הצטרפות לפורום ב-WhatsApp</span>
+          <ArrowUpRight size={14} />
+        </a>
+      </div>
+
+      {/* Categories Grid (Interactive Navigation Cards) */}
+      <div className="space-y-3">
+        <h3 className="text-sm font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest px-1">קטגוריות ותוכן</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {categories.map((cat) => {
+            const theme = getCategoryTheme(cat.color);
+            const Icon = iconMap[cat.iconName] || HelpCircle;
+            const count = getCount(cat.id);
+
+            return (
+              <div 
+                key={cat.id}
+                onClick={() => setActiveTab(cat.id)} 
+                className={`cursor-pointer p-6 rounded-[2rem] border glass-card transition-all duration-300 group relative ${theme.border} ${theme.shadow}`}
+              >
+                <div className="flex justify-between items-start mb-6">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 shadow-sm ${theme.iconBg}`}>
+                    <Icon size={18} />
+                  </div>
+                  <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-lg transition-all ${
+                    darkMode 
+                      ? 'bg-slate-800 text-slate-400 group-hover:bg-slate-700 group-hover:text-white' 
+                      : 'bg-slate-100 text-slate-500 group-hover:bg-slate-200 group-hover:text-slate-800'
+                  }`}>
+                    {count} פריטים
+                  </span>
                 </div>
-                <span className={`text-xs font-black px-3 py-1 rounded-xl transition-all duration-300 ${
-                  darkMode 
-                    ? 'bg-slate-800/80 text-slate-300 group-hover:bg-cyan-500/20 group-hover:text-cyan-300 border border-slate-700/50' 
-                    : 'bg-slate-100 text-slate-600 group-hover:bg-indigo-50 group-hover:text-indigo-600 border border-slate-200'
-                }`}>
-                  {count} {count === 1 ? 'פריט' : 'פריטים'}
+                
+                <h3 className="text-sm font-black mb-1.5 text-slate-800 dark:text-white">
+                  {cat.label}
+                </h3>
+                <p className="text-slate-400 dark:text-slate-500 leading-relaxed text-[11px] mb-5 h-8 line-clamp-2">
+                  {cat.subtitle}
+                </p>
+                
+                <span className={`text-[10px] font-black flex items-center gap-1 group-hover:gap-2 transition-all ${theme.colorText}`}>
+                  <span>פתח מאגר</span>
+                  <ArrowLeft size={12} className="transform group-hover:-translate-x-0.5 transition-transform" />
                 </span>
               </div>
-              
-              <h3 className="text-lg font-black mb-2 transition-colors duration-300 text-slate-800 dark:text-white group-hover:text-slate-950 dark:group-hover:text-white">
-                {cat.label}
-              </h3>
-              <p className="text-slate-500 dark:text-slate-400 leading-relaxed text-xs mb-5 h-10 line-clamp-2">
-                {cat.subtitle}. כלי עזר ומאגרי מידע מותאמים אישית.
-              </p>
-              
-              <span className={`text-xs font-black flex items-center gap-1 group-hover:gap-2 transition-all duration-300 ${theme.colorText}`}>
-                <span>פתח מאגר</span>
-                <ArrowLeft size={14} className="transform group-hover:-translate-x-1 transition-transform" />
-              </span>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
+
+      {/* Dashboard Sub-widgets: Trending vs Recent */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+        {/* Top-Rated / Featured */}
+        <div className={`p-6 rounded-[2rem] border ${
+          darkMode ? 'bg-slate-900/20 border-slate-800/80' : 'bg-white border-slate-200 shadow-sm'
+        }`}>
+          <div className="flex items-center gap-2 mb-4">
+            <Star size={16} className="text-amber-500" />
+            <h3 className="text-sm font-black text-slate-800 dark:text-white">כלים מובילים במעבדות</h3>
+          </div>
+          
+          <div className="space-y-3">
+            {trendingTools.map((tool) => (
+              <a 
+                href={tool.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                key={tool.id} 
+                className={`flex justify-between items-center p-3 rounded-xl border transition-all ${
+                  darkMode 
+                    ? 'bg-slate-900/30 border-slate-800/60 hover:bg-slate-800/40 hover:border-slate-700' 
+                    : 'bg-slate-50 border-slate-100 hover:bg-slate-100/50 hover:border-slate-200'
+                }`}
+              >
+                <div className="text-right">
+                  <div className="text-xs font-bold text-slate-800 dark:text-white">{tool.title}</div>
+                  <div className="text-[10px] text-slate-400 dark:text-slate-500 truncate max-w-[200px]">{tool.description}</div>
+                </div>
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <div className="flex text-amber-500">
+                    <Star size={10} fill="currentColor" />
+                  </div>
+                  <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400">{tool.avgRating.toFixed(1)}</span>
+                </div>
+              </a>
+            ))}
+            {trendingTools.length === 0 && (
+              <div className="text-center text-slate-400 py-6 text-xs font-bold">טרם התקבלו דירוגים לכלים</div>
+            )}
+          </div>
+        </div>
+
+        {/* Recently Updated */}
+        <div className={`p-6 rounded-[2rem] border ${
+          darkMode ? 'bg-slate-900/20 border-slate-800/80' : 'bg-white border-slate-200 shadow-sm'
+        }`}>
+          <div className="flex items-center gap-2 mb-4">
+            <Clock size={16} className="text-blue-500" />
+            <h3 className="text-sm font-black text-slate-800 dark:text-white">עדכונים אחרונים</h3>
+          </div>
+          
+          <div className="space-y-3">
+            {recentTools.map((tool) => (
+              <a 
+                href={tool.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                key={tool.id} 
+                className={`flex justify-between items-center p-3 rounded-xl border transition-all ${
+                  darkMode 
+                    ? 'bg-slate-900/30 border-slate-800/60 hover:bg-slate-800/40 hover:border-slate-700' 
+                    : 'bg-slate-50 border-slate-100 hover:bg-slate-100/50 hover:border-slate-200'
+                }`}
+              >
+                <div className="text-right">
+                  <div className="text-xs font-bold text-slate-800 dark:text-white">{tool.title}</div>
+                  <div className="text-[10px] text-slate-400 dark:text-slate-500 truncate max-w-[200px]">{tool.description}</div>
+                </div>
+                <span className="text-[9px] font-bold text-slate-400 dark:text-slate-500 shrink-0">
+                  {new Date(tool.updatedAt || 0).toLocaleDateString('he-IL')}
+                </span>
+              </a>
+            ))}
+            {recentTools.length === 0 && (
+              <div className="text-center text-slate-400 py-6 text-xs font-bold">טרם הועלו כלים למערכת</div>
+            )}
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 };

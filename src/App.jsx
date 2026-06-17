@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
-  Plus, Search, ShieldAlert, CheckCircle2, ChevronLeft, Menu, Lock, Upload, Home 
+  Plus, Search, ShieldAlert, CheckCircle2, Menu, Lock, Upload, Home, Settings, Star
 } from 'lucide-react';
 import { auth, db } from './firebase';
 import { 
@@ -10,7 +10,7 @@ import {
   collection, doc, setDoc, deleteDoc, onSnapshot, addDoc, writeBatch 
 } from 'firebase/firestore';
 
-import Sidebar, { CATEGORIES } from './components/Sidebar';
+import Sidebar, { iconMap } from './components/Sidebar';
 import Header from './components/Header';
 import About from './components/About';
 import ItemCard from './components/ItemCard';
@@ -19,23 +19,33 @@ import Modals from './components/Modals';
 const appId = 'gems-portal';
 
 const App = () => {
-  // --- State ---
+  // --- States ---
   const [user, setUser] = useState(null);
   const [items, setItems] = useState([]);
   const [feedbacks, setFeedbacks] = useState({});
+  const [categories, setCategories] = useState([]);
+  const [toolRequests, setToolRequests] = useState([]);
+  const [settings, setSettings] = useState({
+    whatsappUrl: 'https://chat.whatsapp.com/default-placeholder-link',
+    announcement: 'ברוכים הבאים לפורטל החדשנות והמו"פ של חטיבת הזיהוי הפלילי (מז"פ)!',
+    announcementActive: true
+  });
+
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('about');
   const [isAdmin, setIsAdmin] = useState(false);
   
-  // Modals
+  // Modals visibility state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [isSuggestModalOpen, setIsSuggestModalOpen] = useState(false);
+  const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
   
-  // Editing & Selection
+  // Editing & Selection targets
   const [editingItem, setEditingItem] = useState(null);
   const [feedbackItem, setFeedbackItem] = useState(null);
   const [reviewsItem, setReviewsItem] = useState(null);
@@ -51,7 +61,7 @@ const App = () => {
     }
   });
   
-  // Forms
+  // Forms states
   const [formData, setFormData] = useState({ 
     title: '', 
     description: '', 
@@ -65,12 +75,12 @@ const App = () => {
   const [feedbackData, setFeedbackData] = useState({ rating: 5, text: '' });
   const [jsonInput, setJsonInput] = useState('');
 
-  // UI State
-  const [darkMode, setDarkMode] = useState(true); // Default to Dark Mode First
+  // UI styling state
+  const [darkMode, setDarkMode] = useState(true); // Default to dark mode
   const [toast, setToast] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // --- HTML Dark Mode Class Sync ---
+  // --- Dark Mode Sync ---
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add('dark');
@@ -106,17 +116,81 @@ const App = () => {
     onAuthStateChanged(auth, setUser);
   }, []);
 
-  // Fetch Items from Firestore
+  // 1. Fetch Categories & Seed Defaults if empty
   useEffect(() => {
     if (!user) return;
-    const unsub = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'portalItems'), 
-      (snap) => setItems(snap.docs.map(d => ({ id: d.id, ...d.data() }))),
-      (err) => console.error(err)
+    const unsub = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'categories'), 
+      async (snap) => {
+        if (snap.empty) {
+          // Seeding default Forensic categories
+          const defaults = [
+            { id: 'internal', label: 'מערכות וכלי AI', subtitle: 'מערכות ובוטים פנימיים', iconName: 'Bot', color: 'blue', order: 1 },
+            { id: 'tool', label: 'כלי בינה מלאכותית', subtitle: 'AI גנרטיבי חיצוני', iconName: 'Sparkles', color: 'cyan', order: 2 },
+            { id: 'training', label: 'הדרכות ומדריכים', subtitle: 'ספרייה מקצועית וסרטונים', iconName: 'GraduationCap', color: 'amber', order: 3 },
+            { id: 'updates', label: 'הנחיות ונהלי עבודה', subtitle: 'נהלים ומדיניות (SOPs)', iconName: 'Megaphone', color: 'purple', order: 4 }
+          ];
+          const batch = writeBatch(db);
+          defaults.forEach(cat => {
+            const ref = doc(db, 'artifacts', appId, 'public', 'data', 'categories', cat.id);
+            batch.set(ref, cat);
+          });
+          await batch.commit();
+        } else {
+          const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+          list.sort((a, b) => (a.order || 0) - (b.order || 0));
+          setCategories(list);
+        }
+      },
+      (err) => console.error("Categories fetch error:", err)
     );
     return () => unsub();
   }, [user]);
 
-  // Fetch Feedbacks from Firestore and aggregate
+  // 2. Fetch Portal Settings & Seed config if empty
+  useEffect(() => {
+    if (!user) return;
+    const unsub = onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'config'), 
+      (docSnap) => {
+        if (docSnap.exists()) {
+          setSettings(docSnap.data());
+        } else {
+          setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'config'), {
+            whatsappUrl: 'https://chat.whatsapp.com/default-placeholder-link',
+            announcement: 'ברוכים הבאים לפורטל החדשנות והמו"פ של חטיבת הזיהוי הפלילי (מז"פ)!',
+            announcementActive: true
+          });
+        }
+      },
+      (err) => console.error("Settings error:", err)
+    );
+    return () => unsub();
+  }, [user]);
+
+  // 3. Fetch Items
+  useEffect(() => {
+    if (!user) return;
+    const unsub = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'portalItems'), 
+      (snap) => setItems(snap.docs.map(d => ({ id: d.id, ...d.data() }))),
+      (err) => console.error("Items fetch error:", err)
+    );
+    return () => unsub();
+  }, [user]);
+
+  // 4. Fetch Tool/Feature requests from field researchers
+  useEffect(() => {
+    if (!user) return;
+    const unsub = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'toolRequests'), 
+      (snap) => {
+        const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        list.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+        setToolRequests(list);
+      },
+      (err) => console.error("Requests fetch error:", err)
+    );
+    return () => unsub();
+  }, [user]);
+
+  // 5. Fetch Feedbacks and aggregate ratings
   useEffect(() => {
     if (!user) return;
     const unsub = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'feedbacks'), 
@@ -139,16 +213,20 @@ const App = () => {
         });
         setFeedbacks(map);
       },
-      (err) => console.error("Feedbacks error:", err)
+      (err) => console.error("Feedbacks fetch error:", err)
     );
     return () => unsub();
   }, [user]);
 
+  // Toast helper
   const showToast = (msg) => { 
     setToast(msg); 
     setTimeout(() => setToast(null), 3000); 
   };
 
+  // --- Database Action Handlers ---
+
+  // Save Item (Add/Edit)
   const handleSave = async (e) => {
     e.preventDefault();
     if (!user) return;
@@ -164,7 +242,7 @@ const App = () => {
       description: '', 
       url: '', 
       imageUrl: '', 
-      category: activeTab !== 'about' ? activeTab : 'internal', 
+      category: activeTab !== 'about' ? activeTab : (categories[0]?.id || 'internal'), 
       status: 'active', 
       isFeatured: false, 
       eventDate: '' 
@@ -172,12 +250,14 @@ const App = () => {
     showToast('הפריט נשמר בהצלחה');
   };
 
+  // Delete Item
   const handleDelete = async (id) => {
     if (!user || !window.confirm('האם אתה בטוח שברצונך למחוק פריט זה?')) return;
     await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'portalItems', id));
     showToast('הפריט נמחק בהצלחה');
   };
 
+  // Submit Feedback
   const handleSendFeedback = async (e) => {
     e.preventDefault();
     if (!user || !feedbackItem) return;
@@ -200,6 +280,7 @@ const App = () => {
     }
   };
 
+  // Toggle Featured state
   const toggleGlobalFeatured = async (item) => {
     if (!user || !isAdmin) return;
     try {
@@ -215,6 +296,7 @@ const App = () => {
     }
   };
 
+  // Bulk Import tools from JSON
   const handleBulkImport = async () => {
     if (!jsonInput) return;
     try {
@@ -256,43 +338,128 @@ const App = () => {
     showToast('התחברת בהצלחה כמנהל מערכת');
   };
 
-  // Sync Form category when activeTab changes
+  // Suggest a tool / request a need (Researchers)
+  const handleSubmitToolRequest = async (reqData) => {
+    if (!user) return;
+    try {
+      const id = crypto.randomUUID();
+      await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'toolRequests', id), {
+        ...reqData,
+        id,
+        createdAt: new Date().toISOString()
+      });
+      showToast('ההצעה/הצורך נשלחו בהצלחה לצוות מו"פ!');
+    } catch (e) {
+      console.error(e);
+      showToast('שגיאה בשליחת הבקשה');
+    }
+  };
+
+  // Delete/Archive a request (Admin)
+  const handleDeleteToolRequest = async (id) => {
+    if (!user || !isAdmin || !window.confirm('האם למחוק בקשה זו מהרשימה?')) return;
+    await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'toolRequests', id));
+    showToast('הבקשה נמחקה בהצלחה');
+  };
+
+  // Add/Update a Category (Admin)
+  const handleAddCategory = async (catData) => {
+    if (!user || !isAdmin) return;
+    try {
+      await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'categories', catData.id), catData);
+      showToast('הקטגוריה נשמרה בהצלחה');
+    } catch (e) {
+      console.error(e);
+      showToast('שגיאה בשמירת הקטגוריה');
+    }
+  };
+
+  // Delete a Category (Admin)
+  const handleDeleteCategory = async (catId) => {
+    if (!user || !isAdmin || !window.confirm('האם אתה בטוח שברצונך למחוק קטגוריה זו? כלים המשויכים אליה לא יוצגו עד שישוייכו מחדש.')) return;
+    try {
+      await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'categories', catId));
+      showToast('הקטגוריה נמחקה בהצלחה');
+    } catch (e) {
+      console.error(e);
+      showToast('שגיאה במחיקת הקטגוריה');
+    }
+  };
+
+  // Save Settings config (Admin)
+  const handleSaveSettings = async (newSettings) => {
+    if (!user || !isAdmin) return;
+    try {
+      await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'config'), newSettings);
+      showToast('הגדרות הפורטל עודכנו בהצלחה');
+      setIsAdminPanelOpen(false);
+    } catch (e) {
+      console.error(e);
+      showToast('שגיאה בעדכון ההגדרות');
+    }
+  };
+
+  // Sync Form category state when activeTab changes
   useEffect(() => {
     if (activeTab !== 'about') {
       setFormData(prev => ({ ...prev, category: activeTab }));
     }
   }, [activeTab]);
 
-  // Filtered and Sorted Items
+  // Load editing item data into form
+  useEffect(() => {
+    if (editingItem) {
+      setFormData({
+        title: editingItem.title || '',
+        description: editingItem.description || '',
+        url: editingItem.url || '',
+        imageUrl: editingItem.imageUrl || '',
+        category: editingItem.category || 'internal',
+        status: editingItem.status || 'active',
+        isFeatured: editingItem.isFeatured || false,
+        eventDate: editingItem.eventDate || ''
+      });
+    }
+  }, [editingItem]);
+
+  // Filtered and Sorted Items for active catalog tab
   const filteredItems = useMemo(() => {
     return items
       .filter(i => i.category === activeTab)
-      .filter(i => i.title.toLowerCase().includes(searchTerm.toLowerCase()) || i.description.toLowerCase().includes(searchTerm.toLowerCase()))
+      .filter(i => 
+        i.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        i.description.toLowerCase().includes(searchTerm.toLowerCase())
+      )
       .sort((a, b) => {
+        // Featured always at top
         if (a.isFeatured && !b.isFeatured) return -1;
         if (!a.isFeatured && b.isFeatured) return 1;
+        // Pinned by user next
         const aPinned = pinnedItems.includes(a.id);
         const bPinned = pinnedItems.includes(b.id);
         if (aPinned && !bPinned) return -1;
         if (!aPinned && bPinned) return 1;
-        return 0;
+        // Otherwise default chronological by updatedAt
+        return new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0);
       });
   }, [items, activeTab, searchTerm, pinnedItems]);
 
   return (
     <div className={`flex h-screen overflow-hidden transition-colors duration-300 ${
-      darkMode ? 'bg-gradient-to-br from-[#030712] via-[#090e1a] to-[#030712] text-slate-100' : 'bg-gradient-to-tr from-slate-100 via-[#f8fafc] to-[#eff6ff]/30 text-slate-900'
+      darkMode 
+        ? 'bg-gradient-to-br from-[#030712] via-[#090e1a] to-[#030712] text-slate-100' 
+        : 'bg-gradient-to-tr from-slate-100 via-[#f8fafc] to-[#eff6ff]/30 text-slate-900'
     }`} dir="rtl">
       
-      {/* Decorative ambient background glowing orbs */}
-      <div className="bg-glow-orb top-0 right-0 w-[500px] h-[500px] bg-cyan-500/20"></div>
-      <div className="bg-glow-orb bottom-0 left-0 w-[400px] h-[400px] bg-purple-500/20"></div>
+      {/* Subtle ambient backgrounds */}
+      <div className="bg-glow-orb top-0 right-0 w-[500px] h-[500px] bg-blue-500/20"></div>
+      <div className="bg-glow-orb bottom-0 left-0 w-[400px] h-[400px] bg-indigo-500/20"></div>
 
       {/* Toast Notification */}
       {toast && (
         <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[200] animate-in slide-in-from-top-4">
-          <div className="bg-slate-950/90 text-white px-6 py-3.5 rounded-full shadow-2xl flex items-center gap-3 border border-white/10 backdrop-blur-md">
-            <CheckCircle2 size={18} className="text-cyan-400" />
+          <div className="bg-slate-950/90 text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-3 border border-white/10 backdrop-blur-md">
+            <CheckCircle2 size={16} className="text-blue-400" />
             <span className="text-xs font-black">{toast}</span>
           </div>
         </div>
@@ -308,6 +475,8 @@ const App = () => {
         isAdmin={isAdmin} 
         setIsAdmin={setIsAdmin} 
         setIsLoginModalOpen={setIsLoginModalOpen} 
+        setIsAdminPanelOpen={setIsAdminPanelOpen}
+        categories={categories}
       />
 
       {/* Main Content Pane */}
@@ -329,56 +498,77 @@ const App = () => {
         <div className="flex-1 overflow-y-auto p-4 md:p-10 scroll-smooth custom-scrollbar">
           
           {activeTab === 'about' ? (
-            <About setActiveTab={setActiveTab} items={items} darkMode={darkMode} />
+            <About 
+              setActiveTab={setActiveTab} 
+              items={items} 
+              darkMode={darkMode} 
+              whatsappUrl={settings.whatsappUrl}
+              announcement={settings.announcement}
+              announcementActive={settings.announcementActive}
+              categories={categories}
+              feedbacks={feedbacks}
+            />
           ) : (
             <>
               {/* Category Page Title Row */}
               <div className="flex items-center justify-between mb-8">
-                <h2 className="text-2xl font-black text-slate-800 dark:text-white flex items-center gap-3">
+                <h2 className="text-xl font-black text-slate-800 dark:text-white flex items-center gap-3">
                   {(() => {
-                    const matchedCat = CATEGORIES.find(c => c.id === activeTab);
-                    const Icon = matchedCat ? matchedCat.icon : Home;
-                    return <Icon className="text-cyan-400" />;
+                    const matchedCat = categories.find(c => c.id === activeTab);
+                    const Icon = matchedCat && iconMap[matchedCat.iconName] ? iconMap[matchedCat.iconName] : Home;
+                    return <Icon className="text-blue-500" />;
                   })()}
-                  <span>{CATEGORIES.find(c => c.id === activeTab)?.label}</span>
+                  <span>{categories.find(c => c.id === activeTab)?.label}</span>
                 </h2>
                 
                 {/* Admin controls inside category */}
-                {isAdmin && (
-                  <div className="flex gap-2">
-                    <button 
-                      onClick={() => setIsImportModalOpen(true)}
-                      className={`flex items-center gap-2 text-xs font-black px-4 py-2.5 rounded-xl border transition-all ${
-                        darkMode ? 'bg-slate-900/50 hover:bg-slate-800 border-slate-800 text-slate-300' : 'bg-white hover:bg-slate-100 border-slate-200 text-slate-700'
-                      }`}
-                    >
-                      <Upload size={14} />
-                      <span>ייבוא המוני</span>
-                    </button>
-                    <button 
-                      onClick={() => { 
-                        setEditingItem(null); 
-                        setFormData({ 
-                          title: '', 
-                          description: '', 
-                          url: '', 
-                          imageUrl: '', 
-                          category: activeTab, 
-                          status: 'active', 
-                          isFeatured: false, 
-                          eventDate: '' 
-                        }); 
-                        setIsModalOpen(true); 
-                      }}
-                      className={`flex items-center gap-2 text-xs font-black px-4 py-2.5 rounded-xl text-white transition-all shadow-md ${
-                        darkMode ? 'bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-cyan-500/5' : 'bg-indigo-600 hover:bg-indigo-500 shadow-indigo-500/5'
-                      }`}
-                    >
-                      <Plus size={14} />
-                      <span>הוסף פריט</span>
-                    </button>
-                  </div>
-                )}
+                <div className="flex gap-2">
+                  {/* Anonymous user suggestion box button */}
+                  <button 
+                    onClick={() => setIsSuggestModalOpen(true)}
+                    className={`flex items-center gap-2 text-xs font-black px-4 py-2.5 rounded-xl border transition-all ${
+                      darkMode ? 'bg-slate-900/50 hover:bg-slate-800 border-slate-800 text-slate-350' : 'bg-white hover:bg-slate-100 border-slate-200 text-slate-700 shadow-sm'
+                    }`}
+                  >
+                    <span>הצע כלי מהשטח</span>
+                  </button>
+
+                  {isAdmin && (
+                    <>
+                      <button 
+                        onClick={() => setIsImportModalOpen(true)}
+                        className={`flex items-center gap-2 text-xs font-black px-4 py-2.5 rounded-xl border transition-all ${
+                          darkMode ? 'bg-slate-900/50 hover:bg-slate-800 border-slate-800 text-slate-300' : 'bg-white hover:bg-slate-100 border-slate-200 text-slate-700 shadow-sm'
+                        }`}
+                      >
+                        <Upload size={14} />
+                        <span>ייבוא JSON</span>
+                      </button>
+                      <button 
+                        onClick={() => { 
+                          setEditingItem(null); 
+                          setFormData({ 
+                            title: '', 
+                            description: '', 
+                            url: '', 
+                            imageUrl: '', 
+                            category: activeTab, 
+                            status: 'active', 
+                            isFeatured: false, 
+                            eventDate: '' 
+                          }); 
+                          setIsModalOpen(true); 
+                        }}
+                        className={`flex items-center gap-2 text-xs font-black px-4 py-2.5 rounded-xl text-white transition-all shadow-sm ${
+                          darkMode ? 'bg-blue-600 hover:bg-blue-500 shadow-blue-500/5' : 'bg-slate-900 hover:bg-blue-600'
+                        }`}
+                      >
+                        <Plus size={14} />
+                        <span>הוסף פריט</span>
+                      </button>
+                    </>
+                  )}
+                </div>
               </div>
 
               {/* Mobile Search input */}
@@ -419,13 +609,14 @@ const App = () => {
                     setViewItem={setViewItem}
                     setIsViewModalOpen={setIsViewModalOpen}
                     showToast={showToast}
+                    categories={categories}
                   />
                 ))}
                 
                 {filteredItems.length === 0 && (
                   <div className="col-span-full py-20 text-center">
-                    <div className="bg-slate-500/5 w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-4 border border-slate-500/10">
-                      <Search className="text-slate-400 w-8 h-8" />
+                    <div className="bg-slate-500/5 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-slate-500/10">
+                      <Search className="text-slate-400 w-6 h-6" />
                     </div>
                     <p className="text-slate-400 dark:text-slate-500 font-bold text-xs">לא נמצאו פריטים קיימים בקטגוריה זו</p>
                   </div>
@@ -441,38 +632,38 @@ const App = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               {/* Branding and Credits */}
               <div className="space-y-3 text-center md:text-right">
-                <h3 className="text-xl font-black">DIFS AI Hub</h3>
+                <h3 className="text-lg font-black text-slate-900 dark:text-white">מז"פ Tech Hub</h3>
                 <p className="text-xs font-medium leading-relaxed text-slate-500 dark:text-slate-400">
-                  פלטפורמה זו פותחה על ידי <span className="font-bold text-cyan-400">מדור מחקר ופיתוח</span>,
-                  <br />החטיבה לזיהוי פלילי, האגף לחקירות ומודיעין, משטרת ישראל.
+                  פלטפורמה זו פותחה על ידי <span className="font-bold text-blue-500 dark:text-blue-400">מדור מחקר ופיתוח (מו"פ)</span>,
+                  <br />החטיבה לזיהוי פלילי, אגף החקירות והמודיעין, משטרת ישראל.
                 </p>
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">
-                  © {new Date().getFullYear()} כל הזכויות שמורות למז"פ
+                <p className="text-[9px] font-black uppercase tracking-widest text-slate-450 dark:text-slate-500">
+                  © {new Date().getFullYear()} כל הזכויות שמורות לחטיבת הזיהוי הפלילי
                 </p>
               </div>
 
               {/* Security Banner Card */}
               <div className={`p-5 rounded-3xl border ${
-                darkMode ? 'bg-slate-900/35 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
+                darkMode ? 'bg-slate-900/30 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
               }`}>
                 <div className="flex gap-4 items-start text-right">
                   <div className={`p-2 rounded-2xl shrink-0 ${
-                    darkMode ? 'bg-amber-500/10 text-amber-500' : 'bg-amber-50 text-amber-600'
+                    darkMode ? 'bg-amber-500/10 text-amber-500' : 'bg-amber-50 text-amber-655 text-amber-700'
                   }`}>
-                    <ShieldAlert size={20} />
+                    <ShieldAlert size={18} />
                   </div>
                   <div className="space-y-1.5 w-full">
-                    <h4 className="text-xs font-black uppercase tracking-wide">
-                      הנחיות אבטחת מידע
+                    <h4 className="text-xs font-black uppercase tracking-wide text-slate-800 dark:text-slate-250">
+                      הנחיות אבטחת מידע ומדיניות
                     </h4>
-                    <ul className="text-xs font-medium space-y-1 text-slate-500 dark:text-slate-400">
+                    <ul className="text-[11px] font-medium space-y-1 text-slate-500 dark:text-slate-400">
                       <li className="flex items-center gap-2">
                         <span className="w-1 h-1 rounded-full bg-red-500 shrink-0"></span>
-                        <span>חל איסור מוחלט להעלות חומרים מסווגים לענן אזרחי.</span>
+                        <span>חל איסור מוחלט להזין חומרים מסווגים או רגישים למערכות AI ציבוריות.</span>
                       </li>
                       <li className="flex items-center gap-2">
-                        <span className="w-1 h-1 rounded-full bg-cyan-500 shrink-0"></span>
-                        <span>התשובות מבוססות AI ויש לאמתן בשיקול דעת מקצועי.</span>
+                        <span className="w-1 h-1 rounded-full bg-blue-500 shrink-0"></span>
+                        <span>התשובות מבוססות AI גנרטיבי ומשמשות כעזר בלבד. יש לאמת כל ממצע מקצועית.</span>
                       </li>
                     </ul>
                   </div>
@@ -513,6 +704,20 @@ const App = () => {
         isReviewsModalOpen={isReviewsModalOpen}
         setIsReviewsModalOpen={setIsReviewsModalOpen}
         reviewsItem={reviewsItem}
+        
+        // Dynamic categories & admin settings props
+        categories={categories}
+        toolRequests={toolRequests}
+        settings={settings}
+        isSuggestModalOpen={isSuggestModalOpen}
+        setIsSuggestModalOpen={setIsSuggestModalOpen}
+        isAdminPanelOpen={isAdminPanelOpen}
+        setIsAdminPanelOpen={setIsAdminPanelOpen}
+        handleAddCategory={handleAddCategory}
+        handleDeleteCategory={handleDeleteCategory}
+        handleSaveSettings={handleSaveSettings}
+        handleDeleteToolRequest={handleDeleteToolRequest}
+        handleSubmitToolRequest={handleSubmitToolRequest}
       />
     </div>
   );

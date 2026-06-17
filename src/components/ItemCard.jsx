@@ -1,9 +1,6 @@
 import React from 'react';
 import { 
-  Plus, Search, ExternalLink, Bot, Trash2, Edit3, Settings,
-  Sparkles, X, ShieldAlert, Pin, Send, Layout, Copy, 
-  CheckCircle2, Moon, Sun, Share2, Lightbulb, 
-  ChevronLeft, Menu, FileText, Activity, Shield, MessageSquare, Star, Users, Upload, Lock, KeyRound, Eye, Home, Zap, GraduationCap, ArrowLeft, Crown, Megaphone, Calendar
+  ExternalLink, Trash2, Edit3, Pin, Crown, Star, Copy, Calendar, ShieldAlert 
 } from 'lucide-react';
 
 const ItemCard = ({ 
@@ -23,7 +20,8 @@ const ItemCard = ({
   setIsFeedbackModalOpen, 
   setViewItem, 
   setIsViewModalOpen,
-  showToast 
+  showToast,
+  categories = []
 }) => {
   const isPinned = pinnedItems.includes(item.id);
   const stats = feedbacks[item.id] || { totalRating: 0, count: 0, reviews: [] };
@@ -45,28 +43,32 @@ const ItemCard = ({
     showToast('הקישור הועתק ללוח!');
   };
 
-  // Get color configurations
-  const getCategoryTheme = (cat) => {
+  // Resolve category configuration dynamically
+  const matchedCat = categories.find(c => c.id === item.category);
+  const categoryLabel = matchedCat ? matchedCat.label : 'כלי / פריט';
+  const categoryColor = matchedCat ? matchedCat.color : 'slate';
+
+  const getCategoryTheme = (color) => {
     if (darkMode) {
-      switch (cat) {
-        case 'internal': return { text: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/20' };
-        case 'tool': return { text: 'text-cyan-400', bg: 'bg-cyan-500/10', border: 'border-cyan-500/20' };
-        case 'training': return { text: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20' };
-        case 'updates': return { text: 'text-purple-400', bg: 'bg-purple-500/10', border: 'border-purple-500/20' };
+      switch (color) {
+        case 'blue': return { text: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/20' };
+        case 'cyan': return { text: 'text-cyan-400', bg: 'bg-cyan-500/10', border: 'border-cyan-500/20' };
+        case 'amber': return { text: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20' };
+        case 'purple': return { text: 'text-purple-400', bg: 'bg-purple-500/10', border: 'border-purple-500/20' };
         default: return { text: 'text-slate-400', bg: 'bg-slate-500/10', border: 'border-slate-500/20' };
       }
     } else {
-      switch (cat) {
-        case 'internal': return { text: 'text-blue-700', bg: 'bg-blue-50 border border-blue-200/60', border: 'border-blue-200/60' };
-        case 'tool': return { text: 'text-cyan-800', bg: 'bg-cyan-50 border border-cyan-200/60', border: 'border-cyan-200/60' };
-        case 'training': return { text: 'text-amber-800', bg: 'bg-amber-50 border border-amber-200/60', border: 'border-amber-200/60' };
-        case 'updates': return { text: 'text-purple-700', bg: 'bg-purple-50 border border-purple-200/60', border: 'border-purple-200/60' };
+      switch (color) {
+        case 'blue': return { text: 'text-blue-700', bg: 'bg-blue-50 border border-blue-200/60', border: 'border-blue-200/60' };
+        case 'cyan': return { text: 'text-cyan-800', bg: 'bg-cyan-50 border border-cyan-200/60', border: 'border-cyan-200/60' };
+        case 'amber': return { text: 'text-amber-800', bg: 'bg-amber-50 border border-amber-200/60', border: 'border-amber-200/60' };
+        case 'purple': return { text: 'text-purple-700', bg: 'bg-purple-50 border border-purple-200/60', border: 'border-purple-200/60' };
         default: return { text: 'text-slate-700', bg: 'bg-slate-50 border border-slate-200/60', border: 'border-slate-200/60' };
       }
     }
   };
 
-  const theme = getCategoryTheme(item.category);
+  const theme = getCategoryTheme(categoryColor);
 
   return (
     <div className={`rounded-[2rem] p-6 border glass-card flex flex-col justify-between group relative overflow-hidden transition-all duration-300 ${
@@ -74,40 +76,37 @@ const ItemCard = ({
     }`}>
       {/* Top Header Row */}
       <div className="flex items-center justify-between mb-4">
-        {/* Category Indicator Badge */}
+        {/* Dynamic Category Indicator Badge */}
         <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${theme.bg} ${theme.text}`}>
           <span className="w-1.5 h-1.5 rounded-full bg-current"></span>
-          <span>
-            {item.category === 'internal' ? 'מערכת פנימית' : 
-             item.category === 'tool' ? 'כלי AI חיצוני' : 
-             item.category === 'training' ? 'הדרכה / ידע' : 
-             'עדכון מדור'}
-          </span>
+          <span>{categoryLabel}</span>
         </div>
 
         {/* Action icons row (copy, pin, edit/delete for admin) */}
         <div className="flex items-center gap-1.5">
           {/* Copy Link */}
-          <button 
-            onClick={copyLink} 
-            className={`p-1.5 rounded-lg border transition-all duration-300 ${
-              darkMode 
-                ? 'bg-slate-900/40 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border-slate-800/80' 
-                : 'bg-slate-100 hover:bg-slate-200 text-slate-500 border-slate-200'
-            }`}
-            title="העתק קישור"
-          >
-            <Copy size={13} />
-          </button>
+          {item.url && (
+            <button 
+              onClick={copyLink} 
+              className={`p-1.5 rounded-lg border transition-all duration-200 ${
+                darkMode 
+                  ? 'bg-slate-900/40 hover:bg-slate-850 text-slate-400 hover:text-slate-200 border-slate-800/80' 
+                  : 'bg-slate-100 hover:bg-slate-200 text-slate-500 border-slate-200'
+              }`}
+              title="העתק קישור"
+            >
+              <Copy size={13} />
+            </button>
+          )}
 
           {/* Pin Card */}
           <button 
             onClick={() => togglePin(item.id)} 
-            className={`p-1.5 rounded-lg border transition-all duration-300 ${
+            className={`p-1.5 rounded-lg border transition-all duration-200 ${
               isPinned 
-                ? 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30' 
+                ? 'bg-blue-500/20 text-blue-400 border-blue-500/30' 
                 : darkMode 
-                  ? 'bg-slate-900/40 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border-slate-800/80' 
+                  ? 'bg-slate-900/40 hover:bg-slate-850 text-slate-400 hover:text-slate-200 border-slate-800/80' 
                   : 'bg-slate-100 hover:bg-slate-200 text-slate-500 border-slate-200'
             }`}
             title={isPinned ? "הסר נעיצה" : "נעץ פריט"}
@@ -121,11 +120,11 @@ const ItemCard = ({
               {/* Toggle Featured */}
               <button 
                 onClick={() => toggleGlobalFeatured(item)} 
-                className={`p-1.5 rounded-lg border transition-all duration-300 ${
+                className={`p-1.5 rounded-lg border transition-all duration-200 ${
                   item.isFeatured 
                     ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' 
                     : darkMode 
-                      ? 'bg-slate-900/40 hover:bg-slate-800 text-slate-400 hover:text-amber-400 border-slate-800/80' 
+                      ? 'bg-slate-900/40 hover:bg-slate-850 text-slate-400 hover:text-amber-400 border-slate-800/80' 
                       : 'bg-slate-100 hover:bg-slate-200 text-slate-500 border-slate-200'
                 }`}
                 title="מומלץ מערכת"
@@ -136,9 +135,9 @@ const ItemCard = ({
               {/* Edit */}
               <button 
                 onClick={() => { setEditingItem(item); setIsModalOpen(true); }} 
-                className={`p-1.5 rounded-lg border transition-all duration-300 ${
+                className={`p-1.5 rounded-lg border transition-all duration-200 ${
                   darkMode 
-                    ? 'bg-slate-900/40 hover:bg-slate-800 text-slate-400 hover:text-blue-400 border-slate-800/80' 
+                    ? 'bg-slate-900/40 hover:bg-slate-850 text-slate-400 hover:text-blue-400 border-slate-800/80' 
                     : 'bg-slate-100 hover:bg-slate-200 text-slate-500 border-slate-200'
                 }`}
                 title="ערוך"
@@ -149,7 +148,7 @@ const ItemCard = ({
               {/* Delete */}
               <button 
                 onClick={() => handleDelete(item.id)} 
-                className={`p-1.5 rounded-lg border transition-all duration-300 ${
+                className={`p-1.5 rounded-lg border transition-all duration-200 ${
                   darkMode 
                     ? 'bg-slate-900/40 hover:bg-red-500/20 text-slate-400 hover:text-red-400 border-slate-800/80' 
                     : 'bg-slate-100 hover:bg-red-100 text-slate-500 border-slate-200 hover:text-red-600'
@@ -166,21 +165,21 @@ const ItemCard = ({
       {/* Card Body */}
       <div className="space-y-3 mb-6 flex-grow">
         <div className="flex items-start gap-2 justify-between">
-          <h4 className="text-lg font-black tracking-tight text-slate-900 dark:text-white group-hover:text-cyan-400 dark:group-hover:text-cyan-400 transition-colors duration-300">
+          <h4 className="text-base font-black tracking-tight text-slate-900 dark:text-white group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors duration-200">
             {item.title}
           </h4>
           {item.isFeatured && (
-            <span className="flex items-center gap-1 text-[9px] font-black text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">
+            <span className="flex items-center gap-1 text-[9px] font-black text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20 shrink-0">
               <Crown size={8} fill="currentColor" />
               <span>מומלץ</span>
             </span>
           )}
         </div>
 
-        {/* Date for updates */}
-        {item.category === 'updates' && item.eventDate && (
-          <div className="flex items-center gap-1 text-[11px] font-medium text-slate-400 dark:text-slate-500">
-            <Calendar size={12} />
+        {/* Date for updates/events */}
+        {item.eventDate && (
+          <div className="flex items-center gap-1 text-[10px] font-medium text-slate-400 dark:text-slate-500">
+            <Calendar size={11} />
             <span>{new Date(item.eventDate).toLocaleDateString('he-IL')}</span>
           </div>
         )}
@@ -193,11 +192,11 @@ const ItemCard = ({
         {(item.description.length > 100 || item.imageUrl) && (
           <button 
             onClick={() => { setViewItem(item); setIsViewModalOpen(true); }}
-            className="text-[11px] font-black text-cyan-500 hover:text-cyan-400 hover:underline flex items-center gap-0.5 transition-colors"
+            className="text-[10px] font-black text-blue-500 dark:text-blue-400 hover:underline flex items-center gap-1 transition-colors"
           >
             <span>קרא עוד...</span>
             {item.imageUrl && (
-              <span className="text-[9px] font-bold bg-white/5 px-1.5 py-0.2 rounded border border-white/5">תמונה</span>
+              <span className="text-[9px] font-bold bg-slate-500/5 px-1.5 py-0.2 rounded border border-slate-500/10">תמונה</span>
             )}
           </button>
         )}
@@ -208,18 +207,18 @@ const ItemCard = ({
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-1.5">
             <div className="flex items-center text-amber-400">
-              <Star size={14} fill="currentColor" className="drop-shadow-[0_0_8px_rgba(245,158,11,0.2)]" />
+              <Star size={13} fill="currentColor" />
             </div>
-            <span className="text-xs font-black text-slate-950 dark:text-slate-200">{avgRating}</span>
-            <span className="text-[10px] text-slate-500 dark:text-slate-500">({stats.count} דירוגים)</span>
+            <span className="text-xs font-black text-slate-900 dark:text-slate-200">{avgRating}</span>
+            <span className="text-[10px] text-slate-400 dark:text-slate-500">({stats.count} דירוגים)</span>
           </div>
 
           <div className="flex items-center gap-2">
             {stats.reviews.length > 0 && (
               <button 
                 onClick={() => { setReviewsItem({ ...item, reviews: stats.reviews }); setIsReviewsModalOpen(true); }}
-                className={`text-[11px] font-black px-2 py-1 rounded-lg transition-colors ${
-                  darkMode ? 'hover:bg-slate-800/60 text-slate-400 hover:text-slate-200' : 'hover:bg-slate-100 text-slate-600 hover:text-slate-950'
+                className={`text-[10px] font-black px-2 py-1 rounded-lg transition-colors ${
+                  darkMode ? 'hover:bg-slate-800 text-slate-400 hover:text-slate-200' : 'hover:bg-slate-100 text-slate-600 hover:text-slate-900'
                 }`}
               >
                 {stats.reviews.length} ביקורות
@@ -227,9 +226,9 @@ const ItemCard = ({
             )}
             <button 
               onClick={() => { setFeedbackItem(item); setIsFeedbackModalOpen(true); }}
-              className={`text-[11px] font-black px-3 py-1.5 rounded-xl transition-all duration-300 flex items-center gap-1 ${
+              className={`text-[10px] font-black px-2.5 py-1.5 rounded-xl transition-all flex items-center gap-1 ${
                 darkMode 
-                  ? 'bg-slate-900/50 hover:bg-slate-800 text-cyan-400 border border-slate-800' 
+                  ? 'bg-slate-900/50 hover:bg-slate-800 text-slate-300 border border-slate-800' 
                   : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200'
               }`}
             >
@@ -245,19 +244,18 @@ const ItemCard = ({
             href={item.url} 
             target="_blank" 
             rel="noopener noreferrer"
-            className={`flex items-center justify-center gap-2 w-full py-3 rounded-2xl font-black text-xs transition-all duration-300 shadow-md ${
+            className={`flex items-center justify-center gap-2 w-full py-2.5 rounded-xl font-black text-xs transition-all duration-200 shadow-sm ${
               darkMode 
-                ? 'bg-slate-800/60 hover:bg-cyan-500 text-slate-200 hover:text-slate-950 border border-slate-700/50 hover:border-cyan-400/30' 
-                : 'bg-slate-900 text-white hover:bg-indigo-600 border border-slate-900 hover:border-indigo-500 shadow-slate-900/5'
+                ? 'bg-slate-800 hover:bg-blue-600 text-slate-200 hover:text-white border border-slate-700' 
+                : 'bg-slate-900 text-white hover:bg-blue-600 border border-slate-900 hover:border-blue-500'
             }`}
           >
             <span>
-              {item.category === 'internal' ? 'הפעל מערכת' : 
-               item.category === 'training' ? 'פתח הדרכה' : 
-               item.category === 'updates' ? 'לפרטים נוספים' : 
-               'פתח כלי'}
+              {item.category === 'training' || categoryLabel === 'הדרכות ומדריכים' ? 'פתח הדרכה' : 
+               item.category === 'updates' || categoryLabel === 'הנחיות ונהלי עבודה' ? 'לפרטים נוספים' : 
+               'הפעל כעת'}
             </span>
-            <ExternalLink size={12} />
+            <ExternalLink size={11} />
           </a>
         )}
       </div>

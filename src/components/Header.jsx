@@ -12,9 +12,9 @@ const Header = ({
   setSidebarOpen 
 }) => {
   return (
-    <header className={`h-20 flex items-center justify-between px-8 border-b z-20 transition-all duration-300 ${
+    <header className={`h-20 flex items-center justify-between px-8 border-b z-20 transition-all duration-350 ${
       darkMode 
-        ? 'bg-[#030712]/50 border-slate-900/40 text-white' 
+        ? 'bg-[#0b0f17]/50 border-slate-900/40 text-white' 
         : 'bg-white/60 border-slate-200/80 text-slate-900'
     } backdrop-blur-md sticky top-0`}>
       
@@ -28,10 +28,10 @@ const Header = ({
           <Menu size={24} />
         </button>
         <div className="hidden md:flex flex-col">
-          <h2 className="text-lg font-black tracking-tight">
-            {greeting}, חוקר
+          <h2 className="text-sm font-black tracking-tight">
+            {greeting}, חוקר פורנזי
           </h2>
-          <p className="text-xs text-slate-400 dark:text-slate-500 font-medium">ברוך הבא למרכז המידע והכלים</p>
+          <p className="text-[10px] text-slate-400 dark:text-slate-500 font-bold">מערכות מחקר ופיתוח מז"פ</p>
         </div>
       </div>
 
@@ -40,14 +40,14 @@ const Header = ({
         {/* Search Input - Hidden on About Tab */}
         {activeTab !== 'about' && (
           <div className="relative hidden md:block w-64 lg:w-96">
-            <Search className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
+            <Search className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-450 text-slate-500 w-4 h-4" />
             <input 
               type="text"
               placeholder="חיפוש מהיר של כלים ומידע..."
-              className={`w-full pr-10 pl-4 py-2.5 rounded-xl text-sm font-medium outline-none border transition-all duration-300 ${
+              className={`w-full pr-10 pl-4 py-2 rounded-xl text-xs font-medium outline-none border transition-all duration-300 ${
                 darkMode 
-                  ? 'bg-slate-900/50 border-slate-800 focus:border-cyan-500/50 focus:bg-slate-900 focus:shadow-[0_0_15px_rgba(6,182,212,0.1)]' 
-                  : 'bg-slate-100/50 border-slate-200 focus:border-indigo-500/50 focus:bg-white focus:shadow-[0_0_15px_rgba(99,102,241,0.1)]'
+                  ? 'bg-slate-900/50 border-slate-800 focus:border-blue-500/50 focus:bg-slate-900 focus:shadow-[0_0_12px_rgba(59,130,246,0.1)]' 
+                  : 'bg-slate-100/50 border-slate-200 focus:border-blue-500/50 focus:bg-white focus:shadow-[0_0_12px_rgba(59,130,246,0.05)]'
               }`}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
