@@ -522,7 +522,7 @@ const Modals = ({
                 <textarea 
                   required
                   rows="4" 
-                  placeholder="פרט כאן מהו האתגר בשטח או מהו הכלי וכיצד הוא יסייע לחוקרים במז"פ..." 
+                  placeholder='פרט כאן מהו האתגר בשטח או מהו הכלי וכיצד הוא יסייע לחוקרים במז"פ...' 
                   className={`w-full mt-1 p-3 rounded-xl border bg-transparent text-xs outline-none focus:border-blue-500 dark:border-slate-800`}
                   value={suggestData.description} 
                   onChange={e => setSuggestData({...suggestData, description: e.target.value})} 
@@ -543,7 +543,7 @@ const Modals = ({
               <div>
                 <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase px-1">פרטי קשר למעקב (אופציונלי לגמרי)</label>
                 <input 
-                  placeholder="שם / טלפון / מחלקה במז"פ (אם תרצה שנוכל לחזור אליך)" 
+                  placeholder='שם / טלפון / מחלקה במז"פ (אם תרצה שנוכל לחזור אליך)' 
                   className={`w-full mt-1 p-3 rounded-xl border bg-transparent text-sm outline-none focus:border-blue-500 dark:border-slate-800`}
                   value={suggestData.contactInfo} 
                   onChange={e => setSuggestData({...suggestData, contactInfo: e.target.value})} 
