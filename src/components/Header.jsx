@@ -69,8 +69,8 @@ const Header = ({
         </button>
         
         {/* Institutional Logos */}
-        <div className="flex items-center gap-2 pr-2 border-r border-slate-200/20">
-          <div className="h-8 w-auto hidden sm:flex items-center justify-center p-0.5 rounded-lg bg-white/5 dark:bg-white/5 border border-white/5">
+        <div className="flex items-center gap-1.5 md:gap-2.5">
+          <div className="h-7 md:h-8 w-auto flex items-center justify-center p-0.5 rounded-lg bg-white/5 dark:bg-white/5 border border-white/5">
             <img 
               src="/לוגו אחמ.png" 
               alt="לוגו אחמ" 
@@ -78,7 +78,7 @@ const Header = ({
               onError={(e) => { e.target.style.display='none'; }} 
             />
           </div>
-          <div className="h-8 md:h-10 w-auto flex items-center justify-center p-0.5 rounded-lg bg-white/5 dark:bg-white/5 border border-white/5">
+          <div className="h-8 md:h-9 w-auto flex items-center justify-center p-0.5 rounded-lg bg-white/5 dark:bg-white/5 border border-white/5">
             <img 
               src="/logo.png" 
               alt="לוגו מזפ" 
