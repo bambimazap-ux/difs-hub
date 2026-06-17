@@ -95,9 +95,9 @@ const Sidebar = ({
       )}
 
       {/* Sidebar Container */}
-      <aside className={`fixed inset-y-0 right-0 w-72 z-50 transform transition-all duration-300 ease-out lg:translate-x-0 lg:static lg:block glass-panel ${
+      <aside className={`fixed inset-y-0 w-72 z-50 transition-all duration-300 ease-out lg:static lg:block glass-panel ${
         darkMode ? 'bg-[#0b0f17] border-l border-slate-900' : 'bg-white border-l border-slate-200'
-      } ${sidebarOpen ? 'translate-x-0 shadow-xl' : 'translate-x-full lg:translate-x-0'}`}>
+      } ${sidebarOpen ? 'right-0 shadow-xl visible opacity-100' : '-right-72 invisible opacity-0 lg:right-auto lg:visible lg:opacity-100'}`}>
         
         <div className="h-full flex flex-col p-6 relative">
           {/* Mobile Close Button */}
