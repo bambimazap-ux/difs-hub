@@ -76,7 +76,7 @@ const About = ({ setActiveTab, items, darkMode }) => {
       </div>
 
       {/* Categories Grid (Interactive Counters) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         {CATEGORIES.slice(1).map((cat) => {
           const theme = getCategoryTheme(cat.id);
           const Icon = cat.icon;

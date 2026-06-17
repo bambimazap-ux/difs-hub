@@ -166,7 +166,7 @@ const ItemCard = ({
       {/* Card Body */}
       <div className="space-y-3 mb-6 flex-grow">
         <div className="flex items-start gap-2 justify-between">
-          <h4 className="text-lg font-black tracking-tight text-slate-800 dark:text-white group-hover:text-cyan-400 dark:group-hover:text-cyan-400 transition-colors duration-300">
+          <h4 className="text-lg font-black tracking-tight text-slate-900 dark:text-white group-hover:text-cyan-400 dark:group-hover:text-cyan-400 transition-colors duration-300">
             {item.title}
           </h4>
           {item.isFeatured && (
@@ -185,7 +185,7 @@ const ItemCard = ({
           </div>
         )}
 
-        <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed line-clamp-3 overflow-hidden">
+        <p className="text-slate-600 dark:text-slate-400 text-xs leading-relaxed line-clamp-3 overflow-hidden">
           {item.description}
         </p>
 
@@ -193,7 +193,7 @@ const ItemCard = ({
         {(item.description.length > 100 || item.imageUrl) && (
           <button 
             onClick={() => { setViewItem(item); setIsViewModalOpen(true); }}
-            className="text-[11px] font-black text-cyan-400 hover:text-cyan-300 hover:underline flex items-center gap-0.5 transition-colors"
+            className="text-[11px] font-black text-cyan-500 hover:text-cyan-400 hover:underline flex items-center gap-0.5 transition-colors"
           >
             <span>קרא עוד...</span>
             {item.imageUrl && (
@@ -205,13 +205,13 @@ const ItemCard = ({
 
       {/* Card Footer Rating Area */}
       <div className="space-y-4 pt-4 border-t border-slate-200/10 dark:border-slate-800/60 shrink-0">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-1.5">
             <div className="flex items-center text-amber-400">
               <Star size={14} fill="currentColor" className="drop-shadow-[0_0_8px_rgba(245,158,11,0.2)]" />
             </div>
-            <span className="text-xs font-black text-slate-800 dark:text-slate-200">{avgRating}</span>
-            <span className="text-[10px] text-slate-400 dark:text-slate-500">({stats.count} דירוגים)</span>
+            <span className="text-xs font-black text-slate-950 dark:text-slate-200">{avgRating}</span>
+            <span className="text-[10px] text-slate-500 dark:text-slate-500">({stats.count} דירוגים)</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -219,7 +219,7 @@ const ItemCard = ({
               <button 
                 onClick={() => { setReviewsItem({ ...item, reviews: stats.reviews }); setIsReviewsModalOpen(true); }}
                 className={`text-[11px] font-black px-2 py-1 rounded-lg transition-colors ${
-                  darkMode ? 'hover:bg-slate-800/60 text-slate-400 hover:text-slate-200' : 'hover:bg-slate-100 text-slate-500 hover:text-slate-900'
+                  darkMode ? 'hover:bg-slate-800/60 text-slate-400 hover:text-slate-200' : 'hover:bg-slate-100 text-slate-600 hover:text-slate-950'
                 }`}
               >
                 {stats.reviews.length} ביקורות
