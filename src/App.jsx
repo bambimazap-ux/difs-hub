@@ -1,0 +1,521 @@
+import React, { useState, useEffect, useMemo } from 'react';
+import { 
+  Plus, Search, ShieldAlert, CheckCircle2, ChevronLeft, Menu, Lock, Upload, Home 
+} from 'lucide-react';
+import { auth, db } from './firebase';
+import { 
+  signInAnonymously, onAuthStateChanged 
+} from 'firebase/auth';
+import { 
+  collection, doc, setDoc, deleteDoc, onSnapshot, addDoc, writeBatch 
+} from 'firebase/firestore';
+
+import Sidebar, { CATEGORIES } from './components/Sidebar';
+import Header from './components/Header';
+import About from './components/About';
+import ItemCard from './components/ItemCard';
+import Modals from './components/Modals';
+
+const appId = 'gems-portal';
+
+const App = () => {
+  // --- State ---
+  const [user, setUser] = useState(null);
+  const [items, setItems] = useState([]);
+  const [feedbacks, setFeedbacks] = useState({});
+  const [searchTerm, setSearchTerm] = useState('');
+  const [activeTab, setActiveTab] = useState('about');
+  const [isAdmin, setIsAdmin] = useState(false);
+  
+  // Modals
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+  const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  
+  // Editing & Selection
+  const [editingItem, setEditingItem] = useState(null);
+  const [feedbackItem, setFeedbackItem] = useState(null);
+  const [reviewsItem, setReviewsItem] = useState(null);
+  const [viewItem, setViewItem] = useState(null);
+  
+  // Initialize pinned items from LocalStorage
+  const [pinnedItems, setPinnedItems] = useState(() => {
+    try {
+      const saved = localStorage.getItem('difs_pinned_items');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      return [];
+    }
+  });
+  
+  // Forms
+  const [formData, setFormData] = useState({ 
+    title: '', 
+    description: '', 
+    url: '', 
+    imageUrl: '', 
+    category: 'internal', 
+    status: 'active', 
+    isFeatured: false, 
+    eventDate: '' 
+  });
+  const [feedbackData, setFeedbackData] = useState({ rating: 5, text: '' });
+  const [jsonInput, setJsonInput] = useState('');
+
+  // UI State
+  const [darkMode, setDarkMode] = useState(true); // Default to Dark Mode First
+  const [toast, setToast] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // --- HTML Dark Mode Class Sync ---
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [darkMode]);
+
+  // Sync Pinned Items to LocalStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem('difs_pinned_items', JSON.stringify(pinnedItems));
+    } catch (e) {
+      console.error("Failed to save pins", e);
+    }
+  }, [pinnedItems]);
+
+  const greeting = useMemo(() => {
+    const h = new Date().getHours();
+    return h < 12 ? 'בוקר טוב' : h < 17 ? 'צהריים טובים' : h < 21 ? 'ערב טוב' : 'לילה טוב';
+  }, []);
+
+  // Firebase Anonymous Auth
+  useEffect(() => {
+    const initAuth = async () => {
+      try {
+        await signInAnonymously(auth);
+      } catch (error) {
+        console.error("Auth Error:", error);
+      }
+    };
+    initAuth();
+    onAuthStateChanged(auth, setUser);
+  }, []);
+
+  // Fetch Items from Firestore
+  useEffect(() => {
+    if (!user) return;
+    const unsub = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'portalItems'), 
+      (snap) => setItems(snap.docs.map(d => ({ id: d.id, ...d.data() }))),
+      (err) => console.error(err)
+    );
+    return () => unsub();
+  }, [user]);
+
+  // Fetch Feedbacks from Firestore and aggregate
+  useEffect(() => {
+    if (!user) return;
+    const unsub = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'feedbacks'), 
+      (snap) => {
+        const map = {};
+        snap.docs.forEach(doc => {
+          const data = doc.data();
+          if (!map[data.itemId]) {
+            map[data.itemId] = { totalRating: 0, count: 0, reviews: [] };
+          }
+          map[data.itemId].totalRating += data.rating;
+          map[data.itemId].count += 1;
+          if (data.text && data.text.trim().length > 0) {
+            map[data.itemId].reviews.push({ 
+              text: data.text, 
+              rating: data.rating, 
+              date: data.createdAt 
+            });
+          }
+        });
+        setFeedbacks(map);
+      },
+      (err) => console.error("Feedbacks error:", err)
+    );
+    return () => unsub();
+  }, [user]);
+
+  const showToast = (msg) => { 
+    setToast(msg); 
+    setTimeout(() => setToast(null), 3000); 
+  };
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    if (!user) return;
+    const id = editingItem?.id || crypto.randomUUID();
+    await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'portalItems', id), { 
+      ...formData, 
+      updatedAt: new Date().toISOString() 
+    });
+    setIsModalOpen(false); 
+    setEditingItem(null); 
+    setFormData({ 
+      title: '', 
+      description: '', 
+      url: '', 
+      imageUrl: '', 
+      category: activeTab !== 'about' ? activeTab : 'internal', 
+      status: 'active', 
+      isFeatured: false, 
+      eventDate: '' 
+    });
+    showToast('הפריט נשמר בהצלחה');
+  };
+
+  const handleDelete = async (id) => {
+    if (!user || !window.confirm('האם אתה בטוח שברצונך למחוק פריט זה?')) return;
+    await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'portalItems', id));
+    showToast('הפריט נמחק בהצלחה');
+  };
+
+  const handleSendFeedback = async (e) => {
+    e.preventDefault();
+    if (!user || !feedbackItem) return;
+    
+    try {
+      await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'feedbacks'), {
+        itemId: feedbackItem.id,
+        itemTitle: feedbackItem.title,
+        rating: feedbackData.rating,
+        text: feedbackData.text,
+        createdAt: new Date().toISOString()
+      });
+      setIsFeedbackModalOpen(false);
+      setFeedbackData({ rating: 5, text: '' });
+      setFeedbackItem(null);
+      showToast('הדירוג התקבל, תודה רבה!');
+    } catch (err) {
+      console.error(err);
+      showToast('שגיאה בשליחת הדירוג');
+    }
+  };
+
+  const toggleGlobalFeatured = async (item) => {
+    if (!user || !isAdmin) return;
+    try {
+      const newFeaturedState = !item.isFeatured;
+      await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'portalItems', item.id), { 
+        ...item, 
+        isFeatured: newFeaturedState 
+      }, { merge: true });
+      showToast(newFeaturedState ? 'סומן כמומלץ מערכת' : 'הוסר ממומלצי המערכת');
+    } catch (e) {
+      console.error(e);
+      showToast('שגיאה בעדכון');
+    }
+  };
+
+  const handleBulkImport = async () => {
+    if (!jsonInput) return;
+    try {
+      const data = JSON.parse(jsonInput);
+      if (!Array.isArray(data)) throw new Error("הפורמט חייב להיות רשימה (Array)");
+      
+      const batch = writeBatch(db);
+      let count = 0;
+      
+      data.forEach(item => {
+        if (item.title && item.url) {
+          const newId = crypto.randomUUID();
+          const ref = doc(db, 'artifacts', appId, 'public', 'data', 'portalItems', newId);
+          batch.set(ref, {
+            title: item.title,
+            description: item.description || '',
+            url: item.url,
+            imageUrl: item.imageUrl || '',
+            category: item.category || 'internal',
+            status: item.status || 'active',
+            isFeatured: false,
+            updatedAt: new Date().toISOString()
+          });
+          count++;
+        }
+      });
+      
+      await batch.commit();
+      setIsImportModalOpen(false);
+      setJsonInput('');
+      showToast(`${count} פריטים יובאו בהצלחה!`);
+    } catch (e) {
+      alert("שגיאה בייבוא: " + e.message);
+    }
+  };
+
+  const handleAdminLoginSuccess = () => {
+    setIsAdmin(true);
+    showToast('התחברת בהצלחה כמנהל מערכת');
+  };
+
+  // Sync Form category when activeTab changes
+  useEffect(() => {
+    if (activeTab !== 'about') {
+      setFormData(prev => ({ ...prev, category: activeTab }));
+    }
+  }, [activeTab]);
+
+  // Filtered and Sorted Items
+  const filteredItems = useMemo(() => {
+    return items
+      .filter(i => i.category === activeTab)
+      .filter(i => i.title.toLowerCase().includes(searchTerm.toLowerCase()) || i.description.toLowerCase().includes(searchTerm.toLowerCase()))
+      .sort((a, b) => {
+        if (a.isFeatured && !b.isFeatured) return -1;
+        if (!a.isFeatured && b.isFeatured) return 1;
+        const aPinned = pinnedItems.includes(a.id);
+        const bPinned = pinnedItems.includes(b.id);
+        if (aPinned && !bPinned) return -1;
+        if (!aPinned && bPinned) return 1;
+        return 0;
+      });
+  }, [items, activeTab, searchTerm, pinnedItems]);
+
+  return (
+    <div className={`flex h-screen overflow-hidden transition-colors duration-300 ${
+      darkMode ? 'bg-[#080b11] text-slate-100' : 'bg-slate-50 text-slate-900'
+    }`} dir="rtl">
+      
+      {/* Decorative ambient background glowing orbs */}
+      <div className="bg-glow-orb top-0 right-0 w-[500px] h-[500px] bg-cyan-500/20"></div>
+      <div className="bg-glow-orb bottom-0 left-0 w-[400px] h-[400px] bg-purple-500/20"></div>
+
+      {/* Toast Notification */}
+      {toast && (
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[200] animate-in slide-in-from-top-4">
+          <div className="bg-slate-950/90 text-white px-6 py-3.5 rounded-full shadow-2xl flex items-center gap-3 border border-white/10 backdrop-blur-md">
+            <CheckCircle2 size={18} className="text-cyan-400" />
+            <span className="text-xs font-black">{toast}</span>
+          </div>
+        </div>
+      )}
+
+      {/* Sidebar Component */}
+      <Sidebar 
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab} 
+        darkMode={darkMode} 
+        sidebarOpen={sidebarOpen} 
+        setSidebarOpen={setSidebarOpen} 
+        isAdmin={isAdmin} 
+        setIsAdmin={setIsAdmin} 
+        setIsLoginModalOpen={setIsLoginModalOpen} 
+      />
+
+      {/* Main Content Pane */}
+      <main className="flex-1 flex flex-col min-w-0 overflow-hidden relative z-10">
+        
+        {/* Top Header Component */}
+        <Header 
+          greeting={greeting} 
+          searchTerm={searchTerm} 
+          setSearchTerm={setSearchTerm} 
+          darkMode={darkMode} 
+          setDarkMode={setDarkMode} 
+          activeTab={activeTab} 
+          sidebarOpen={sidebarOpen} 
+          setSidebarOpen={setSidebarOpen} 
+        />
+
+        {/* Scrollable Content Viewport */}
+        <div className="flex-1 overflow-y-auto p-6 md:p-10 scroll-smooth custom-scrollbar">
+          
+          {activeTab === 'about' ? (
+            <About setActiveTab={setActiveTab} items={items} darkMode={darkMode} />
+          ) : (
+            <>
+              {/* Category Page Title Row */}
+              <div className="flex items-center justify-between mb-8">
+                <h2 className="text-2xl font-black text-slate-800 dark:text-white flex items-center gap-3">
+                  {(() => {
+                    const matchedCat = CATEGORIES.find(c => c.id === activeTab);
+                    const Icon = matchedCat ? matchedCat.icon : Home;
+                    return <Icon className="text-cyan-400" />;
+                  })()}
+                  <span>{CATEGORIES.find(c => c.id === activeTab)?.label}</span>
+                </h2>
+                
+                {/* Admin controls inside category */}
+                {isAdmin && (
+                  <div className="flex gap-2">
+                    <button 
+                      onClick={() => setIsImportModalOpen(true)}
+                      className={`flex items-center gap-2 text-xs font-black px-4 py-2.5 rounded-xl border transition-all ${
+                        darkMode ? 'bg-slate-900/50 hover:bg-slate-800 border-slate-800 text-slate-300' : 'bg-white hover:bg-slate-100 border-slate-200 text-slate-700'
+                      }`}
+                    >
+                      <Upload size={14} />
+                      <span>ייבוא המוני</span>
+                    </button>
+                    <button 
+                      onClick={() => { 
+                        setEditingItem(null); 
+                        setFormData({ 
+                          title: '', 
+                          description: '', 
+                          url: '', 
+                          imageUrl: '', 
+                          category: activeTab, 
+                          status: 'active', 
+                          isFeatured: false, 
+                          eventDate: '' 
+                        }); 
+                        setIsModalOpen(true); 
+                      }}
+                      className={`flex items-center gap-2 text-xs font-black px-4 py-2.5 rounded-xl text-white transition-all shadow-md ${
+                        darkMode ? 'bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-cyan-500/5' : 'bg-indigo-600 hover:bg-indigo-500 shadow-indigo-500/5'
+                      }`}
+                    >
+                      <Plus size={14} />
+                      <span>הוסף פריט</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Mobile Search input */}
+              <div className="mb-6 md:hidden">
+                <div className="relative">
+                  <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
+                  <input 
+                    type="text"
+                    placeholder="חיפוש..."
+                    className={`w-full pr-10 pl-4 py-2.5 rounded-xl text-xs font-medium outline-none border transition-all ${
+                      darkMode ? 'bg-slate-900/50 border-slate-800 text-white' : 'bg-white border-slate-200'
+                    }`}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              {/* Grid of Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 pb-12">
+                {filteredItems.map(item => (
+                  <ItemCard 
+                    key={item.id}
+                    item={item}
+                    isAdmin={isAdmin}
+                    darkMode={darkMode}
+                    pinnedItems={pinnedItems}
+                    setPinnedItems={setPinnedItems}
+                    feedbacks={feedbacks}
+                    setEditingItem={setEditingItem}
+                    setIsModalOpen={setIsModalOpen}
+                    handleDelete={handleDelete}
+                    toggleGlobalFeatured={toggleGlobalFeatured}
+                    setReviewsItem={setReviewsItem}
+                    setIsReviewsModalOpen={setIsReviewsModalOpen}
+                    setFeedbackItem={setFeedbackItem}
+                    setIsFeedbackModalOpen={setIsFeedbackModalOpen}
+                    setViewItem={setViewItem}
+                    setIsViewModalOpen={setIsViewModalOpen}
+                    showToast={showToast}
+                  />
+                ))}
+                
+                {filteredItems.length === 0 && (
+                  <div className="col-span-full py-20 text-center">
+                    <div className="bg-slate-500/5 w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-4 border border-slate-500/10">
+                      <Search className="text-slate-400 w-8 h-8" />
+                    </div>
+                    <p className="text-slate-400 dark:text-slate-500 font-bold text-xs">לא נמצאו פריטים קיימים בקטגוריה זו</p>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+
+          {/* Footer Card */}
+          <footer className={`mt-12 pt-10 pb-8 border-t transition-colors duration-300 ${
+            darkMode ? 'border-slate-800/60 bg-slate-950/20' : 'border-slate-200 bg-slate-100/30'
+          } rounded-[2rem] p-6`}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+              {/* Branding and Credits */}
+              <div className="space-y-3 text-center md:text-right">
+                <h3 className="text-xl font-black">DIFS AI Hub</h3>
+                <p className="text-xs font-medium leading-relaxed text-slate-500 dark:text-slate-400">
+                  פלטפורמה זו פותחה על ידי <span className="font-bold text-cyan-400">מדור מחקר ופיתוח</span>,
+                  <br />החטיבה לזיהוי פלילי, האגף לחקירות ומודיעין, משטרת ישראל.
+                </p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                  © {new Date().getFullYear()} כל הזכויות שמורות למז"פ
+                </p>
+              </div>
+
+              {/* Security Banner Card */}
+              <div className={`p-5 rounded-3xl border ${
+                darkMode ? 'bg-slate-900/35 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
+              }`}>
+                <div className="flex gap-4 items-start text-right">
+                  <div className={`p-2 rounded-2xl shrink-0 ${
+                    darkMode ? 'bg-amber-500/10 text-amber-500' : 'bg-amber-50 text-amber-600'
+                  }`}>
+                    <ShieldAlert size={20} />
+                  </div>
+                  <div className="space-y-1.5 w-full">
+                    <h4 className="text-xs font-black uppercase tracking-wide">
+                      הנחיות אבטחת מידע
+                    </h4>
+                    <ul className="text-xs font-medium space-y-1 text-slate-500 dark:text-slate-400">
+                      <li className="flex items-center gap-2">
+                        <span className="w-1 h-1 rounded-full bg-red-500 shrink-0"></span>
+                        <span>חל איסור מוחלט להעלות חומרים מסווגים לענן אזרחי.</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <span className="w-1 h-1 rounded-full bg-cyan-500 shrink-0"></span>
+                        <span>התשובות מבוססות AI ויש לאמתן בשיקול דעת מקצועי.</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </footer>
+
+        </div>
+      </main>
+
+      {/* Global Modals Manager */}
+      <Modals 
+        darkMode={darkMode}
+        isViewModalOpen={isViewModalOpen}
+        setIsViewModalOpen={setIsViewModalOpen}
+        viewItem={viewItem}
+        isLoginModalOpen={isLoginModalOpen}
+        setIsLoginModalOpen={setIsLoginModalOpen}
+        handleAdminLoginSuccess={handleAdminLoginSuccess}
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        editingItem={editingItem}
+        handleSave={handleSave}
+        formData={formData}
+        setFormData={setFormData}
+        isImportModalOpen={isImportModalOpen}
+        setIsImportModalOpen={setIsImportModalOpen}
+        jsonInput={jsonInput}
+        setJsonInput={setJsonInput}
+        handleBulkImport={handleBulkImport}
+        isFeedbackModalOpen={isFeedbackModalOpen}
+        setIsFeedbackModalOpen={setIsFeedbackModalOpen}
+        feedbackItem={feedbackItem}
+        handleSendFeedback={handleSendFeedback}
+        feedbackData={feedbackData}
+        setFeedbackData={setFeedbackData}
+        isReviewsModalOpen={isReviewsModalOpen}
+        setIsReviewsModalOpen={setIsReviewsModalOpen}
+        reviewsItem={reviewsItem}
+      />
+    </div>
+  );
+};
+
+export default App;
