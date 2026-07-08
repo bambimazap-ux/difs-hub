@@ -21,7 +21,7 @@ const About = ({
   const getCategoryTheme = (color) => {
     if (darkMode) {
       switch(color) {
-        case 'blue': return { border: 'hover:border-blue-500/50', iconBg: 'bg-blue-500/10 text-blue-400 group-hover:bg-blue-650 group-hover:text-white', colorText: 'text-blue-400', shadow: 'hover:shadow-blue-500/5' };
+        case 'blue': return { border: 'hover:border-blue-500/50', iconBg: 'bg-blue-500/10 text-blue-400 group-hover:bg-blue-600 group-hover:text-white', colorText: 'text-blue-400', shadow: 'hover:shadow-blue-500/5' };
         case 'cyan': return { border: 'hover:border-cyan-500/50', iconBg: 'bg-cyan-500/10 text-cyan-400 group-hover:bg-cyan-600 group-hover:text-slate-950', colorText: 'text-cyan-400', shadow: 'hover:shadow-cyan-500/5' };
         case 'amber': return { border: 'hover:border-amber-500/50', iconBg: 'bg-amber-500/10 text-amber-400 group-hover:bg-amber-600 group-hover:text-slate-950', colorText: 'text-amber-400', shadow: 'hover:shadow-amber-500/5' };
         case 'purple': return { border: 'hover:border-purple-500/50', iconBg: 'bg-purple-500/10 text-purple-400 group-hover:bg-purple-600 group-hover:text-white', colorText: 'text-purple-400', shadow: 'hover:shadow-purple-500/5' };
@@ -30,10 +30,10 @@ const About = ({
     } else {
       switch(color) {
         case 'blue': return { border: 'hover:border-blue-500/30', iconBg: 'bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white', colorText: 'text-blue-600', shadow: 'hover:shadow-blue-500/5' };
-        case 'cyan': return { border: 'hover:border-cyan-500/30', iconBg: 'bg-cyan-50 text-cyan-700 group-hover:bg-cyan-650 group-hover:text-white', colorText: 'text-cyan-700', shadow: 'hover:shadow-cyan-500/5' };
-        case 'amber': return { border: 'hover:border-amber-500/30', iconBg: 'bg-amber-55 text-amber-700 group-hover:bg-amber-600 group-hover:text-slate-950', colorText: 'text-amber-700', shadow: 'hover:shadow-amber-500/5' };
-        case 'purple': return { border: 'hover:border-purple-500/30', iconBg: 'bg-purple-50 text-purple-650 group-hover:bg-purple-600 group-hover:text-white', colorText: 'text-purple-650', shadow: 'hover:shadow-purple-500/5' };
-        default: return { border: 'hover:border-slate-500/20', iconBg: 'bg-slate-100 text-slate-600 group-hover:bg-slate-600 group-hover:text-white', colorText: 'text-slate-605', shadow: '' };
+        case 'cyan': return { border: 'hover:border-cyan-500/30', iconBg: 'bg-cyan-50 text-cyan-700 group-hover:bg-cyan-600 group-hover:text-white', colorText: 'text-cyan-700', shadow: 'hover:shadow-cyan-500/5' };
+        case 'amber': return { border: 'hover:border-amber-500/30', iconBg: 'bg-amber-50 text-amber-700 group-hover:bg-amber-600 group-hover:text-slate-950', colorText: 'text-amber-700', shadow: 'hover:shadow-amber-500/5' };
+        case 'purple': return { border: 'hover:border-purple-500/30', iconBg: 'bg-purple-50 text-purple-600 group-hover:bg-purple-600 group-hover:text-white', colorText: 'text-purple-600', shadow: 'hover:shadow-purple-500/5' };
+        default: return { border: 'hover:border-slate-500/20', iconBg: 'bg-slate-100 text-slate-600 group-hover:bg-slate-600 group-hover:text-white', colorText: 'text-slate-600', shadow: '' };
       }
     }
   };
@@ -60,7 +60,7 @@ const About = ({
   }, [items]);
 
   return (
-    <div className="animate-in fade-in duration-500 w-full flex flex-col justify-start max-w-5xl mx-auto space-y-6 md:space-y-8 pb-16 relative px-1 md:px-0">
+    <div className="animate-in fade-in duration-500 w-full flex flex-col justify-start max-w-5xl mx-auto space-y-6 md:space-y-8 pb-16 relative px-4 md:px-0">
       
       {/* Premium Hero Banner */}
       <div className={`relative overflow-hidden rounded-2xl md:rounded-[2.5rem] p-6 md:p-12 border transition-all duration-300 ${
@@ -81,7 +81,7 @@ const About = ({
           <h2 className="text-2xl md:text-4xl font-black tracking-tight leading-tight text-slate-900 dark:text-white">
             מרכז החדשנות והבינה המלאכותית
           </h2>
-          <p className="text-xs md:text-sm font-medium leading-relaxed text-slate-500 dark:text-slate-405">
+          <p className="text-xs md:text-sm font-medium leading-relaxed text-slate-500 dark:text-slate-400">
             הפלטפורמה המרכזית של החטיבה לזיהוי פלילי המאגדת בוטים מתקדמים, כלי AI חיצוניים ומאגר הדרכות מקצועי.
           </p>
         </div>
@@ -108,7 +108,7 @@ const About = ({
             <MessageSquare size={20} />
           </div>
           <div className="space-y-1">
-            <h3 className="text-xs md:text-sm font-bold text-slate-850 text-slate-900 dark:text-white">הפורום המקצועי של מז"פ בוואטסאפ</h3>
+            <h3 className="text-xs md:text-sm font-bold text-slate-900 dark:text-white">הפורום המקצועי של מז"פ בוואטסאפ</h3>
             <p className="text-[11px] md:text-xs text-slate-500 dark:text-slate-400 max-w-xl leading-relaxed">
               קבוצת הדיונים הפנימית של החטיבה לשיתוף פרומפטים מנצחים, התייעצות לגבי כלי AI ותמיכה טכנית הדדית בזמן אמת.
             </p>
@@ -118,7 +118,7 @@ const About = ({
           href={whatsappUrl} 
           target="_blank" 
           rel="noopener noreferrer"
-          className={`w-full md:w-auto px-5 py-2.5 rounded-xl font-bold text-xs text-center transition-all shadow-sm flex items-center justify-center gap-1.5 ${
+          className={`w-full md:w-auto px-5 py-3.5 md:py-2.5 rounded-xl font-bold text-xs text-center transition-all shadow-sm flex items-center justify-center gap-1.5 ${
             darkMode ? 'bg-indigo-600 hover:bg-indigo-500 text-white' : 'bg-indigo-600 hover:bg-indigo-700 text-white'
           }`}
         >
@@ -130,8 +130,10 @@ const About = ({
       {/* Categories Grid (Interactive Navigation Cards) */}
       <div className="space-y-3">
         <h3 className="text-[10px] md:text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest px-1">קטגוריות ותוכן</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {categories.map((cat) => {
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {categories
+            .filter(cat => cat.id === 'internal' || cat.id === 'tool' || cat.id === 'training')
+            .map((cat) => {
             const theme = getCategoryTheme(cat.color);
             const Icon = iconMap[cat.iconName] || HelpCircle;
             const count = getCount(cat.id);
@@ -197,7 +199,7 @@ const About = ({
                 }`}
               >
                 <div className="text-right">
-                  <div className="text-xs font-bold text-slate-805 dark:text-white">{tool.title}</div>
+                  <div className="text-xs font-bold text-slate-800 dark:text-white">{tool.title}</div>
                   <div className="text-[9px] text-slate-400 dark:text-slate-500 truncate max-w-[160px] md:max-w-[200px]">{tool.description}</div>
                 </div>
                 <div className="flex items-center gap-1 shrink-0">
@@ -218,7 +220,7 @@ const About = ({
         }`}>
           <div className="flex items-center gap-2 mb-4">
             <Clock size={15} className="text-blue-500" />
-            <h3 className="text-xs md:text-sm font-black text-slate-805 dark:text-white">עדכונים אחרונים</h3>
+            <h3 className="text-xs md:text-sm font-black text-slate-800 dark:text-white">עדכונים אחרונים</h3>
           </div>
           
           <div className="space-y-3">
@@ -235,7 +237,7 @@ const About = ({
                 }`}
               >
                 <div className="text-right">
-                  <div className="text-xs font-bold text-slate-805 dark:text-white">{tool.title}</div>
+                  <div className="text-xs font-bold text-slate-800 dark:text-white">{tool.title}</div>
                   <div className="text-[9px] text-slate-400 dark:text-slate-500 truncate max-w-[160px] md:max-w-[200px]">{tool.description}</div>
                 </div>
                 <span className="text-[9px] font-bold text-slate-400 dark:text-slate-500 shrink-0">

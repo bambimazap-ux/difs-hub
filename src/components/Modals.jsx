@@ -50,6 +50,7 @@ const Modals = ({
     color: 'blue',
     order: 5
   });
+  const [editingCategory, setEditingCategory] = useState(null);
 
   // Local states for suggesting a Tool
   const [suggestData, setSuggestData] = useState({
@@ -123,13 +124,14 @@ const Modals = ({
   const handleCatSubmitLocal = (e) => {
     e.preventDefault();
     if (!newCatData.label.trim()) return;
-    const catId = newCatData.id.trim() || newCatData.label.trim().toLowerCase().replace(/\s+/g, '-');
+    const catId = editingCategory ? editingCategory.id : (newCatData.id.trim() || newCatData.label.trim().toLowerCase().replace(/\s+/g, '-'));
     handleAddCategory({
       ...newCatData,
       id: catId,
       order: Number(newCatData.order)
     });
     setNewCatData({ id: '', label: '', subtitle: '', iconName: 'Bot', color: 'blue', order: 5 });
+    setEditingCategory(null);
   };
 
   const handleSaveSettingsLocal = (e) => {
@@ -141,7 +143,10 @@ const Modals = ({
     <>
       {/* 1. View Item Modal (Read More) */}
       {isViewModalOpen && viewItem && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in">
+        <div 
+          onClick={(e) => e.target === e.currentTarget && setIsViewModalOpen(false)}
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in"
+        >
           <div className={`w-full max-w-lg rounded-2xl md:rounded-[2rem] p-5 md:p-8 shadow-2xl flex flex-col max-h-[90vh] border transition-all ${
             darkMode ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white text-slate-900 border-slate-200'
           }`}>
@@ -154,9 +159,9 @@ const Modals = ({
               </div>
               <button 
                 onClick={() => setIsViewModalOpen(false)} 
-                className={`p-2 rounded-xl transition-colors ${darkMode ? 'hover:bg-slate-800 text-slate-400 hover:text-white' : 'hover:bg-slate-100 text-slate-500'}`}
+                className={`w-11 h-11 flex items-center justify-center rounded-full transition-colors ${darkMode ? 'hover:bg-slate-800 text-slate-400 hover:text-white' : 'hover:bg-slate-100 text-slate-500'}`}
               >
-                <X size={18} />
+                <X size={20} />
               </button>
             </div>
             
@@ -201,7 +206,10 @@ const Modals = ({
 
       {/* 2. Admin Login Modal */}
       {isLoginModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in">
+        <div 
+          onClick={(e) => e.target === e.currentTarget && setIsLoginModalOpen(false)}
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in"
+        >
           <div className={`w-full max-w-sm rounded-2xl md:rounded-[2rem] p-6 md:p-8 shadow-2xl text-center border transition-all ${
             darkMode ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white text-slate-900 border-slate-200'
           }`}>
@@ -230,7 +238,7 @@ const Modals = ({
                   type="button" 
                   onClick={() => { setIsLoginModalOpen(false); setLoginPassword(''); }} 
                   className={`flex-1 py-2.5 rounded-xl font-bold text-xs transition-colors ${
-                    darkMode ? 'bg-slate-800 hover:bg-slate-750 text-slate-350' : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
+                    darkMode ? 'bg-slate-800 hover:bg-slate-700 text-slate-300' : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
                   }`}
                 >
                   ביטול
@@ -251,7 +259,10 @@ const Modals = ({
 
       {/* 3. Item Form Modal (Add / Edit Tool) */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in">
+        <div 
+          onClick={(e) => e.target === e.currentTarget && setIsModalOpen(false)}
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in"
+        >
           <div className={`w-full max-w-lg rounded-2xl md:rounded-[2rem] p-5 md:p-8 shadow-2xl border transition-all flex flex-col max-h-[90vh] ${
             darkMode ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white text-slate-900 border-slate-200'
           }`}>
@@ -259,9 +270,9 @@ const Modals = ({
               <h3 className="text-base md:text-lg font-black">{editingItem ? 'עריכת פריט' : 'הוספת פריט חדש'}</h3>
               <button 
                 onClick={() => setIsModalOpen(false)}
-                className={`p-1.5 rounded-xl transition-colors ${darkMode ? 'hover:bg-slate-800 text-slate-400' : 'hover:bg-slate-100 text-slate-500'}`}
+                className={`w-11 h-11 flex items-center justify-center rounded-full transition-colors ${darkMode ? 'hover:bg-slate-800 text-slate-400' : 'hover:bg-slate-100 text-slate-500'}`}
               >
-                <X size={18} />
+                <X size={20} />
               </button>
             </div>
             
@@ -346,7 +357,10 @@ const Modals = ({
 
       {/* 4. Import Modal */}
       {isImportModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in">
+        <div 
+          onClick={(e) => e.target === e.currentTarget && setIsImportModalOpen(false)}
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in"
+        >
           <div className={`w-full max-w-2xl rounded-2xl md:rounded-[2rem] p-5 md:p-8 shadow-2xl border transition-all flex flex-col max-h-[90vh] ${
             darkMode ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white text-slate-900 border-slate-200'
           }`}>
@@ -354,9 +368,9 @@ const Modals = ({
               <h3 className="text-base md:text-lg font-black">ייבוא המוני (JSON)</h3>
               <button 
                 onClick={() => setIsImportModalOpen(false)}
-                className={`p-1.5 rounded-xl transition-colors ${darkMode ? 'hover:bg-slate-800 text-slate-400' : 'hover:bg-slate-100 text-slate-500'}`}
+                className={`w-11 h-11 flex items-center justify-center rounded-full transition-colors ${darkMode ? 'hover:bg-slate-800 text-slate-400' : 'hover:bg-slate-100 text-slate-500'}`}
               >
-                <X size={18} />
+                <X size={20} />
               </button>
             </div>
             
@@ -377,7 +391,7 @@ const Modals = ({
               <button 
                 onClick={handleBulkImport} 
                 className={`w-full py-3 rounded-xl font-black text-xs text-white transition-all shadow-md flex items-center justify-center gap-2 ${
-                  darkMode ? 'bg-blue-600 hover:bg-blue-50 shadow-blue-500/5' : 'bg-slate-900 hover:bg-blue-600'
+                  darkMode ? 'bg-blue-600 hover:bg-blue-500 shadow-blue-500/5' : 'bg-slate-900 hover:bg-blue-600'
                 }`}
               >
                 <Upload size={16} />
@@ -390,7 +404,10 @@ const Modals = ({
 
       {/* 5. Feedback Modal (Rate Item) */}
       {isFeedbackModalOpen && feedbackItem && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in">
+        <div 
+          onClick={(e) => e.target === e.currentTarget && setIsFeedbackModalOpen(false)}
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in"
+        >
           <div className={`w-full max-w-md rounded-2xl md:rounded-[2rem] p-5 md:p-8 shadow-2xl border transition-all flex flex-col max-h-[90vh] ${
             darkMode ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white text-slate-900 border-slate-200'
           }`}>
@@ -401,9 +418,9 @@ const Modals = ({
               </div>
               <button 
                 onClick={() => setIsFeedbackModalOpen(false)}
-                className={`p-1.5 rounded-xl transition-colors ${darkMode ? 'hover:bg-slate-800 text-slate-400' : 'hover:bg-slate-100 text-slate-500'}`}
+                className={`w-11 h-11 flex items-center justify-center rounded-full transition-colors ${darkMode ? 'hover:bg-slate-800 text-slate-400' : 'hover:bg-slate-100 text-slate-500'}`}
               >
-                <X size={18} />
+                <X size={20} />
               </button>
             </div>
             
@@ -414,8 +431,8 @@ const Modals = ({
                     key={star}
                     type="button"
                     onClick={() => setFeedbackData({ ...feedbackData, rating: star })}
-                    className={`p-1.5 transition-transform hover:scale-110 ${
-                      feedbackData.rating >= star ? 'text-amber-400' : 'text-slate-300 dark:text-slate-605'
+                    className={`p-2.5 transition-transform hover:scale-110 ${
+                      feedbackData.rating >= star ? 'text-amber-400' : 'text-slate-300 dark:text-slate-600'
                     }`}
                   >
                     <Star size={28} fill={feedbackData.rating >= star ? "currentColor" : "none"} />
@@ -444,7 +461,10 @@ const Modals = ({
 
       {/* 6. Reviews View Modal */}
       {isReviewsModalOpen && reviewsItem && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in">
+        <div 
+          onClick={(e) => e.target === e.currentTarget && setIsReviewsModalOpen(false)}
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in"
+        >
           <div className={`w-full max-w-lg rounded-2xl md:rounded-[2rem] p-5 md:p-8 shadow-2xl flex flex-col max-h-[85vh] border transition-all ${
             darkMode ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white text-slate-900 border-slate-200'
           }`}>
@@ -455,9 +475,9 @@ const Modals = ({
               </div>
               <button 
                 onClick={() => setIsReviewsModalOpen(false)}
-                className={`p-1.5 rounded-xl transition-colors ${darkMode ? 'hover:bg-slate-800 text-slate-400' : 'hover:bg-slate-100 text-slate-500'}`}
+                className={`w-11 h-11 flex items-center justify-center rounded-full transition-colors ${darkMode ? 'hover:bg-slate-800 text-slate-400' : 'hover:bg-slate-100 text-slate-500'}`}
               >
-                <X size={18} />
+                <X size={20} />
               </button>
             </div>
             
@@ -477,7 +497,7 @@ const Modals = ({
                         {new Date(rev.date).toLocaleDateString('he-IL')}
                       </span>
                     </div>
-                    <p className={`text-xs font-medium ${darkMode ? 'text-slate-350' : 'text-slate-650'}`}>"{rev.text}"</p>
+                    <p className={`text-xs font-medium ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>"{rev.text}"</p>
                   </div>
                 ))
               )}
@@ -488,7 +508,10 @@ const Modals = ({
 
       {/* 7. Suggest a Tool Modal (Researchers Suggestion Box) */}
       {isSuggestModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in">
+        <div 
+          onClick={(e) => e.target === e.currentTarget && setIsSuggestModalOpen(false)}
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in"
+        >
           <div className={`w-full max-w-md rounded-2xl md:rounded-[2rem] p-5 md:p-8 shadow-2xl border transition-all flex flex-col max-h-[90vh] ${
             darkMode ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white text-slate-900 border-slate-200'
           }`}>
@@ -499,9 +522,9 @@ const Modals = ({
               </div>
               <button 
                 onClick={() => setIsSuggestModalOpen(false)}
-                className={`p-1.5 rounded-xl transition-colors ${darkMode ? 'hover:bg-slate-800 text-slate-400' : 'hover:bg-slate-100 text-slate-500'}`}
+                className={`w-11 h-11 flex items-center justify-center rounded-full transition-colors ${darkMode ? 'hover:bg-slate-800 text-slate-400' : 'hover:bg-slate-100 text-slate-500'}`}
               >
-                <X size={18} />
+                <X size={20} />
               </button>
             </div>
             
@@ -563,7 +586,10 @@ const Modals = ({
 
       {/* 8. Unified Admin Control Panel Modal */}
       {isAdminPanelOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in">
+        <div 
+          onClick={(e) => e.target === e.currentTarget && setIsAdminPanelOpen(false)}
+          className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in"
+        >
           <div className={`w-full max-w-3xl rounded-2xl md:rounded-[2rem] p-4 md:p-8 shadow-2xl border transition-all flex flex-col max-h-[95vh] md:max-h-[90vh] ${
             darkMode ? 'bg-slate-900 border-slate-800 text-white' : 'bg-white text-slate-900 border-slate-200'
           }`}>
@@ -577,20 +603,20 @@ const Modals = ({
               </div>
               <button 
                 onClick={() => setIsAdminPanelOpen(false)}
-                className={`p-1.5 rounded-xl transition-colors ${darkMode ? 'hover:bg-slate-800 text-slate-400' : 'hover:bg-slate-100 text-slate-500'}`}
+                className={`w-11 h-11 flex items-center justify-center rounded-full transition-colors ${darkMode ? 'hover:bg-slate-800 text-slate-400' : 'hover:bg-slate-100 text-slate-500'}`}
               >
-                <X size={18} />
+                <X size={20} />
               </button>
             </div>
 
             {/* Navigation Tabs */}
-            <div className="flex flex-wrap border-b border-slate-250 dark:border-slate-800 mb-5 shrink-0">
+            <div className="flex flex-nowrap overflow-x-auto scrollbar-none border-b border-slate-200 dark:border-slate-800 mb-5 shrink-0 -mx-4 px-4 whitespace-nowrap">
               <button 
                 onClick={() => setAdminTab('categories')}
                 className={`pb-2.5 px-3 md:px-4 text-[11px] md:text-xs font-black border-b-2 transition-all ${
                   adminTab === 'categories' 
                     ? 'border-blue-500 text-blue-500' 
-                    : 'border-transparent text-slate-400 hover:text-slate-350'
+                    : 'border-transparent text-slate-400 hover:text-slate-300'
                 }`}
               >
                 ניהול קטגוריות
@@ -600,7 +626,7 @@ const Modals = ({
                 className={`pb-2.5 px-3 md:px-4 text-[11px] md:text-xs font-black border-b-2 transition-all relative ${
                   adminTab === 'backlog' 
                     ? 'border-blue-500 text-blue-500' 
-                    : 'border-transparent text-slate-400 hover:text-slate-350'
+                    : 'border-transparent text-slate-400 hover:text-slate-300'
                 }`}
               >
                 <span>הצעות וצרכים מהשטח</span>
@@ -615,7 +641,7 @@ const Modals = ({
                 className={`pb-2.5 px-3 md:px-4 text-[11px] md:text-xs font-black border-b-2 transition-all ${
                   adminTab === 'settings' 
                     ? 'border-blue-500 text-blue-500' 
-                    : 'border-transparent text-slate-400 hover:text-slate-350'
+                    : 'border-transparent text-slate-400 hover:text-slate-300'
                 }`}
               >
                 הגדרות פורטל
@@ -630,7 +656,7 @@ const Modals = ({
                 <div className="space-y-6">
                   {/* Category List */}
                   <div className="space-y-3">
-                    <h4 className="text-[10px] font-black text-slate-450 uppercase">קטגוריות קיימות</h4>
+                    <h4 className="text-[10px] font-black text-slate-400 uppercase">קטגוריות קיימות</h4>
                     <div className="grid grid-cols-1 gap-2">
                       {categories.map((cat) => {
                         const Icon = iconMap[cat.iconName] || HelpCircle;
@@ -639,18 +665,35 @@ const Modals = ({
                             darkMode ? 'bg-slate-950/20 border-slate-800' : 'bg-slate-50 border-slate-200 shadow-sm'
                           }`}>
                             <div className="flex items-center gap-3">
-                              <div className={`p-2 rounded-lg ${darkMode ? 'bg-slate-850 text-slate-200' : 'bg-white border border-slate-200 text-slate-700'}`}>
+                              <div className={`p-2 rounded-lg ${darkMode ? 'bg-slate-800 text-slate-200' : 'bg-white border border-slate-200 text-slate-700'}`}>
                                 <Icon size={15} />
                               </div>
                               <div>
-                                <div className="text-xs font-bold text-slate-855 dark:text-white">{cat.label}</div>
-                                <div className="text-[9px] text-slate-450 dark:text-slate-500">{cat.subtitle} (מפתח: {cat.id})</div>
+                                <div className="text-xs font-bold text-slate-800 dark:text-white">{cat.label}</div>
+                                <div className="text-[9px] text-slate-400 dark:text-slate-500">{cat.subtitle} (מפתח: {cat.id})</div>
                               </div>
                             </div>
                             <div className="flex items-center gap-3">
                               <span className="text-[9px] font-bold bg-slate-500/10 px-2 py-0.5 rounded text-slate-500">
                                 סדר: {cat.order}
                               </span>
+                              <button 
+                                onClick={() => {
+                                  setEditingCategory(cat);
+                                  setNewCatData({
+                                    id: cat.id,
+                                    label: cat.label,
+                                    subtitle: cat.subtitle,
+                                    iconName: cat.iconName || 'Bot',
+                                    color: cat.color || 'blue',
+                                    order: cat.order || 5
+                                  });
+                                }}
+                                className="text-blue-500 hover:text-blue-400 p-1 rounded-lg hover:bg-blue-500/10 transition-colors"
+                                title="ערוך קטגוריה"
+                              >
+                                <Edit size={14} />
+                              </button>
                               <button 
                                 onClick={() => handleDeleteCategory(cat.id)}
                                 className={`text-red-500 hover:text-red-400 p-1 rounded-lg hover:bg-red-500/10 transition-colors`}
@@ -670,8 +713,8 @@ const Modals = ({
                     darkMode ? 'bg-slate-950/30 border-slate-800' : 'bg-slate-50 border-slate-200'
                   }`}>
                     <h4 className="text-xs font-black text-slate-400 flex items-center gap-2">
-                      <Plus size={14} />
-                      <span>הוסף קטגוריה חדשה</span>
+                      {editingCategory ? <Edit size={14} /> : <Plus size={14} />}
+                      <span>{editingCategory ? `עריכת קטגוריה: ${editingCategory.label}` : 'הוסף קטגוריה חדשה'}</span>
                     </h4>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -740,7 +783,10 @@ const Modals = ({
                       <input 
                         placeholder="מזהה קטגוריה באנגלית (למשל: digital-lab) - אופציונלי" 
                         dir="ltr"
-                        className={`w-full p-2.5 rounded-lg border bg-transparent text-xs outline-none focus:border-blue-500 dark:border-slate-800 text-left`}
+                        disabled={!!editingCategory}
+                        className={`w-full p-2.5 rounded-lg border bg-transparent text-xs outline-none focus:border-blue-500 dark:border-slate-800 text-left ${
+                          editingCategory ? 'opacity-50 cursor-not-allowed' : ''
+                        }`}
                         value={newCatData.id}
                         onChange={e => setNewCatData({ ...newCatData, id: e.target.value })}
                       />
@@ -748,8 +794,22 @@ const Modals = ({
                         type="submit"
                         className={`w-full md:w-auto px-5 py-2.5 rounded-lg font-bold text-xs text-white bg-blue-600 hover:bg-blue-500 transition-colors shrink-0`}
                       >
-                        הוסף קטגוריה
+                        {editingCategory ? 'עדכן קטגוריה' : 'הוסף קטגוריה'}
                       </button>
+                      {editingCategory && (
+                        <button 
+                          type="button"
+                          onClick={() => {
+                            setEditingCategory(null);
+                            setNewCatData({ id: '', label: '', subtitle: '', iconName: 'Bot', color: 'blue', order: 5 });
+                          }}
+                          className={`w-full md:w-auto px-5 py-2.5 rounded-lg font-bold text-xs border transition-colors shrink-0 ${
+                            darkMode ? 'border-slate-800 text-slate-400 hover:bg-slate-800' : 'border-slate-200 text-slate-600 hover:bg-slate-100'
+                          }`}
+                        >
+                          ביטול
+                        </button>
+                      )}
                     </div>
                   </form>
                 </div>
@@ -758,7 +818,7 @@ const Modals = ({
               {/* TAB 2: Field Needs Backlog */}
               {adminTab === 'backlog' && (
                 <div className="space-y-4">
-                  <h4 className="text-[10px] font-black text-slate-450 uppercase">הצעות וצרכים שוטפים</h4>
+                  <h4 className="text-[10px] font-black text-slate-400 uppercase">הצעות וצרכים שוטפים</h4>
                   
                   <div className="space-y-3">
                     {toolRequests.map((req) => (
@@ -768,7 +828,7 @@ const Modals = ({
                         <div className="flex justify-between items-start">
                           <div>
                             <h5 className="text-xs font-black text-slate-900 dark:text-white">{req.toolName}</h5>
-                            <span className="text-[9px] text-slate-450 dark:text-slate-500">
+                            <span className="text-[9px] text-slate-400 dark:text-slate-500">
                               הוגש ב: {new Date(req.createdAt).toLocaleDateString('he-IL')} בשעה {new Date(req.createdAt).toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })}
                             </span>
                           </div>
@@ -781,7 +841,7 @@ const Modals = ({
                           </button>
                         </div>
                         
-                        <p className="text-xs text-slate-605 dark:text-slate-400 leading-relaxed font-medium">
+                        <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
                           {req.description}
                         </p>
 
@@ -818,7 +878,7 @@ const Modals = ({
               {/* TAB 3: Portal Settings */}
               {adminTab === 'settings' && (
                 <form onSubmit={handleSaveSettingsLocal} className="space-y-5">
-                  <h4 className="text-[10px] font-black text-slate-450 uppercase">הגדרות כלליות</h4>
+                  <h4 className="text-[10px] font-black text-slate-400 uppercase">הגדרות כלליות</h4>
                   
                   <div className="space-y-4">
                     <div>
@@ -852,14 +912,14 @@ const Modals = ({
                         checked={localSettings.announcementActive}
                         onChange={e => setLocalSettings({ ...localSettings, announcementActive: e.target.checked })}
                       />
-                      <label htmlFor="announcementActive" className="text-xs font-bold text-slate-700 dark:text-slate-350 cursor-pointer select-none">
+                      <label htmlFor="announcementActive" className="text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer select-none">
                         הצג את באנר ההכרזה למשתמשים
                       </label>
                     </div>
                   </div>
 
                   <button type="submit" className={`w-full py-3 rounded-xl font-black text-xs text-white transition-all shadow-md ${
-                    darkMode ? 'bg-blue-600 hover:bg-blue-550' : 'bg-slate-900 hover:bg-blue-600'
+                    darkMode ? 'bg-blue-600 hover:bg-blue-500' : 'bg-slate-900 hover:bg-blue-600'
                   }`}>
                     שמור הגדרות
                   </button>

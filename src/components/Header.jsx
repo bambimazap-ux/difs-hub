@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Search, Sun, Moon } from 'lucide-react';
+import { Menu, Search, Sun, Moon, Type } from 'lucide-react';
 
 const Header = ({ 
   greeting, 
@@ -7,12 +7,14 @@ const Header = ({
   setSearchTerm, 
   darkMode, 
   setDarkMode, 
+  textSize,
+  setTextSize,
   activeTab, 
   sidebarOpen, 
   setSidebarOpen 
 }) => {
   return (
-    <header className={`h-20 flex items-center justify-between px-8 border-b z-20 transition-all duration-350 ${
+    <header className={`h-20 flex items-center justify-between px-4 md:px-8 border-b z-20 transition-all duration-350 ${
       darkMode 
         ? 'bg-[#0b0f17]/50 border-slate-900/40 text-white' 
         : 'bg-white/60 border-slate-200/80 text-slate-900'
@@ -22,7 +24,7 @@ const Header = ({
       <div className="flex items-center gap-4">
         <button 
           onClick={() => setSidebarOpen(!sidebarOpen)} 
-          className="lg:hidden p-2 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors"
+          className="lg:hidden min-w-[44px] min-h-[44px] flex items-center justify-center p-2 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors"
           aria-label="תפריט ניווט"
         >
           <Menu size={24} />
@@ -55,10 +57,24 @@ const Header = ({
           </div>
         )}
 
+        {/* Font Size Adjuster Toggle */}
+        <button 
+          onClick={() => setTextSize(prev => prev === 'large' ? 'normal' : 'large')}
+          className={`w-11 h-11 flex items-center justify-center rounded-xl transition-all duration-300 ${
+            darkMode 
+              ? 'bg-slate-800/80 text-blue-400 border border-slate-700/50 hover:bg-slate-700' 
+              : 'bg-slate-100 text-blue-600 border border-slate-200/50 hover:bg-slate-200'
+          }`}
+          aria-label="שינוי גודל גופן"
+          title={textSize === 'large' ? "הקטן גופן" : "הגדל גופן"}
+        >
+          <Type size={18} />
+        </button>
+
         {/* Dark Mode Toggle */}
         <button 
           onClick={() => setDarkMode(!darkMode)}
-          className={`p-2.5 rounded-xl transition-all duration-300 ${
+          className={`w-11 h-11 flex items-center justify-center rounded-xl transition-all duration-300 ${
             darkMode 
               ? 'bg-slate-800/80 text-amber-400 border border-slate-700/50 hover:bg-slate-700' 
               : 'bg-slate-100 text-slate-600 border border-slate-200/50 hover:bg-slate-200'

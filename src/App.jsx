@@ -18,6 +18,13 @@ import Modals from './components/Modals';
 
 const appId = 'gems-portal';
 
+const categoryDescriptions = {
+  'internal': 'אתרים, אפליקציות, בוטים וסוכנים שפותחו על ידי מדור מו"פ.',
+  'tool': 'המלצות על כלי בינה מלאכותית שימושיים',
+  'training': 'הקלטות או הדרכות שנעשו בחטיבה, והדרכות מומלצות נוספות',
+  'updates': 'נהלים, מדיניות ועדכונים שוטפים של החטיבה'
+};
+
 const App = () => {
   // --- States ---
   const [user, setUser] = useState(null);
@@ -77,6 +84,13 @@ const App = () => {
 
   // UI styling state
   const [darkMode, setDarkMode] = useState(true); // Default to dark mode
+  const [textSize, setTextSize] = useState(() => {
+    try {
+      return localStorage.getItem('difs_text_size') || 'normal';
+    } catch (e) {
+      return 'normal';
+    }
+  });
   const [toast, setToast] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -89,6 +103,14 @@ const App = () => {
     }
   }, [darkMode]);
 
+  // --- Font Size Sync ---
+  useEffect(() => {
+    document.documentElement.style.fontSize = textSize === 'large' ? '19px' : '17px';
+    try {
+      localStorage.setItem('difs_text_size', textSize);
+    } catch (e) {}
+  }, [textSize]);
+
   // Sync Pinned Items to LocalStorage
   useEffect(() => {
     try {
@@ -97,6 +119,34 @@ const App = () => {
       console.error("Failed to save pins", e);
     }
   }, [pinnedItems]);
+
+  // Lock background scroll when sidebar or modals are open
+  useEffect(() => {
+    const isAnyOpen = 
+      sidebarOpen || 
+      isModalOpen || 
+      isFeedbackModalOpen || 
+      isReviewsModalOpen || 
+      isImportModalOpen || 
+      isLoginModalOpen || 
+      isViewModalOpen || 
+      isSuggestModalOpen || 
+      isAdminPanelOpen;
+    
+    if (isAnyOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [
+    sidebarOpen, isModalOpen, isFeedbackModalOpen, isReviewsModalOpen, 
+    isImportModalOpen, isLoginModalOpen, isViewModalOpen, isSuggestModalOpen, 
+    isAdminPanelOpen
+  ]);
 
   const greeting = useMemo(() => {
     const h = new Date().getHours();
@@ -445,7 +495,7 @@ const App = () => {
   }, [items, activeTab, searchTerm, pinnedItems]);
 
   return (
-    <div className={`flex h-screen overflow-hidden transition-colors duration-300 ${
+    <div className={`flex h-[100dvh] overflow-hidden transition-colors duration-300 ${
       darkMode 
         ? 'bg-gradient-to-br from-[#030712] via-[#090e1a] to-[#030712] text-slate-100' 
         : 'bg-gradient-to-tr from-slate-100 via-[#f8fafc] to-[#eff6ff]/30 text-slate-900'
@@ -489,6 +539,8 @@ const App = () => {
           setSearchTerm={setSearchTerm} 
           darkMode={darkMode} 
           setDarkMode={setDarkMode} 
+          textSize={textSize}
+          setTextSize={setTextSize}
           activeTab={activeTab} 
           sidebarOpen={sidebarOpen} 
           setSidebarOpen={setSidebarOpen} 
@@ -511,18 +563,25 @@ const App = () => {
           ) : (
             <>
               {/* Category Page Title Row */}
-              <div className="flex items-center justify-between mb-8">
-                <h2 className="text-xl font-black text-slate-800 dark:text-white flex items-center gap-3">
-                  {(() => {
-                    const matchedCat = categories.find(c => c.id === activeTab);
-                    const Icon = matchedCat && iconMap[matchedCat.iconName] ? iconMap[matchedCat.iconName] : Home;
-                    return <Icon className="text-blue-500" />;
-                  })()}
-                  <span>{categories.find(c => c.id === activeTab)?.label}</span>
-                </h2>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                <div className="text-right">
+                  <h2 className="text-xl font-black text-slate-800 dark:text-white flex items-center gap-3">
+                    {(() => {
+                      const matchedCat = categories.find(c => c.id === activeTab);
+                      const Icon = matchedCat && iconMap[matchedCat.iconName] ? iconMap[matchedCat.iconName] : Home;
+                      return <Icon className="text-blue-500" />;
+                    })()}
+                    <span>{categories.find(c => c.id === activeTab)?.label}</span>
+                  </h2>
+                  {categoryDescriptions[activeTab] && (
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5 font-medium leading-relaxed">
+                      {categoryDescriptions[activeTab]}
+                    </p>
+                  )}
+                </div>
                 
                 {/* Admin controls inside category */}
-                <div className="flex gap-2">
+                <div className="flex gap-2 shrink-0 self-end sm:self-auto">
                   {/* Anonymous user suggestion box button */}
                   <button 
                     onClick={() => setIsSuggestModalOpen(true)}
@@ -588,7 +647,7 @@ const App = () => {
               </div>
 
               {/* Grid of Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 pb-12">
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6 pb-12">
                 {filteredItems.map(item => (
                   <ItemCard 
                     key={item.id}
@@ -637,7 +696,7 @@ const App = () => {
                   פלטפורמה זו פותחה על ידי <span className="font-bold text-blue-500 dark:text-blue-400">מדור מחקר ופיתוח (מו"פ)</span>,
                   <br />החטיבה לזיהוי פלילי, אגף החקירות והמודיעין, משטרת ישראל.
                 </p>
-                <p className="text-[9px] font-black uppercase tracking-widest text-slate-450 dark:text-slate-500">
+                <p className="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">
                   © {new Date().getFullYear()} כל הזכויות שמורות לחטיבת הזיהוי הפלילי
                 </p>
               </div>
@@ -648,7 +707,7 @@ const App = () => {
               }`}>
                 <div className="flex gap-4 items-start text-right">
                   <div className={`p-2 rounded-2xl shrink-0 ${
-                    darkMode ? 'bg-amber-500/10 text-amber-500' : 'bg-amber-50 text-amber-655 text-amber-700'
+                    darkMode ? 'bg-amber-500/10 text-amber-500' : 'bg-amber-50 text-amber-700'
                   }`}>
                     <ShieldAlert size={18} />
                   </div>

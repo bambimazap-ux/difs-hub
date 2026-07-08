@@ -48,8 +48,8 @@ const Sidebar = ({
     } : {
       slate: 'bg-slate-200 text-slate-800 border-slate-300 shadow-sm font-bold',
       blue: 'bg-blue-50 text-blue-700 border-blue-100 font-bold',
-      cyan: 'bg-cyan-55 text-cyan-700 border-cyan-100 font-bold',
-      amber: 'bg-amber-50 text-amber-805 text-amber-800 border-amber-100 font-bold',
+      cyan: 'bg-cyan-50 text-cyan-700 border-cyan-100 font-bold',
+      amber: 'bg-amber-50 text-amber-800 border-amber-100 font-bold',
       purple: 'bg-purple-50 text-purple-700 border-purple-100 font-bold'
     };
 
@@ -95,20 +95,20 @@ const Sidebar = ({
       )}
 
       {/* Sidebar Container */}
-      <aside className={`fixed inset-y-0 w-72 z-50 transition-all duration-300 ease-out lg:static lg:block glass-panel ${
+      <aside className={`fixed inset-y-0 right-0 w-72 z-50 transition-transform duration-300 ease-out lg:static lg:block transform will-change-transform glass-panel ${
         darkMode ? 'bg-[#0b0f17] border-l border-slate-900' : 'bg-white border-l border-slate-200'
-      } ${sidebarOpen ? 'right-0 shadow-xl visible opacity-100' : '-right-72 invisible opacity-0 lg:right-auto lg:visible lg:opacity-100'}`}>
+      } ${sidebarOpen ? 'translate-x-0 shadow-xl visible opacity-100' : 'translate-x-full lg:translate-x-0 lg:visible lg:opacity-100'}`}>
         
         <div className="h-full flex flex-col p-6 relative">
           {/* Mobile Close Button */}
           <button 
             onClick={() => setSidebarOpen(false)}
-            className={`absolute top-4 left-4 p-2 rounded-xl lg:hidden transition-colors ${
+            className={`absolute top-4 left-4 w-11 h-11 flex items-center justify-center rounded-xl lg:hidden transition-colors ${
               darkMode ? 'hover:bg-slate-800 text-slate-400 hover:text-slate-200' : 'hover:bg-slate-100 text-slate-500'
             }`}
             aria-label="סגור תפריט"
           >
-            <X size={18} />
+            <X size={20} />
           </button>
 
           {/* Brand Logo Container */}
