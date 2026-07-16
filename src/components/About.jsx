@@ -21,10 +21,10 @@ const About = ({
   const getCategoryTheme = (color) => {
     if (darkMode) {
       switch(color) {
-        case 'blue': return { border: 'hover:border-blue-500/50', iconBg: 'bg-blue-500/10 text-blue-400 group-hover:bg-blue-600 group-hover:text-white', colorText: 'text-blue-400', shadow: 'hover:shadow-blue-500/5' };
-        case 'cyan': return { border: 'hover:border-cyan-500/50', iconBg: 'bg-cyan-500/10 text-cyan-400 group-hover:bg-cyan-600 group-hover:text-slate-950', colorText: 'text-cyan-400', shadow: 'hover:shadow-cyan-500/5' };
-        case 'amber': return { border: 'hover:border-amber-500/50', iconBg: 'bg-amber-500/10 text-amber-400 group-hover:bg-amber-600 group-hover:text-slate-950', colorText: 'text-amber-400', shadow: 'hover:shadow-amber-500/5' };
-        case 'purple': return { border: 'hover:border-purple-500/50', iconBg: 'bg-purple-500/10 text-purple-400 group-hover:bg-purple-600 group-hover:text-white', colorText: 'text-purple-400', shadow: 'hover:shadow-purple-500/5' };
+        case 'blue': return { border: 'hover:border-primary/50', iconBg: 'bg-primary/10 text-primary group-hover:bg-primary group-hover:text-[#002e6a]', colorText: 'text-primary', shadow: 'hover:shadow-[0_0_15px_rgba(173,198,255,0.15)]' };
+        case 'cyan': return { border: 'hover:border-secondary/50', iconBg: 'bg-secondary/10 text-secondary group-hover:bg-secondary group-hover:text-[#003640]', colorText: 'text-secondary', shadow: 'hover:shadow-[0_0_15px_rgba(76,215,246,0.15)]' };
+        case 'amber': return { border: 'hover:border-amber-500/50', iconBg: 'bg-amber-500/10 text-amber-400 group-hover:bg-amber-500 group-hover:text-black', colorText: 'text-amber-450', shadow: 'hover:shadow-[0_0_15px_rgba(245,158,11,0.15)]' };
+        case 'purple': return { border: 'hover:border-tertiary/50', iconBg: 'bg-tertiary/10 text-tertiary group-hover:bg-tertiary group-hover:text-[#3c0091]', colorText: 'text-tertiary', shadow: 'hover:shadow-[0_0_15px_rgba(208,188,255,0.15)]' };
         default: return { border: 'hover:border-slate-500/50', iconBg: 'bg-slate-500/10 text-slate-400 group-hover:bg-slate-700 group-hover:text-white', colorText: 'text-slate-400', shadow: '' };
       }
     } else {
@@ -63,25 +63,29 @@ const About = ({
     <div className="animate-in fade-in duration-500 w-full flex flex-col justify-start max-w-5xl mx-auto space-y-6 md:space-y-8 pb-16 relative px-4 md:px-0">
       
       {/* Premium Hero Banner */}
-      <div className={`relative overflow-hidden rounded-2xl md:rounded-[2.5rem] p-6 md:p-12 border transition-all duration-300 ${
+      <div className={`relative overflow-hidden rounded-2xl md:rounded-[2rem] p-6 md:p-12 border transition-all duration-300 ${
         darkMode 
-          ? 'bg-slate-900 border-slate-800/80 shadow-lg' 
+          ? 'bg-surface-container/40 border-outline-variant/20 shadow-lg glass-panel-glow' 
           : 'bg-gradient-to-br from-slate-50 via-white to-slate-50 text-slate-900 border-slate-200/80 shadow-md shadow-slate-200/10'
       }`}>
+        {/* Subtle grid elements in hero background */}
+        {darkMode && (
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(173,198,255,0.01)_1px,transparent_1px),linear-gradient(to_bottom,rgba(173,198,255,0.01)_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none opacity-50"></div>
+        )}
         <div className="relative z-10 flex flex-col items-center text-center max-w-2xl mx-auto space-y-4 md:space-y-5">
           <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-wider border transition-all duration-300 ${
             darkMode 
-              ? 'bg-blue-500/10 text-blue-300 border-blue-500/20' 
+              ? 'bg-primary/10 text-primary border-primary/20' 
               : 'bg-blue-50 text-blue-700 border-blue-100 shadow-sm'
           }`}>
-            <Sparkles size={11} />
+            <Sparkles size={11} className="animate-pulse" />
             <span>DIFS Innovation</span>
           </div>
           
-          <h2 className="text-2xl md:text-4xl font-black tracking-tight leading-tight text-slate-900 dark:text-white">
+          <h2 className="text-2xl md:text-3xl font-black tracking-tight leading-tight text-slate-900 dark:text-on-surface">
             מרכז החדשנות והבינה המלאכותית
           </h2>
-          <p className="text-xs md:text-sm font-medium leading-relaxed text-slate-500 dark:text-slate-400">
+          <p className="text-xs md:text-sm font-medium leading-relaxed text-slate-500 dark:text-on-surface-variant">
             הפלטפורמה המרכזית של החטיבה לזיהוי פלילי המאגדת בוטים מתקדמים, כלי AI חיצוניים ומאגר הדרכות מקצועי.
           </p>
         </div>
@@ -89,27 +93,27 @@ const About = ({
 
       {/* Announcement Banner (If Active) */}
       {announcementActive && announcement && (
-        <div className={`p-4 rounded-xl md:rounded-2xl border flex items-center gap-3 animate-pulse ${
-          darkMode ? 'bg-blue-950/20 border-blue-900/50 text-blue-300' : 'bg-blue-50 border-blue-200 text-blue-800'
+        <div className={`p-4 rounded-xl md:rounded-2xl border flex items-center gap-3 ${
+          darkMode ? 'bg-primary/10 border-primary/20 text-primary glass-panel-glow pulse-glow animate-pulse' : 'bg-blue-50 border-blue-200 text-blue-800'
         }`}>
-          <Megaphone size={15} className="shrink-0 text-blue-500" />
+          <Megaphone size={15} className="shrink-0 text-secondary" />
           <p className="text-xs font-bold text-right w-full leading-relaxed">{announcement}</p>
         </div>
       )}
 
       {/* WhatsApp Forum Card Widget */}
-      <div className={`p-5 md:p-6 rounded-2xl md:rounded-[2rem] border flex flex-col md:flex-row justify-between items-center gap-5 md:gap-6 ${
+      <div className={`p-5 md:p-6 rounded-2xl border flex flex-col md:flex-row justify-between items-center gap-5 md:gap-6 ${
         darkMode 
-          ? 'bg-slate-900/40 border-slate-800' 
+          ? 'bg-surface-container/40 border-outline-variant/20 backdrop-blur-md shadow-md' 
           : 'bg-white border-slate-200 shadow-sm'
       }`}>
         <div className="flex gap-4 items-start text-right">
-          <div className={`p-2.5 rounded-xl ${darkMode ? 'bg-indigo-500/10 text-indigo-400' : 'bg-indigo-50 text-indigo-700'}`}>
+          <div className={`p-2.5 rounded-xl ${darkMode ? 'bg-tertiary/10 text-tertiary' : 'bg-indigo-50 text-indigo-700'}`}>
             <MessageSquare size={20} />
           </div>
           <div className="space-y-1">
-            <h3 className="text-xs md:text-sm font-bold text-slate-900 dark:text-white">הפורום המקצועי של מז"פ בוואטסאפ</h3>
-            <p className="text-[11px] md:text-xs text-slate-500 dark:text-slate-400 max-w-xl leading-relaxed">
+            <h3 className="text-xs md:text-sm font-bold text-slate-900 dark:text-on-surface">הפורום המקצועי של מז"פ בוואטסאפ</h3>
+            <p className="text-[11px] md:text-xs text-slate-500 dark:text-on-surface-variant max-w-xl leading-relaxed">
               קבוצת הדיונים הפנימית של החטיבה לשיתוף פרומפטים מנצחים, התייעצות לגבי כלי AI ותמיכה טכנית הדדית בזמן אמת.
             </p>
           </div>
@@ -118,8 +122,8 @@ const About = ({
           href={whatsappUrl} 
           target="_blank" 
           rel="noopener noreferrer"
-          className={`w-full md:w-auto px-5 py-3.5 md:py-2.5 rounded-xl font-bold text-xs text-center transition-all shadow-sm flex items-center justify-center gap-1.5 ${
-            darkMode ? 'bg-indigo-600 hover:bg-indigo-500 text-white' : 'bg-indigo-600 hover:bg-indigo-700 text-white'
+          className={`w-full md:w-auto px-5 py-3 md:py-2.5 rounded-xl font-bold text-xs text-center transition-all shadow-sm flex items-center justify-center gap-1.5 active:scale-[0.98] ${
+            darkMode ? 'bg-tertiary/20 hover:bg-tertiary/30 text-tertiary border border-tertiary/30 hover:shadow-[0_0_15px_rgba(208,188,255,0.15)]' : 'bg-indigo-600 hover:bg-indigo-700 text-white'
           }`}
         >
           <span>הצטרפות לפורום ב-WhatsApp</span>
@@ -142,7 +146,7 @@ const About = ({
               <div 
                 key={cat.id}
                 onClick={() => setActiveTab(cat.id)} 
-                className={`cursor-pointer p-5 md:p-6 rounded-xl md:rounded-[2rem] border glass-card transition-all duration-300 group relative ${theme.border} ${theme.shadow}`}
+                className={`cursor-pointer p-5 md:p-6 rounded-2xl border glass-card transition-all duration-300 group relative ${theme.border} ${theme.shadow}`}
               >
                 <div className="flex justify-between items-start mb-5">
                   <div className={`w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-300 shadow-sm ${theme.iconBg}`}>
@@ -150,17 +154,17 @@ const About = ({
                   </div>
                   <span className={`text-[9px] font-bold px-2 py-0.5 rounded transition-all ${
                     darkMode 
-                      ? 'bg-slate-800 text-slate-400 group-hover:bg-slate-700 group-hover:text-white' 
+                      ? 'bg-surface-variant/40 text-on-surface-variant group-hover:bg-surface-bright group-hover:text-white' 
                       : 'bg-slate-100 text-slate-500 group-hover:bg-slate-200 group-hover:text-slate-800'
                   }`}>
                     {count} פריטים
                   </span>
                 </div>
                 
-                <h3 className="text-xs md:text-sm font-black mb-1.5 text-slate-800 dark:text-white">
+                <h3 className="text-xs md:text-sm font-black mb-1.5 text-slate-800 dark:text-on-surface">
                   {cat.label}
                 </h3>
-                <p className="text-slate-405 dark:text-slate-500 leading-relaxed text-[10px] mb-4 h-8 line-clamp-2">
+                <p className="text-slate-450 dark:text-on-surface-variant/70 leading-relaxed text-[10px] mb-4 h-8 line-clamp-2">
                   {cat.subtitle}
                 </p>
                 
@@ -177,12 +181,12 @@ const About = ({
       {/* Dashboard Sub-widgets: Trending vs Recent */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
         {/* Top-Rated / Featured */}
-        <div className={`p-5 md:p-6 rounded-xl md:rounded-[2rem] border ${
-          darkMode ? 'bg-slate-900/20 border-slate-800/80' : 'bg-white border-slate-200 shadow-sm'
+        <div className={`p-5 md:p-6 rounded-2xl border ${
+          darkMode ? 'bg-surface-container-low/40 border-outline-variant/20 backdrop-blur-md shadow-sm' : 'bg-white border-slate-200 shadow-sm'
         }`}>
           <div className="flex items-center gap-2 mb-4">
             <Star size={15} className="text-amber-500" />
-            <h3 className="text-xs md:text-sm font-black text-slate-800 dark:text-white">כלים מובילים במעבדות</h3>
+            <h3 className="text-xs md:text-sm font-black text-slate-800 dark:text-on-surface">כלים מובילים במעבדות</h3>
           </div>
           
           <div className="space-y-3">
@@ -192,19 +196,19 @@ const About = ({
                 target="_blank"
                 rel="noopener noreferrer"
                 key={tool.id} 
-                className={`flex justify-between items-center p-3 rounded-xl border transition-all ${
+                className={`flex justify-between items-center p-3 rounded-xl border transition-all duration-200 active:scale-[0.99] ${
                   darkMode 
-                    ? 'bg-slate-900/30 border-slate-800/60 hover:bg-slate-800/40 hover:border-slate-700' 
+                    ? 'bg-surface-variant/20 border-outline-variant/10 hover:bg-surface-variant/40 hover:border-outline-variant/30 text-on-surface' 
                     : 'bg-slate-50 border-slate-100 hover:bg-slate-100/50 hover:border-slate-200'
                 }`}
               >
                 <div className="text-right">
-                  <div className="text-xs font-bold text-slate-800 dark:text-white">{tool.title}</div>
-                  <div className="text-[9px] text-slate-400 dark:text-slate-500 truncate max-w-[160px] md:max-w-[200px]">{tool.description}</div>
+                  <div className="text-xs font-bold text-slate-800 dark:text-on-surface">{tool.title}</div>
+                  <div className="text-[9px] text-slate-400 dark:text-on-surface-variant/60 truncate max-w-[160px] md:max-w-[200px]">{tool.description}</div>
                 </div>
                 <div className="flex items-center gap-1 shrink-0">
                   <Star size={9} className="text-amber-500" fill="currentColor" />
-                  <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400">{tool.avgRating.toFixed(1)}</span>
+                  <span className="text-[10px] font-bold text-slate-600 dark:text-on-surface-variant">{tool.avgRating.toFixed(1)}</span>
                 </div>
               </a>
             ))}
@@ -215,12 +219,12 @@ const About = ({
         </div>
 
         {/* Recently Updated */}
-        <div className={`p-5 md:p-6 rounded-xl md:rounded-[2rem] border ${
-          darkMode ? 'bg-slate-900/20 border-slate-800/80' : 'bg-white border-slate-200 shadow-sm'
+        <div className={`p-5 md:p-6 rounded-2xl border ${
+          darkMode ? 'bg-surface-container-low/40 border-outline-variant/20 backdrop-blur-md shadow-sm' : 'bg-white border-slate-200 shadow-sm'
         }`}>
           <div className="flex items-center gap-2 mb-4">
-            <Clock size={15} className="text-blue-500" />
-            <h3 className="text-xs md:text-sm font-black text-slate-800 dark:text-white">עדכונים אחרונים</h3>
+            <Clock size={15} className="text-secondary" />
+            <h3 className="text-xs md:text-sm font-black text-slate-800 dark:text-on-surface">עדכונים אחרונים</h3>
           </div>
           
           <div className="space-y-3">
@@ -230,17 +234,17 @@ const About = ({
                 target="_blank"
                 rel="noopener noreferrer"
                 key={tool.id} 
-                className={`flex justify-between items-center p-3 rounded-xl border transition-all ${
+                className={`flex justify-between items-center p-3 rounded-xl border transition-all duration-200 active:scale-[0.99] ${
                   darkMode 
-                    ? 'bg-slate-900/30 border-slate-800/60 hover:bg-slate-800/40 hover:border-slate-700' 
+                    ? 'bg-surface-variant/20 border-outline-variant/10 hover:bg-surface-variant/40 hover:border-outline-variant/30 text-on-surface' 
                     : 'bg-slate-50 border-slate-100 hover:bg-slate-100/50 hover:border-slate-200'
                 }`}
               >
                 <div className="text-right">
-                  <div className="text-xs font-bold text-slate-800 dark:text-white">{tool.title}</div>
-                  <div className="text-[9px] text-slate-400 dark:text-slate-500 truncate max-w-[160px] md:max-w-[200px]">{tool.description}</div>
+                  <div className="text-xs font-bold text-slate-800 dark:text-on-surface">{tool.title}</div>
+                  <div className="text-[9px] text-slate-400 dark:text-on-surface-variant/60 truncate max-w-[160px] md:max-w-[200px]">{tool.description}</div>
                 </div>
-                <span className="text-[9px] font-bold text-slate-400 dark:text-slate-500 shrink-0">
+                <span className="text-[9px] font-bold text-slate-400 dark:text-on-surface-variant/60 shrink-0">
                   {new Date(tool.updatedAt || 0).toLocaleDateString('he-IL')}
                 </span>
               </a>

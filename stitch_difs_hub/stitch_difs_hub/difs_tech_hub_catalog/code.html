@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+
+<html class="dark" dir="rtl" lang="he"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DIFS Tech Hub - Tool Catalog</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Outfit:wght@400;500;600&amp;family=Rubik:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-high": "#272a31",
+                      "surface-tint": "#adc6ff",
+                      "tertiary": "#d0bcff",
+                      "secondary-fixed": "#acedff",
+                      "on-tertiary-fixed": "#23005c",
+                      "surface-variant": "#32353c",
+                      "inverse-on-surface": "#2e3038",
+                      "outline-variant": "#424754",
+                      "on-surface-variant": "#c2c6d6",
+                      "inverse-primary": "#005ac2",
+                      "error": "#ffb4ab",
+                      "on-error-container": "#ffdad6",
+                      "on-secondary": "#003640",
+                      "secondary-fixed-dim": "#4cd7f6",
+                      "tertiary-container": "#a078ff",
+                      "on-secondary-fixed-variant": "#004e5c",
+                      "secondary": "#4cd7f6",
+                      "outline": "#8c909f",
+                      "on-secondary-container": "#00424e",
+                      "on-tertiary-container": "#340080",
+                      "primary-fixed-dim": "#adc6ff",
+                      "on-primary-container": "#00285d",
+                      "background": "#10131a",
+                      "on-tertiary-fixed-variant": "#5516be",
+                      "on-primary-fixed-variant": "#004395",
+                      "surface-bright": "#363941",
+                      "on-secondary-fixed": "#001f26",
+                      "on-primary": "#002e6a",
+                      "on-surface": "#e1e2ec",
+                      "on-tertiary": "#3c0091",
+                      "surface": "#10131a",
+                      "on-background": "#e1e2ec",
+                      "tertiary-fixed": "#e9ddff",
+                      "surface-container-low": "#191b23",
+                      "surface-container-lowest": "#0b0e15",
+                      "secondary-container": "#03b5d3",
+                      "tertiary-fixed-dim": "#d0bcff",
+                      "surface-container-highest": "#32353c",
+                      "surface-dim": "#10131a",
+                      "primary-fixed": "#d8e2ff",
+                      "primary": "#adc6ff",
+                      "on-primary-fixed": "#001a42",
+                      "primary-container": "#4d8eff",
+                      "error-container": "#93000a",
+                      "surface-container": "#1d2027",
+                      "inverse-surface": "#e1e2ec",
+                      "on-error": "#690005"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "base-unit": "4px",
+                      "stack-md": "16px",
+                      "container-margin": "24px",
+                      "panel-padding": "20px",
+                      "gutter": "16px",
+                      "stack-sm": "8px",
+                      "stack-lg": "32px"
+              },
+              "fontFamily": {
+                      "body-sm": [
+                              "Outfit"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Outfit"
+                      ],
+                      "body-md": [
+                              "Outfit"
+                      ],
+                      "headline-xl": [
+                              "Rubik"
+                      ],
+                      "headline-lg": [
+                              "Rubik"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Rubik"
+                      ]
+              },
+              "fontSize": {
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-sm": [
+                              "10px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-xl": [
+                              "40px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        body {
+            background-color: #030712;
+            background-image: linear-gradient(rgba(76, 215, 246, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(76, 215, 246, 0.05) 1px, transparent 1px);
+            background-size: 32px 32px;
+            background-attachment: fixed;
+        }
+        
+        .glass-panel {
+            background: rgba(9, 14, 26, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(66, 71, 84, 0.3);
+            border-top-color: rgba(173, 198, 255, 0.2);
+            border-right-color: rgba(173, 198, 255, 0.2);
+        }
+
+        .glowing-border {
+            box-shadow: 0 0 20px rgba(173, 198, 255, 0.15);
+            border: 1px solid rgba(173, 198, 255, 0.4);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #adc6ff 0%, #4cd7f6 100%);
+            color: #001a42;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
+        }
+        
+        .btn-ghost {
+            border: 1px solid #4cd7f6;
+            color: #4cd7f6;
+        }
+        
+        .btn-ghost:hover {
+            background-color: rgba(76, 215, 246, 0.1);
+        }
+    </style>
+</head>
+<body class="text-on-background min-h-screen flex rtl font-body-md text-body-md overflow-x-hidden">
+<!-- SideNavBar (Shared Component) -->
+<nav class="hidden md:flex flex-col h-full bg-surface-container/70 backdrop-blur-xl docked fixed right-0 top-0 w-64 border-l border-outline-variant/30 shadow-[0px_0px_20px_rgba(173,198,255,0.15)] z-40">
+<div class="p-panel-padding flex items-center gap-stack-md border-b border-outline-variant/20">
+<img alt="DIFS Logo Badge" class="w-12 h-12 rounded-xl object-cover border border-outline-variant/50" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZgLsbRIrCnDHIYmYoJofu4ZruFz9qUfMp80PkRx54lshqhqnEOsCGFJ_bDQHSY_ErQ0cPSkM8uwNQ_Ihnh133rfe2WUR2BIjeFssaCHi9XFkWRQBSy9JY-C3Mx0ERlFMr7YcEPemKyrzuEp6yv8jesbIcxpe2RfMkGfsW0oEOTNDidM-p-eNl4ecRdhbSgzdt9JO9FeWxsjMaI8Dp-k9JNO6tABWP4vzwFy7PIqW-mdWflMV0_bo"/>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-surface-tint">DIFS Tech Hub</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">מז"פ Tech Hub</p>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto py-stack-md flex flex-col gap-base-unit">
+<a class="flex flex-row-reverse items-center gap-stack-sm text-on-surface-variant hover:text-on-surface px-4 py-3 hover:bg-surface-variant/50 transition-all duration-300 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">dashboard</span>
+<span>לוח בקרה</span>
+</a>
+<a class="flex flex-row-reverse items-center gap-stack-sm bg-primary-container/20 text-primary border-r-4 border-primary px-4 py-3 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">phonelink_setup</span>
+<span>מערכות וכלי AI</span>
+</a>
+<a class="flex flex-row-reverse items-center gap-stack-sm text-on-surface-variant hover:text-on-surface px-4 py-3 hover:bg-surface-variant/50 transition-all duration-300 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">folder_managed</span>
+<span>ניהול תיקים</span>
+</a>
+<a class="flex flex-row-reverse items-center gap-stack-sm text-on-surface-variant hover:text-on-surface px-4 py-3 hover:bg-surface-variant/50 transition-all duration-300 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">database</span>
+<span>מאגרי נתונים</span>
+</a>
+<a class="flex flex-row-reverse items-center gap-stack-sm text-on-surface-variant hover:text-on-surface px-4 py-3 hover:bg-surface-variant/50 transition-all duration-300 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+<span>הגדרות מערכת</span>
+</a>
+</div>
+<div class="p-panel-padding border-t border-outline-variant/20 flex flex-col gap-stack-sm">
+<div class="bg-surface-variant/30 rounded-lg p-3 text-center border border-outline-variant/20">
+<span class="font-label-sm text-label-sm text-primary">מצב מנהל מערכת</span>
+</div>
+<a class="flex flex-row-reverse items-center gap-stack-sm text-on-surface-variant hover:text-on-surface px-4 py-2 hover:bg-surface-variant/50 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">help</span>
+<span>עזרה</span>
+</a>
+<a class="flex flex-row-reverse items-center gap-stack-sm text-error hover:bg-error-container/10 px-4 py-2 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span>יציאה</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col md:mr-64 w-full min-h-screen relative">
+<!-- TopAppBar (Shared Component) -->
+<header class="bg-surface/50 backdrop-blur-md docked fixed top-0 left-0 right-0 md:right-64 h-16 border-b border-outline-variant/20 flex flex-row-reverse justify-between items-center px-container-margin w-auto rtl z-30">
+<div class="flex items-center gap-stack-md">
+<span class="md:hidden font-headline-lg text-headline-lg font-semibold text-surface-tint">DIFS Tech Hub</span>
+<!-- Search Bar Placeholder -->
+<div class="hidden sm:flex items-center bg-surface-variant/50 border-b-2 border-outline-variant rounded-t-sm px-3 py-1 w-64 focus-within:border-primary transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant mr-2">search</span>
+<input class="bg-transparent border-none text-on-surface focus:ring-0 w-full placeholder:text-on-surface-variant/50 font-body-sm text-body-sm" placeholder="חיפוש כלים..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-stack-md text-on-surface-variant cursor-pointer">
+<button class="hover:text-primary transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="hover:text-primary transition-colors flex items-center">
+<img alt="User Profile" class="w-8 h-8 rounded-full border border-primary/50 object-cover" data-alt="A macro photography shot of a pristine, glowing cyan microchip logic board acting as an abstract User Profile avatar, deep black background with soft rim lighting, high-tech cyber-forensic aesthetic, incredibly detailed, 8k resolution, cinematic atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAanyw09Ea62sh5iT9NbdUI2sC6oRajgLbqP5nznz6qea4dehu7DcqopTARFuQNVtqgyudLdaMwKAkmIrcqayawozQSTc6xdw5bstDloEAm5ipwrMP2lPYACpqQdFznkn6UbRj81ihXzQBX3fkY6zesutzEKlDl4UWccvGTOcrCIydt54o-GAfxqBdNexp9_6p4YKHlx97c4E3_cQZZaD4FDOJV8nsx65t900p8XhyKnZq4o33yelY"/>
+</button>
+</div>
+</header>
+<!-- Canvas -->
+<main class="flex-1 mt-16 p-container-margin pb-32 max-w-7xl mx-auto w-full flex flex-col gap-stack-lg">
+<!-- Page Header Section -->
+<section class="flex flex-col md:flex-row justify-between items-start md:items-end gap-stack-md border-b border-outline-variant/20 pb-stack-md">
+<div>
+<div class="flex items-center gap-stack-sm mb-2 text-primary">
+<span class="material-symbols-outlined text-3xl">psychology</span>
+<h2 class="font-headline-xl text-headline-xl text-on-surface">מערכות וכלי AI</h2>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+                        קטלוג הכלים הפנימיים של מז"פ. אסופה של מודלי שפה, כלי עיבוד תמונה וניתוח נתונים מבוססי בינה מלאכותית בסביבה סגורה ומאובטחת.
+                    </p>
+</div>
+<div class="flex flex-wrap gap-stack-sm">
+<button class="btn-ghost px-4 py-2 rounded font-label-md text-label-md flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-sm">upload_file</span>
+                        ייבוא JSON
+                    </button>
+<button class="btn-ghost px-4 py-2 rounded font-label-md text-label-md flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-sm">add</span>
+                        הוסף פריט
+                    </button>
+<button class="btn-primary px-6 py-2 rounded font-label-md text-label-md font-bold flex items-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-sm">lightbulb</span>
+                        הצע כלי מהשטח
+                    </button>
+</div>
+</section>
+<!-- Tools Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-gutter">
+<!-- Featured Card -->
+<div class="glass-panel glowing-border rounded-xl p-panel-padding flex flex-col gap-stack-md relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-2 h-full bg-primary/80 group-hover:bg-primary transition-colors"></div>
+<div class="absolute top-4 left-4 flex gap-2">
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">content_copy</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">push_pin</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high border border-outline-variant flex items-center justify-center text-primary shadow-[0_0_10px_rgba(173,198,255,0.2)]">
+<span class="material-symbols-outlined text-2xl">document_scanner</span>
+</div>
+<div>
+<span class="px-2 py-0.5 rounded-sm bg-primary-container/20 text-primary font-label-sm text-label-sm border border-primary/30 mb-1 inline-block">מומלץ מערכת</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Forensic Vision Pro</h3>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant flex-1 line-clamp-3">
+                        מערכת מתקדמת לניתוח ופענוח תמונות מזירת העבירה. כוללת אלגוריתמים לשיפור רזולוציה, זיהוי אובייקטים והצלבת פנים מול מאגרי המידע בצורה מאובטחת.
+                    </p>
+<div class="flex items-center justify-between border-t border-outline-variant/30 pt-stack-sm mt-auto">
+<div class="flex flex-col">
+<div class="flex items-center text-secondary">
+<span class="font-label-md text-label-md font-bold">4.8</span>
+<span class="text-xs ml-1">★</span>
+</div>
+<button class="text-primary hover:underline font-label-sm text-label-sm text-right mt-1">צפה בביקורות</button>
+</div>
+<button class="btn-primary px-4 py-1.5 rounded font-label-md text-label-md font-bold flex items-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-sm">play_arrow</span>
+                            הפעל כלי
+                        </button>
+</div>
+</div>
+<!-- Standard Card 1 -->
+<div class="glass-panel rounded-xl p-panel-padding flex flex-col gap-stack-md relative hover:border-outline transition-colors">
+<div class="absolute top-0 right-0 w-1 h-full bg-outline-variant"></div>
+<div class="absolute top-4 left-4 flex gap-2">
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">content_copy</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">push_pin</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high border border-outline-variant flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-2xl">memory</span>
+</div>
+<div>
+<span class="px-2 py-0.5 rounded-sm bg-surface-variant text-on-surface-variant font-label-sm text-label-sm border border-outline-variant/50 mb-1 inline-block">ניתוח טקסט</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">DIFS LLM Core</h3>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant flex-1 line-clamp-3">
+                        מודל שפה מקומי ומאובטח המותאם לטרמינולוגיה משטרתית. מסייע בסיכום עדויות, הפקת תובנות מדוחות ארוכים וניסוח ראשוני של מסמכים משפטיים.
+                    </p>
+<div class="flex items-center justify-between border-t border-outline-variant/30 pt-stack-sm mt-auto">
+<div class="flex flex-col">
+<div class="flex items-center text-on-surface-variant">
+<span class="font-label-md text-label-md font-bold">4.2</span>
+<span class="text-xs ml-1 text-outline">★</span>
+</div>
+<button class="text-primary hover:underline font-label-sm text-label-sm text-right mt-1">צפה בביקורות</button>
+</div>
+<button class="bg-surface-variant hover:bg-surface-bright text-on-surface px-4 py-1.5 rounded font-label-md text-label-md font-bold flex items-center gap-2 border border-outline-variant transition-colors">
+<span class="material-symbols-outlined text-sm">play_arrow</span>
+                            הפעל כלי
+                        </button>
+</div>
+</div>
+<!-- Standard Card 2 -->
+<div class="glass-panel rounded-xl p-panel-padding flex flex-col gap-stack-md relative hover:border-outline transition-colors">
+<div class="absolute top-0 right-0 w-1 h-full bg-outline-variant"></div>
+<div class="absolute top-4 left-4 flex gap-2">
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">content_copy</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">push_pin</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high border border-outline-variant flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-2xl">fingerprint</span>
+</div>
+<div>
+<span class="px-2 py-0.5 rounded-sm bg-surface-variant text-on-surface-variant font-label-sm text-label-sm border border-outline-variant/50 mb-1 inline-block">ביומטריה</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Bio-Match AI</h3>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant flex-1 line-clamp-3">
+                        כלי עזר לזיהוי טביעות אצבע חלקיות. המערכת משתמשת ברשתות נוירונים עמוקות כדי להשלים דפוסים חסרים ולהציע התאמות פוטנציאליות בדיוק גבוה.
+                    </p>
+<div class="flex items-center justify-between border-t border-outline-variant/30 pt-stack-sm mt-auto">
+<div class="flex flex-col">
+<div class="flex items-center text-on-surface-variant">
+<span class="font-label-md text-label-md font-bold">4.5</span>
+<span class="text-xs ml-1 text-outline">★</span>
+</div>
+<button class="text-primary hover:underline font-label-sm text-label-sm text-right mt-1">צפה בביקורות</button>
+</div>
+<button class="bg-surface-variant hover:bg-surface-bright text-on-surface px-4 py-1.5 rounded font-label-md text-label-md font-bold flex items-center gap-2 border border-outline-variant transition-colors">
+<span class="material-symbols-outlined text-sm">play_arrow</span>
+                            הפעל כלי
+                        </button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer (Shared Component Template modified for security warning) -->
+<footer class="bg-surface-container-lowest/80 backdrop-blur-lg docked absolute bottom-0 left-0 right-0 md:right-64 border-t-2 border-error-container/30 flex flex-col gap-stack-md p-panel-padding items-center rtl z-30">
+<div class="w-full max-w-4xl flex items-center gap-3 bg-error-container/10 border border-error-container/50 p-3 rounded-lg text-error mb-2">
+<span class="material-symbols-outlined text-2xl">warning</span>
+<p class="font-body-sm text-body-sm">
+<strong>אזהרת אבטחת מידע:</strong> הכלים בקטלוג זה מעבדים מידע מסווג. חל איסור מוחלט על העלאת נתונים אלו לפלטפורמות חיצוניות או שירותי ענן שאינם מאושרים ע"י מחלקת ביטחון שדה. הפעילות מנוטרת.
+                </p>
+</div>
+<div class="flex flex-col md:flex-row items-center justify-between w-full max-w-4xl text-on-surface-variant font-label-sm text-label-sm">
+<p>© 2024 משטרת ישראל - חטיבת הזיהוי הפלילי (מז"פ). כל הזכויות שמורות.</p>
+<div class="flex gap-4 mt-2 md:mt-0">
+<a class="hover:text-secondary underline transition-colors" href="#">מדיניות אבטחה</a>
+<a class="hover:text-secondary underline transition-colors" href="#">תנאי שימוש</a>
+<a class="hover:text-secondary underline transition-colors" href="#">צור קשר</a>
+</div>
+</div>
+</footer>
+</div>
+</body></html>

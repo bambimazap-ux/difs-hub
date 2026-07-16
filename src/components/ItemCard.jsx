@@ -52,10 +52,10 @@ const ItemCard = ({
   const getCategoryTheme = (color) => {
     if (darkMode) {
       switch (color) {
-        case 'blue': return { text: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/20' };
-        case 'cyan': return { text: 'text-cyan-400', bg: 'bg-cyan-500/10', border: 'border-cyan-500/20' };
-        case 'amber': return { text: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20' };
-        case 'purple': return { text: 'text-purple-400', bg: 'bg-purple-500/10', border: 'border-purple-500/20' };
+        case 'blue': return { text: 'text-primary', bg: 'bg-primary/10', border: 'border-primary/20' };
+        case 'cyan': return { text: 'text-secondary', bg: 'bg-secondary/10', border: 'border-secondary/20' };
+        case 'amber': return { text: 'text-amber-400', bg: 'bg-amber-400/10', border: 'border-amber-400/20' };
+        case 'purple': return { text: 'text-tertiary', bg: 'bg-tertiary/10', border: 'border-tertiary/20' };
         default: return { text: 'text-slate-400', bg: 'bg-slate-500/10', border: 'border-slate-500/20' };
       }
     } else {
@@ -72,16 +72,21 @@ const ItemCard = ({
   const theme = getCategoryTheme(categoryColor);
 
   return (
-    <div className={`rounded-2xl p-4 md:p-5 border glass-card transition-all duration-300 ${
+    <div className={`rounded-2xl p-4 md:p-5 border glass-card transition-all duration-300 relative overflow-hidden ${
       item.isFeatured ? 'featured-glow' : ''
     }`}>
+      {/* Scan line effect for active/featured cards in dark mode */}
+      {item.isFeatured && darkMode && (
+        <div className="scan-line"></div>
+      )}
+
       {/* Top Header Row (Main Collapsed View) */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-right">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-right relative z-10">
         {/* Right side: Badge, Title, Rating, Date */}
         <div className="flex flex-col gap-1.5 flex-grow min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             {/* Dynamic Category Indicator Badge */}
-            <div className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider ${theme.bg} ${theme.text}`}>
+            <div className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider border ${theme.bg} ${theme.text} ${theme.border}`}>
               <span className="w-1 h-1 rounded-full bg-current"></span>
               <span>{categoryLabel}</span>
             </div>
@@ -95,7 +100,7 @@ const ItemCard = ({
 
             {/* Date for updates/events */}
             {item.eventDate && (
-              <div className="flex items-center gap-1 text-[9px] font-medium text-slate-400 dark:text-slate-500">
+              <div className="flex items-center gap-1 text-[9px] font-medium text-slate-400 dark:text-on-surface-variant/75">
                 <Calendar size={10} />
                 <span>{new Date(item.eventDate).toLocaleDateString('he-IL')}</span>
               </div>
@@ -103,7 +108,7 @@ const ItemCard = ({
           </div>
 
           <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
-            <h4 className="text-sm font-black tracking-tight text-slate-900 dark:text-white group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors duration-200 truncate">
+            <h4 className="text-sm font-black tracking-tight text-slate-900 dark:text-on-surface group-hover:text-primary transition-colors duration-200 truncate">
               {item.title}
             </h4>
             
@@ -111,7 +116,7 @@ const ItemCard = ({
             <div className="flex items-center gap-1 text-[10px] text-amber-500 font-bold shrink-0">
               <Star size={10} fill="currentColor" />
               <span>{avgRating}</span>
-              <span className="text-slate-400 dark:text-slate-500 text-[8px]">({stats.count})</span>
+              <span className="text-slate-450 dark:text-on-surface-variant/60 text-[8px]">({stats.count})</span>
             </div>
           </div>
         </div>
@@ -124,9 +129,9 @@ const ItemCard = ({
               href={item.url} 
               target="_blank" 
               rel="noopener noreferrer"
-              className={`flex items-center gap-1 px-3 py-1.5 rounded-xl font-black text-[10px] transition-all duration-200 shadow-sm shrink-0 ${
+              className={`flex items-center gap-1 px-3 py-1.5 rounded-xl font-black text-[10px] transition-all duration-200 shadow-sm shrink-0 active:scale-[0.97] ${
                 darkMode 
-                  ? 'bg-slate-800 hover:bg-blue-600 text-slate-200 hover:text-white border border-slate-700/50' 
+                  ? 'bg-primary/10 hover:bg-primary text-primary hover:text-[#002e6a] border border-primary/20 hover:shadow-[0_0_12px_rgba(173,198,255,0.15)]' 
                   : 'bg-slate-900 text-white hover:bg-blue-600 border border-slate-900 hover:border-blue-500'
               }`}
             >
@@ -143,9 +148,9 @@ const ItemCard = ({
           {item.url && (
             <button 
               onClick={copyLink} 
-              className={`p-2 rounded-lg border transition-all duration-200 ${
+              className={`p-2 rounded-lg border transition-all duration-200 active:scale-[0.95] ${
                 darkMode 
-                  ? 'bg-slate-900/40 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border-slate-800/80' 
+                  ? 'bg-surface-variant/40 hover:bg-surface-bright text-on-surface-variant hover:text-on-surface border-outline-variant/20' 
                   : 'bg-slate-100 hover:bg-slate-200 text-slate-500 border-slate-200'
               }`}
               title="העתק קישור"
@@ -157,12 +162,12 @@ const ItemCard = ({
           {/* Pin Card */}
           <button 
             onClick={() => togglePin(item.id)} 
-            className={`p-2 rounded-lg border transition-all duration-200 ${
+            className={`p-2 rounded-lg border transition-all duration-200 active:scale-[0.95] ${
               isPinned 
-                ? 'bg-blue-500/20 text-blue-400 border-blue-500/30' 
+                ? 'bg-primary/20 text-primary border-primary/30' 
                 : darkMode 
-                  ? 'bg-slate-900/40 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border-slate-800/80' 
-                  : 'bg-slate-100 hover:bg-slate-200 text-slate-500 border-slate-200'
+                  ? 'bg-surface-variant/40 hover:bg-surface-bright text-on-surface-variant hover:text-on-surface border-outline-variant/20' 
+                  : 'bg-slate-105 hover:bg-slate-200 text-slate-505 border-slate-200'
             }`}
             title={isPinned ? "הסר נעיצה" : "נעץ פריט"}
           >
@@ -171,16 +176,16 @@ const ItemCard = ({
 
           {/* Admin Controls */}
           {isAdmin && (
-            <div className="flex items-center gap-1 border-r border-slate-200/10 dark:border-slate-800/60 pr-2 mr-1">
+            <div className="flex items-center gap-1 border-r border-slate-200/10 dark:border-outline-variant/20 pr-2 mr-1">
               {/* Toggle Featured */}
               <button 
                 onClick={() => toggleGlobalFeatured(item)} 
-                className={`p-2 rounded-lg border transition-all duration-200 ${
+                className={`p-2 rounded-lg border transition-all duration-200 active:scale-[0.95] ${
                   item.isFeatured 
                     ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' 
                     : darkMode 
-                      ? 'bg-slate-900/40 hover:bg-slate-800 text-slate-400 hover:text-amber-400 border-slate-800/80' 
-                      : 'bg-slate-100 hover:bg-slate-200 text-slate-500 border-slate-200'
+                      ? 'bg-surface-variant/40 hover:bg-surface-bright text-on-surface-variant hover:text-amber-400 border-outline-variant/20' 
+                      : 'bg-slate-100 hover:bg-slate-200 text-slate-550 border-slate-200'
                 }`}
                 title="מומלץ מערכת"
               >
@@ -190,10 +195,10 @@ const ItemCard = ({
               {/* Edit */}
               <button 
                 onClick={() => { setEditingItem(item); setIsModalOpen(true); }} 
-                className={`p-2 rounded-lg border transition-all duration-200 ${
+                className={`p-2 rounded-lg border transition-all duration-200 active:scale-[0.95] ${
                   darkMode 
-                    ? 'bg-slate-900/40 hover:bg-slate-800 text-slate-400 hover:text-blue-400 border-slate-800/80' 
-                    : 'bg-slate-100 hover:bg-slate-200 text-slate-500 border-slate-200'
+                    ? 'bg-surface-variant/40 hover:bg-surface-bright text-on-surface-variant hover:text-primary border-outline-variant/20' 
+                    : 'bg-slate-100 hover:bg-slate-200 text-slate-550 border-slate-200'
                 }`}
                 title="ערוך"
               >
@@ -203,10 +208,10 @@ const ItemCard = ({
               {/* Delete */}
               <button 
                 onClick={() => handleDelete(item.id)} 
-                className={`p-2 rounded-lg border transition-all duration-200 ${
+                className={`p-2 rounded-lg border transition-all duration-200 active:scale-[0.95] ${
                   darkMode 
-                    ? 'bg-slate-900/40 hover:bg-red-500/20 text-slate-400 hover:text-red-400 border-slate-800/80' 
-                    : 'bg-slate-100 hover:bg-red-100 text-slate-500 border-slate-200 hover:text-red-600'
+                    ? 'bg-surface-variant/40 hover:bg-red-500/20 text-on-surface-variant hover:text-red-405 border-outline-variant/20' 
+                    : 'bg-slate-100 hover:bg-red-100 text-slate-550 border-slate-200 hover:text-red-650'
                 }`}
                 title="מחק"
               >
@@ -218,10 +223,10 @@ const ItemCard = ({
           {/* Expand Chevron Toggle */}
           <button 
             onClick={() => setIsExpanded(!isExpanded)}
-            className={`p-2 rounded-lg border transition-all duration-200 ${
+            className={`p-2 rounded-lg border transition-all duration-200 active:scale-[0.95] ${
               darkMode 
-                ? 'bg-slate-900/40 hover:bg-slate-800 text-slate-400 hover:text-white border-slate-800/80' 
-                : 'bg-slate-100 hover:bg-slate-200 text-slate-600 border-slate-200'
+                ? 'bg-surface-variant/40 hover:bg-surface-bright text-on-surface-variant hover:text-on-surface border-outline-variant/20' 
+                : 'bg-slate-100 hover:bg-slate-200 text-slate-650 border-slate-200'
             }`}
             aria-label={isExpanded ? "סגור פרטים" : "פתח פרטים"}
             title={isExpanded ? "סגור פרטים" : "פתח פרטים"}
@@ -233,10 +238,10 @@ const ItemCard = ({
 
       {/* Expanded Content Drawer */}
       {isExpanded && (
-        <div className="mt-4 pt-4 border-t border-slate-200/10 dark:border-slate-800/60 animate-in fade-in slide-in-from-top-2 duration-200 space-y-4 text-right">
+        <div className="mt-4 pt-4 border-t border-slate-200/10 dark:border-outline-variant/20 animate-in fade-in slide-in-from-top-2 duration-200 space-y-4 text-right relative z-10">
           
           {/* Main Description Text */}
-          <p className="text-slate-600 dark:text-slate-350 text-xs leading-relaxed font-medium">
+          <p className="text-slate-650 dark:text-on-surface-variant text-xs leading-relaxed font-medium">
             {item.description}
           </p>
 
@@ -245,7 +250,7 @@ const ItemCard = ({
             <div className="pt-1">
               <button 
                 onClick={() => { setViewItem(item); setIsViewModalOpen(true); }}
-                className="text-[10px] font-black text-blue-500 dark:text-blue-400 hover:underline flex items-center gap-1 transition-colors"
+                className="text-[10px] font-black text-primary hover:text-secondary hover:underline flex items-center gap-1 transition-colors"
               >
                 <span>הצג תמונה ומפרט מלא</span>
               </button>
@@ -253,13 +258,13 @@ const ItemCard = ({
           )}
 
           {/* Card Footer Rating & Detailed Controls Area */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-200/5 dark:border-slate-800/40">
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-200/5 dark:border-outline-variant/10">
             <div className="flex items-center gap-1.5 font-bold">
               <div className="flex items-center text-amber-400">
                 <Star size={13} fill="currentColor" />
               </div>
-              <span className="text-xs text-slate-900 dark:text-slate-200">{avgRating}</span>
-              <span className="text-[10px] text-slate-400 dark:text-slate-500">({stats.count} דירוגים)</span>
+              <span className="text-xs text-slate-900 dark:text-on-surface">{avgRating}</span>
+              <span className="text-[10px] text-slate-400 dark:text-on-surface-variant/60">({stats.count} דירוגים)</span>
             </div>
 
             <div className="flex items-center gap-2">
@@ -267,7 +272,7 @@ const ItemCard = ({
                 <button 
                   onClick={() => { setReviewsItem({ ...item, reviews: stats.reviews }); setIsReviewsModalOpen(true); }}
                   className={`text-[10px] font-black px-3 py-1.5 rounded-lg transition-colors ${
-                    darkMode ? 'hover:bg-slate-800 text-slate-400 hover:text-slate-200' : 'hover:bg-slate-100 text-slate-600 hover:text-slate-900'
+                    darkMode ? 'hover:bg-surface-variant/60 text-on-surface-variant hover:text-on-surface' : 'hover:bg-slate-100 text-slate-600 hover:text-slate-900'
                   }`}
                 >
                   {stats.reviews.length} ביקורות
@@ -275,9 +280,9 @@ const ItemCard = ({
               )}
               <button 
                 onClick={() => { setFeedbackItem(item); setIsFeedbackModalOpen(true); }}
-                className={`text-[10px] font-black px-3 py-1.5 rounded-xl transition-all flex items-center gap-1.5 ${
+                className={`text-[10px] font-black px-3 py-1.5 rounded-xl transition-all flex items-center gap-1.5 active:scale-[0.98] ${
                   darkMode 
-                    ? 'bg-slate-900/50 hover:bg-slate-800 text-slate-300 border border-slate-800' 
+                    ? 'bg-surface-variant/40 hover:bg-surface-bright text-on-surface border border-outline-variant/30 hover:shadow-[0_0_12px_rgba(173,198,255,0.08)]' 
                     : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200'
                 }`}
               >

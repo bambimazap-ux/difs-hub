@@ -38,18 +38,18 @@ const Sidebar = ({
     const isActive = activeTab === id;
     const Icon = iconMap[iconName] || HelpCircle;
     
-    // Notion/Linear Slate-Slate theme colors
+    // Stitch inspired palette with category colors
     const activeColorClasses = darkMode ? {
-      slate: 'bg-slate-800 text-white border-slate-700 shadow-sm font-bold',
-      blue: 'bg-blue-600/30 text-blue-300 border-blue-500/40 shadow-sm font-bold',
-      cyan: 'bg-cyan-500/20 text-cyan-300 border-cyan-400/30 font-bold',
-      amber: 'bg-amber-500/20 text-amber-300 border-amber-400/30 font-bold',
-      purple: 'bg-purple-600/30 text-purple-300 border-purple-500/40 font-bold'
+      slate: 'bg-primary/10 text-primary border-primary/30 shadow-[0_0_12px_rgba(173,198,255,0.08)] font-bold',
+      blue: 'bg-blue-500/20 text-blue-400 border-blue-500/30 shadow-[0_0_12px_rgba(59,130,246,0.08)] font-bold',
+      cyan: 'bg-secondary/20 text-secondary border-secondary/30 shadow-[0_0_12px_rgba(76,215,246,0.08)] font-bold',
+      amber: 'bg-amber-500/20 text-amber-300 border-amber-500/30 shadow-[0_0_12px_rgba(245,158,11,0.08)] font-bold',
+      purple: 'bg-tertiary/20 text-tertiary border-tertiary/30 shadow-[0_0_12px_rgba(208,188,255,0.08)] font-bold'
     } : {
       slate: 'bg-slate-200 text-slate-800 border-slate-300 shadow-sm font-bold',
       blue: 'bg-blue-50 text-blue-700 border-blue-100 font-bold',
       cyan: 'bg-cyan-50 text-cyan-700 border-cyan-100 font-bold',
-      amber: 'bg-amber-50 text-amber-800 border-amber-100 font-bold',
+      amber: 'bg-amber-55 text-amber-800 border-amber-200 font-bold',
       purple: 'bg-purple-50 text-purple-700 border-purple-100 font-bold'
     };
 
@@ -59,16 +59,16 @@ const Sidebar = ({
     return (
       <button 
         onClick={() => { setActiveTab(id); setSidebarOpen(false); }}
-        className={`w-full flex items-center gap-4 px-4 py-3 rounded-2xl border transition-all duration-200 group ${
+        className={`w-full flex items-center gap-4 px-4 py-3 rounded-2xl border transition-all duration-200 group active:scale-[0.98] ${
           isActive 
             ? activeClass
-            : `${darkMode ? 'text-slate-400 bg-transparent border-transparent hover:bg-slate-800/40 hover:text-slate-200' : 'text-slate-500 bg-transparent border-transparent hover:bg-slate-100/60 hover:text-slate-800'}`
+            : `${darkMode ? 'text-on-surface-variant bg-transparent border-transparent hover:bg-surface-variant/40 hover:text-on-surface' : 'text-slate-500 bg-transparent border-transparent hover:bg-slate-100/60 hover:text-slate-850'}`
         }`}
       >
         <div className={`p-2 rounded-xl transition-all duration-200 ${
           isActive 
             ? 'bg-white/10 dark:bg-white/5' 
-            : 'bg-slate-500/5 group-hover:bg-slate-500/10'
+            : 'bg-slate-500/5 group-hover:bg-slate-550/10'
         }`}>
           <Icon size={18} />
         </div>
@@ -77,7 +77,7 @@ const Sidebar = ({
             isActive ? '' : 'text-slate-700 dark:text-slate-200 group-hover:text-slate-950 dark:group-hover:text-white'
           }`}>{label}</div>
           <div className={`text-[10px] font-medium mt-0.5 ${
-            isActive ? 'opacity-90' : 'text-slate-400 dark:text-slate-500'
+            isActive ? 'opacity-90' : 'text-slate-450 dark:text-slate-500'
           }`}>{subtitle}</div>
         </div>
       </button>
@@ -89,22 +89,24 @@ const Sidebar = ({
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
         <div 
-          className="fixed inset-0 z-40 bg-black/40 lg:hidden backdrop-blur-sm transition-opacity duration-300"
+          className="fixed inset-0 z-40 bg-black/45 lg:hidden backdrop-blur-sm transition-opacity duration-300"
           onClick={() => setSidebarOpen(false)}
         ></div>
       )}
 
       {/* Sidebar Container */}
-      <aside className={`fixed inset-y-0 right-0 w-72 z-50 transition-transform duration-300 ease-out lg:static lg:block transform will-change-transform glass-panel ${
-        darkMode ? 'bg-[#0b0f17] border-l border-slate-900' : 'bg-white border-l border-slate-200'
-      } ${sidebarOpen ? 'translate-x-0 shadow-xl visible opacity-100' : 'translate-x-full lg:translate-x-0 lg:visible lg:opacity-100'}`}>
+      <aside className={`fixed inset-y-0 right-0 w-72 z-50 transition-transform duration-300 ease-out lg:static lg:block transform lg:translate-x-0 glass-panel ${
+        darkMode 
+          ? 'bg-surface-container/70 border-l border-outline-variant/30' 
+          : 'bg-white border-l border-slate-200'
+      } ${sidebarOpen ? 'translate-x-0 shadow-2xl visible opacity-100' : 'translate-x-full lg:visible lg:opacity-100'}`}>
         
         <div className="h-full flex flex-col p-6 relative">
           {/* Mobile Close Button */}
           <button 
             onClick={() => setSidebarOpen(false)}
             className={`absolute top-4 left-4 w-11 h-11 flex items-center justify-center rounded-xl lg:hidden transition-colors ${
-              darkMode ? 'hover:bg-slate-800 text-slate-400 hover:text-slate-200' : 'hover:bg-slate-100 text-slate-500'
+              darkMode ? 'hover:bg-surface-variant text-on-surface-variant hover:text-on-surface' : 'hover:bg-slate-100 text-slate-500'
             }`}
             aria-label="סגור תפריט"
           >
@@ -113,13 +115,13 @@ const Sidebar = ({
 
           {/* Brand Logo Container */}
           <div className="flex flex-col items-center text-center mb-8 space-y-4 pt-6 lg:pt-2">
-            <div className="relative w-28 h-28 mx-auto group cursor-pointer">
+            <div className="relative w-24 h-24 mx-auto group cursor-pointer">
               {/* Outer decorative subtle boundary */}
-              <div className="absolute -inset-1 bg-gradient-to-tr from-slate-200 to-slate-300 dark:from-slate-800 dark:to-slate-700 rounded-[2rem] opacity-60 transition-all duration-300"></div>
+              <div className="absolute -inset-1 bg-gradient-to-tr from-primary to-secondary rounded-full opacity-40 group-hover:opacity-80 transition-all duration-300 blur-[2px]"></div>
               
               {/* Main Container */}
-              <div className="absolute inset-0 bg-white dark:bg-slate-950 rounded-[1.8rem] border border-slate-200 dark:border-slate-800 flex items-center justify-center p-3 shadow-sm">
-                <div className="w-full h-full relative flex items-center justify-center overflow-hidden rounded-[1.4rem]">
+              <div className="absolute inset-0 bg-[#090e1a] rounded-full border border-outline-variant/40 flex items-center justify-center p-2.5 shadow-md">
+                <div className="w-full h-full relative flex items-center justify-center overflow-hidden rounded-full bg-slate-900/50">
                   <img 
                     src="/לוגו מדור מופ.png" 
                     alt="לוגו מדור מופ" 
@@ -131,12 +133,12 @@ const Sidebar = ({
             </div>
 
             <div className="space-y-1">
-              <h1 className="font-black text-xl tracking-tight text-slate-900 dark:text-white">
+              <h1 className="font-black text-lg tracking-tight text-slate-900 dark:text-white">
                 מז"פ Tech Hub
               </h1>
-              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-                <span className="text-[9px] font-black text-slate-600 dark:text-slate-400 tracking-wider uppercase">מדור מחקר ופיתוח</span>
+              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-slate-100 dark:bg-surface-variant/40 border border-slate-200 dark:border-outline-variant/30">
+                <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+                <span className="text-[9px] font-black text-slate-650 dark:text-on-surface-variant tracking-wider uppercase">מדור מחקר ופיתוח</span>
               </div>
             </div>
           </div>
@@ -168,12 +170,12 @@ const Sidebar = ({
           </nav>
 
           {/* Admin Toggle Panel */}
-          <div className="mt-auto pt-4 border-t border-slate-200/10 dark:border-slate-800/60 shrink-0 space-y-2">
+          <div className="mt-auto pt-4 border-t border-slate-200/10 dark:border-outline-variant/20 shrink-0 space-y-2">
             {isAdmin && (
               <button 
                 onClick={() => setIsAdminPanelOpen(true)}
                 className={`w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-xs font-bold transition-all duration-300 border ${
-                  darkMode ? 'bg-blue-600/20 text-blue-300 border-blue-500/30' : 'bg-blue-50 text-blue-700 border-blue-100'
+                  darkMode ? 'bg-blue-500/10 text-blue-400 border-blue-500/20 hover:bg-blue-500/20' : 'bg-blue-50 text-blue-700 border-blue-100 hover:bg-blue-100'
                 }`}
               >
                 <Settings size={14} />
@@ -185,7 +187,7 @@ const Sidebar = ({
               className={`w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-xs font-bold transition-all duration-300 border ${
                 isAdmin 
                   ? 'bg-amber-500/20 text-amber-300 border-amber-500/30' 
-                  : `${darkMode ? 'bg-slate-900/50 hover:bg-slate-800/80 text-slate-300 border-slate-800' : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'}`
+                  : `${darkMode ? 'bg-surface-variant/40 hover:bg-surface-variant/80 text-on-surface border-outline-variant/30' : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'}`
               }`}
             >
               {isAdmin ? <Layout size={14} /> : <Lock size={14} />}

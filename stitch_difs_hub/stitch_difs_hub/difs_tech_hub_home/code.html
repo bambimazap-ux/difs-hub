@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+
+<html class="dark" dir="rtl" lang="he"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DIFS Tech Hub - Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=Rubik:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-high": "#272a31",
+                      "surface-tint": "#adc6ff",
+                      "tertiary": "#d0bcff",
+                      "secondary-fixed": "#acedff",
+                      "on-tertiary-fixed": "#23005c",
+                      "surface-variant": "#32353c",
+                      "inverse-on-surface": "#2e3038",
+                      "outline-variant": "#424754",
+                      "on-surface-variant": "#c2c6d6",
+                      "inverse-primary": "#005ac2",
+                      "error": "#ffb4ab",
+                      "on-error-container": "#ffdad6",
+                      "on-secondary": "#003640",
+                      "secondary-fixed-dim": "#4cd7f6",
+                      "tertiary-container": "#a078ff",
+                      "on-secondary-fixed-variant": "#004e5c",
+                      "secondary": "#4cd7f6",
+                      "outline": "#8c909f",
+                      "on-secondary-container": "#00424e",
+                      "on-tertiary-container": "#340080",
+                      "primary-fixed-dim": "#adc6ff",
+                      "on-primary-container": "#00285d",
+                      "background": "#10131a",
+                      "on-tertiary-fixed-variant": "#5516be",
+                      "on-primary-fixed-variant": "#004395",
+                      "surface-bright": "#363941",
+                      "on-secondary-fixed": "#001f26",
+                      "on-primary": "#002e6a",
+                      "on-surface": "#e1e2ec",
+                      "on-tertiary": "#3c0091",
+                      "surface": "#10131a",
+                      "on-background": "#e1e2ec",
+                      "tertiary-fixed": "#e9ddff",
+                      "surface-container-low": "#191b23",
+                      "surface-container-lowest": "#0b0e15",
+                      "secondary-container": "#03b5d3",
+                      "tertiary-fixed-dim": "#d0bcff",
+                      "surface-container-highest": "#32353c",
+                      "surface-dim": "#10131a",
+                      "primary-fixed": "#d8e2ff",
+                      "primary": "#adc6ff",
+                      "on-primary-fixed": "#001a42",
+                      "primary-container": "#4d8eff",
+                      "error-container": "#93000a",
+                      "surface-container": "#1d2027",
+                      "inverse-surface": "#e1e2ec",
+                      "on-error": "#690005"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "base-unit": "4px",
+                      "stack-md": "16px",
+                      "container-margin": "24px",
+                      "panel-padding": "20px",
+                      "gutter": "16px",
+                      "stack-sm": "8px",
+                      "stack-lg": "32px"
+              },
+              "fontFamily": {
+                      "body-sm": [
+                              "Outfit"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Outfit"
+                      ],
+                      "body-md": [
+                              "Outfit"
+                      ],
+                      "headline-xl": [
+                              "Rubik"
+                      ],
+                      "headline-lg": [
+                              "Rubik"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Rubik"
+                      ]
+              },
+              "fontSize": {
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-sm": [
+                              "10px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-xl": [
+                              "40px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        body {
+            background-color: #030712;
+            background-image: 
+                linear-gradient(to right, rgba(76, 215, 246, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(76, 215, 246, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            color: #e1e2ec;
+        }
+        
+        .glass-panel {
+            background-color: rgba(9, 14, 26, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid #424754;
+            border-top-color: rgba(255,255,255,0.1);
+            border-right-color: rgba(255,255,255,0.1);
+        }
+
+        .glass-panel-glow {
+            box-shadow: 0 0 20px 0 rgba(173, 198, 255, 0.15);
+        }
+
+        .pulse-glow {
+            animation: pulse-glow-anim 2s infinite;
+        }
+
+        @keyframes pulse-glow-anim {
+            0% { box-shadow: 0 0 0 0 rgba(76, 215, 246, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(76, 215, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(76, 215, 246, 0); }
+        }
+        
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #4cd7f6, transparent);
+            opacity: 0.5;
+            animation: scan 4s linear infinite;
+        }
+        
+        @keyframes scan {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100%); }
+        }
+      </style>
+</head>
+<body class="font-body-md text-body-md rtl h-screen flex overflow-hidden">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-full bg-surface-container/70 backdrop-blur-xl docked fixed right-0 top-0 w-64 border-l border-outline-variant/30 z-50">
+<!-- Logo Area -->
+<div class="p-container-margin border-b border-outline-variant/20 flex flex-col items-center justify-center gap-stack-sm">
+<div class="w-20 h-20 rounded-full overflow-hidden border-2 border-primary glow-cyan mb-2">
+<img alt="DIFS Logo Badge" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZgLsbRIrCnDHIYmYoJofu4ZruFz9qUfMp80PkRx54lshqhqnEOsCGFJ_bDQHSY_ErQ0cPSkM8uwNQ_Ihnh133rfe2WUR2BIjeFssaCHi9XFkWRQBSy9JY-C3Mx0ERlFMr7YcEPemKyrzuEp6yv8jesbIcxpe2RfMkGfsW0oEOTNDidM-p-eNl4ecRdhbSgzdt9JO9FeWxsjMaI8Dp-k9JNO6tABWP4vzwFy7PIqW-mdWflMV0_bo"/>
+</div>
+<h1 class="font-headline-md text-headline-md font-bold text-surface-tint text-center">DIFS Tech Hub</h1>
+<p class="font-label-md text-label-md text-on-surface-variant">מז"פ Tech Hub</p>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 overflow-y-auto py-stack-md flex flex-col gap-base-unit">
+<a class="flex flex-row items-center gap-stack-sm bg-primary-container/20 text-primary border-r-4 border-primary px-4 py-3 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span>לוח בקרה</span>
+</a>
+<a class="flex flex-row items-center gap-stack-sm text-on-surface-variant hover:text-on-surface px-4 py-3 hover:bg-surface-variant/50 transition-all duration-300 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">phonelink_setup</span>
+<span>ניתוח פורנזי</span>
+</a>
+<a class="flex flex-row items-center gap-stack-sm text-on-surface-variant hover:text-on-surface px-4 py-3 hover:bg-surface-variant/50 transition-all duration-300 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">folder_managed</span>
+<span>ניהול תיקים</span>
+</a>
+<a class="flex flex-row items-center gap-stack-sm text-on-surface-variant hover:text-on-surface px-4 py-3 hover:bg-surface-variant/50 transition-all duration-300 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">database</span>
+<span>מאגרי נתונים</span>
+</a>
+<a class="flex flex-row items-center gap-stack-sm text-on-surface-variant hover:text-on-surface px-4 py-3 hover:bg-surface-variant/50 transition-all duration-300 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>הגדרות מערכת</span>
+</a>
+</div>
+<!-- Footer Links -->
+<div class="p-4 border-t border-outline-variant/20 flex flex-col gap-base-unit">
+<a class="flex flex-row items-center gap-stack-sm text-on-surface-variant hover:text-on-surface px-4 py-2 hover:bg-surface-variant/50 transition-all duration-300 rounded-md" href="#">
+<span class="material-symbols-outlined">help</span>
+<span>עזרה</span>
+</a>
+<a class="flex flex-row items-center gap-stack-sm text-error hover:text-error-container px-4 py-2 hover:bg-surface-variant/50 transition-all duration-300 rounded-md" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span>יציאה</span>
+</a>
+<div class="mt-4 px-4">
+<button class="w-full bg-surface-variant text-on-surface font-label-md text-label-md py-2 rounded border border-outline-variant/50 hover:bg-surface-bright transition-colors">
+                    מצב מנהל מערכת
+                </button>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 md:mr-64 flex flex-col relative h-full overflow-hidden">
+<!-- TopAppBar -->
+<header class="flex flex-row justify-between items-center px-container-margin w-full rtl bg-surface/50 backdrop-blur-md h-16 border-b border-outline-variant/20 z-40 sticky top-0">
+<div class="flex items-center gap-stack-md">
+<!-- Mobile Menu Button -->
+<button class="md:hidden text-on-surface p-2 rounded-full hover:bg-surface-variant/50 transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h2 class="font-headline-lg text-headline-lg font-semibold text-surface-tint hidden md:block">DIFS Tech Hub</h2>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-stack-md">
+<button class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer relative p-2 rounded-full hover:bg-surface-variant/50">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full animate-pulse"></span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer p-2 rounded-full hover:bg-surface-variant/50">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Scrollable Canvas -->
+<div class="flex-1 overflow-y-auto p-container-margin pb-32">
+<!-- Announcement Bar -->
+<div class="mb-stack-lg relative overflow-hidden rounded-lg bg-primary-container/10 border border-primary/30 p-4 flex items-center justify-center gap-2 glass-panel-glow pulse-glow">
+<span class="material-symbols-outlined text-primary">campaign</span>
+<p class="font-body-lg text-body-lg text-primary font-medium text-center">ברוכים הבאים לפורטל החדשנות והמו"פ של חטיבת הזיהוי הפלילי (מז"פ)!</p>
+<div class="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent animate-[shimmer_2s_infinite]"></div>
+</div>
+<!-- Hero Section (Bento Top) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter mb-stack-lg">
+<!-- Main Hero -->
+<div class="lg:col-span-8 glass-panel rounded-xl p-8 relative overflow-hidden flex flex-col justify-center min-h-[300px]">
+<div class="scan-line"></div>
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
+<div class="relative z-10 space-y-4">
+<div class="inline-flex items-center gap-2 bg-surface-variant/50 border border-outline-variant/30 rounded-full px-3 py-1 mb-4">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-secondary tracking-widest uppercase">מערכת פעילה</span>
+</div>
+<h2 class="font-headline-xl text-headline-xl text-surface-tint">מרכז החדשנות והבינה המלאכותית</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl leading-relaxed">
+                            הפלטפורמה המרכזית של החטיבה לזיהוי פלילי המאגדת בוטים מתקדמים, כלי AI חיצוניים ומאגר הדרכות מקצועי.
+                        </p>
+</div>
+</div>
+<!-- WhatsApp Forum Card -->
+<div class="lg:col-span-4 glass-panel rounded-xl p-6 relative overflow-hidden flex flex-col items-center justify-center text-center group hover:bg-surface-variant/40 transition-colors">
+<div class="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent"></div>
+<div class="w-16 h-16 rounded-2xl bg-surface-variant/80 border border-outline-variant/50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(34,197,94,0.2)]">
+<span class="material-symbols-outlined text-4xl text-green-400">forum</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">קהילת המומחים</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-6">הצטרפו לדיונים מקצועיים, שיתוף ידע ועדכונים בזמן אמת בפורום הסגור של מז"פ.</p>
+<button class="w-full bg-gradient-to-r from-primary to-secondary text-on-primary font-label-md text-label-md py-3 px-6 rounded-lg shadow-lg hover:shadow-cyan-500/20 transition-all flex items-center justify-center gap-2">
+<span>הצטרפות לפורום ב-WhatsApp</span>
+<span class="material-symbols-outlined text-sm">open_in_new</span>
+</button>
+</div>
+</div>
+<!-- Quick Categories Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-stack-lg">
+<!-- Internal Tools -->
+<div class="glass-panel rounded-lg p-6 border-r-2 border-r-primary hover:bg-surface-variant/30 transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined">terminal</span>
+</div>
+<span class="font-headline-lg text-headline-lg text-on-surface">14</span>
+</div>
+<h4 class="font-body-lg text-body-lg text-on-surface font-medium">כלי פיתוח פנימיים</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">בוטים ומערכות שפותחו בחטיבה</p>
+<div class="mt-4 flex items-center gap-2 text-primary font-label-sm text-label-sm group-hover:gap-3 transition-all">
+<span>צפה בכלים</span>
+<span class="material-symbols-outlined text-sm">arrow_back</span>
+</div>
+</div>
+<!-- External Tools -->
+<div class="glass-panel rounded-lg p-6 border-r-2 border-r-secondary hover:bg-surface-variant/30 transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 rounded-lg bg-secondary/10 text-secondary">
+<span class="material-symbols-outlined">api</span>
+</div>
+<span class="font-headline-lg text-headline-lg text-on-surface">8</span>
+</div>
+<h4 class="font-body-lg text-body-lg text-on-surface font-medium">כלי AI חיצוניים</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">מערכות מסחריות מאושרות</p>
+<div class="mt-4 flex items-center gap-2 text-secondary font-label-sm text-label-sm group-hover:gap-3 transition-all">
+<span>צפה בכלים</span>
+<span class="material-symbols-outlined text-sm">arrow_back</span>
+</div>
+</div>
+<!-- Training -->
+<div class="glass-panel rounded-lg p-6 border-r-2 border-r-tertiary hover:bg-surface-variant/30 transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 rounded-lg bg-tertiary/10 text-tertiary">
+<span class="material-symbols-outlined">school</span>
+</div>
+<span class="font-headline-lg text-headline-lg text-on-surface">24</span>
+</div>
+<h4 class="font-body-lg text-body-lg text-on-surface font-medium">מאגר הדרכות</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">מדריכים, נהלים וסרטונים</p>
+<div class="mt-4 flex items-center gap-2 text-tertiary font-label-sm text-label-sm group-hover:gap-3 transition-all">
+<span>למידה</span>
+<span class="material-symbols-outlined text-sm">arrow_back</span>
+</div>
+</div>
+</div>
+<!-- Widgets Row -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
+<!-- Top Tools Widget -->
+<div class="glass-panel rounded-xl flex flex-col h-[400px]">
+<div class="p-4 border-b border-outline-variant/30 flex justify-between items-center bg-surface-variant/20 rounded-t-xl">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">star</span>
+<h3 class="font-body-lg text-body-lg text-on-surface font-medium">כלים מובילים</h3>
+</div>
+<button class="text-primary hover:text-primary-container font-label-sm text-label-sm uppercase tracking-wider">הצג הכל</button>
+</div>
+<div class="p-2 flex-1 overflow-y-auto space-y-2">
+<!-- Tool Item -->
+<div class="flex items-center gap-4 p-3 rounded-lg hover:bg-surface-variant/40 transition-colors border border-transparent hover:border-outline-variant/30 cursor-pointer">
+<div class="w-10 h-10 rounded bg-primary-container/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">fingerprint</span>
+</div>
+<div class="flex-1">
+<h4 class="font-body-md text-body-md text-on-surface">זיהוי טביעות אצבע חכם (AI-Print)</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">כלי פנימי</p>
+</div>
+<div class="px-2 py-1 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+                                98%
+                            </div>
+</div>
+<!-- Tool Item -->
+<div class="flex items-center gap-4 p-3 rounded-lg hover:bg-surface-variant/40 transition-colors border border-transparent hover:border-outline-variant/30 cursor-pointer">
+<div class="w-10 h-10 rounded bg-secondary/20 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">image_search</span>
+</div>
+<div class="flex-1">
+<h4 class="font-body-md text-body-md text-on-surface">שיפור תמונה מבוסס רשת נוירונים</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">כלי חיצוני</p>
+</div>
+<div class="px-2 py-1 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+                                92%
+                            </div>
+</div>
+<!-- Tool Item -->
+<div class="flex items-center gap-4 p-3 rounded-lg hover:bg-surface-variant/40 transition-colors border border-transparent hover:border-outline-variant/30 cursor-pointer">
+<div class="w-10 h-10 rounded bg-tertiary/20 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined">translate</span>
+</div>
+<div class="flex-1">
+<h4 class="font-body-md text-body-md text-on-surface">תמלול ותרגום אודיו משפטי</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">כלי פנימי</p>
+</div>
+<div class="px-2 py-1 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+                                85%
+                            </div>
+</div>
+</div>
+</div>
+<!-- Recent Updates Terminal List -->
+<div class="glass-panel rounded-xl flex flex-col h-[400px]">
+<div class="p-4 border-b border-outline-variant/30 flex justify-between items-center bg-surface-variant/20 rounded-t-xl">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">update</span>
+<h3 class="font-body-lg text-body-lg text-on-surface font-medium">עדכונים אחרונים</h3>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto font-mono text-sm">
+<div class="flex gap-4 p-3 border-b border-outline-variant/10 bg-surface/5 hover:bg-surface-variant/20 transition-colors">
+<span class="text-secondary opacity-70 w-24 shrink-0">10:42 15/10</span>
+<div class="flex-1">
+<span class="text-primary font-medium">[מערכת]</span> עודכנה גרסת מודל השפה לפנימי (v2.4)
+                            </div>
+</div>
+<div class="flex gap-4 p-3 border-b border-outline-variant/10 bg-surface/2 hover:bg-surface-variant/20 transition-colors">
+<span class="text-secondary opacity-70 w-24 shrink-0">08:15 15/10</span>
+<div class="flex-1">
+<span class="text-tertiary font-medium">[הדרכה]</span> נוסף מדריך חדש: עבודה מאובטחת עם LLM חיצוני
+                            </div>
+</div>
+<div class="flex gap-4 p-3 border-b border-outline-variant/10 bg-surface/5 hover:bg-surface-variant/20 transition-colors">
+<span class="text-secondary opacity-70 w-24 shrink-0">16:30 14/10</span>
+<div class="flex-1">
+<span class="text-primary font-medium">[כלי]</span> כלי AI-Print זמין כעת לסניף צפון
+                            </div>
+</div>
+<div class="flex gap-4 p-3 border-b border-outline-variant/10 bg-surface/2 hover:bg-surface-variant/20 transition-colors">
+<span class="text-secondary opacity-70 w-24 shrink-0">11:00 13/10</span>
+<div class="flex-1">
+<span class="text-error font-medium">[אבטחה]</span> עודכנו נהלי סיווג חומרים לפני העלאה לכלים חיצוניים
+                            </div>
+</div>
+<div class="flex gap-4 p-3 border-b border-outline-variant/10 bg-surface/5 hover:bg-surface-variant/20 transition-colors">
+<span class="text-secondary opacity-70 w-24 shrink-0">09:00 10/10</span>
+<div class="flex-1">
+<span class="text-primary font-medium">[מערכת]</span> השקת הפורטל החדש בהצלחה
+                            </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="docked absolute bottom-0 left-0 right-0 md:right-64 bg-surface-container-lowest/80 backdrop-blur-lg border-t-2 border-error-container/30 bg-surface-container-low flex flex-col gap-stack-md p-panel-padding items-center rtl z-40">
+<!-- Security Warning -->
+<div class="w-full bg-error-container/20 border border-error/30 rounded-lg p-3 flex items-center justify-center gap-3 mb-2">
+<span class="material-symbols-outlined text-error">warning</span>
+<p class="font-body-sm text-body-sm text-error font-medium">אזהרה: המערכת מיועדת לשימוש מורשה בלבד. יש להקפיד על נהלי ביטחון מידע בסיווג חומרים.</p>
+</div>
+<div class="flex flex-col md:flex-row justify-between items-center w-full max-w-4xl gap-4">
+<p class="font-label-sm text-label-sm text-on-surface-variant text-center md:text-right">
+                    © 2024 משטרת ישראל - חטיבת הזיהוי הפלילי (מז"פ). כל הזכויות שמורות.
+                </p>
+<div class="flex gap-4">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-secondary transition-colors" href="#">מדיניות אבטחה</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-secondary transition-colors" href="#">תנאי שימוש</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-secondary transition-colors" href="#">צור קשר</a>
+</div>
+</div>
+</footer>
+</main>
+</body></html>
