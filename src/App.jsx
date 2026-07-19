@@ -495,10 +495,10 @@ const App = () => {
   }, [items, activeTab, searchTerm, pinnedItems]);
 
   return (
-    <div className={`flex h-[100dvh] overflow-hidden transition-colors duration-300 ${
+    <div className={`flex h-[100dvh] overflow-hidden transition-all duration-300 ${
       darkMode 
-        ? 'bg-gradient-to-br from-[#030712] via-[#090e1a] to-[#030712] text-slate-100' 
-        : 'bg-gradient-to-tr from-slate-100 via-[#f8fafc] to-[#eff6ff]/30 text-slate-900'
+        ? 'bg-grid-pattern text-slate-100' 
+        : 'bg-grid-pattern-light text-slate-900'
     }`} dir="rtl">
       
       {/* Subtle ambient backgrounds */}
@@ -647,7 +647,7 @@ const App = () => {
               </div>
 
               {/* Grid of Cards */}
-              <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6 pb-12">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 pb-12">
                 {filteredItems.map(item => (
                   <ItemCard 
                     key={item.id}

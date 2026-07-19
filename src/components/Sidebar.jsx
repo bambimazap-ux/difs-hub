@@ -40,17 +40,17 @@ const Sidebar = ({
     
     // Stitch inspired palette with category colors
     const activeColorClasses = darkMode ? {
-      slate: 'bg-primary/10 text-primary border-primary/30 shadow-[0_0_12px_rgba(173,198,255,0.08)] font-bold',
-      blue: 'bg-blue-500/20 text-blue-400 border-blue-500/30 shadow-[0_0_12px_rgba(59,130,246,0.08)] font-bold',
-      cyan: 'bg-secondary/20 text-secondary border-secondary/30 shadow-[0_0_12px_rgba(76,215,246,0.08)] font-bold',
-      amber: 'bg-amber-500/20 text-amber-300 border-amber-500/30 shadow-[0_0_12px_rgba(245,158,11,0.08)] font-bold',
-      purple: 'bg-tertiary/20 text-tertiary border-tertiary/30 shadow-[0_0_12px_rgba(208,188,255,0.08)] font-bold'
+      slate: 'bg-primary-container/10 text-primary border-primary font-bold',
+      blue: 'bg-primary-container/10 text-primary border-primary font-bold',
+      cyan: 'bg-secondary-container/10 text-secondary border-secondary font-bold',
+      amber: 'bg-amber-500/10 text-amber-400 border-amber-500 font-bold',
+      purple: 'bg-tertiary-container/10 text-tertiary border-tertiary font-bold'
     } : {
-      slate: 'bg-slate-200 text-slate-800 border-slate-300 shadow-sm font-bold',
-      blue: 'bg-blue-50 text-blue-700 border-blue-100 font-bold',
-      cyan: 'bg-cyan-50 text-cyan-700 border-cyan-100 font-bold',
-      amber: 'bg-amber-55 text-amber-800 border-amber-200 font-bold',
-      purple: 'bg-purple-50 text-purple-700 border-purple-100 font-bold'
+      slate: 'bg-slate-100 text-slate-800 border-slate-400 font-bold',
+      blue: 'bg-blue-50 text-blue-700 border-blue-600 font-bold',
+      cyan: 'bg-cyan-50 text-cyan-700 border-cyan-500 font-bold',
+      amber: 'bg-amber-50 text-amber-800 border-amber-600 font-bold',
+      purple: 'bg-purple-50 text-purple-700 border-purple-650 font-bold'
     };
 
     const defaultColor = color || 'slate';
@@ -59,24 +59,22 @@ const Sidebar = ({
     return (
       <button 
         onClick={() => { setActiveTab(id); setSidebarOpen(false); }}
-        className={`w-full flex items-center gap-4 px-4 py-3 rounded-2xl border transition-all duration-200 group active:scale-[0.98] ${
+        className={`w-full flex items-center gap-4 px-5 py-3 transition-all duration-200 border-r-4 active:scale-95 group ${
           isActive 
-            ? activeClass
-            : `${darkMode ? 'text-on-surface-variant bg-transparent border-transparent hover:bg-surface-variant/40 hover:text-on-surface' : 'text-slate-500 bg-transparent border-transparent hover:bg-slate-100/60 hover:text-slate-850'}`
+            ? `${activeClass}`
+            : `${darkMode ? 'text-on-surface-variant bg-transparent border-transparent hover:bg-surface-variant/30 hover:text-on-surface' : 'text-slate-600 bg-transparent border-transparent hover:bg-slate-100 hover:text-slate-900'}`
         }`}
       >
-        <div className={`p-2 rounded-xl transition-all duration-200 ${
+        <div className={`p-2 rounded-lg transition-all duration-200 shrink-0 ${
           isActive 
-            ? 'bg-white/10 dark:bg-white/5' 
-            : 'bg-slate-500/5 group-hover:bg-slate-550/10'
+            ? 'bg-transparent text-current' 
+            : 'bg-slate-500/5 group-hover:bg-slate-500/10'
         }`}>
           <Icon size={18} />
         </div>
-        <div className="text-right">
-          <div className={`font-bold text-sm leading-tight transition-colors ${
-            isActive ? '' : 'text-slate-700 dark:text-slate-200 group-hover:text-slate-950 dark:group-hover:text-white'
-          }`}>{label}</div>
-          <div className={`text-[10px] font-medium mt-0.5 ${
+        <div className="text-right flex-1 min-w-0">
+          <div className="font-bold text-xs leading-tight">{label}</div>
+          <div className={`text-[9px] font-medium mt-0.5 truncate ${
             isActive ? 'opacity-90' : 'text-slate-450 dark:text-slate-500'
           }`}>{subtitle}</div>
         </div>

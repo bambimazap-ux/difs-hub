@@ -68,229 +68,210 @@ const ItemCard = ({
       }
     }
   };
-
   const theme = getCategoryTheme(categoryColor);
 
   return (
-    <div className={`rounded-2xl p-4 md:p-5 border glass-card transition-all duration-300 relative overflow-hidden ${
-      item.isFeatured ? 'featured-glow' : ''
+    <div className={`rounded-xl p-5 border glass-panel transition-all duration-300 relative overflow-hidden flex flex-col gap-4 group ${
+      item.isFeatured ? 'border-primary/30 shadow-[0_0_15px_rgba(173,198,255,0.06)]' : 'border-outline-variant/15'
     }`}>
       {/* Scan line effect for active/featured cards in dark mode */}
       {item.isFeatured && darkMode && (
         <div className="scan-line"></div>
       )}
 
-      {/* Top Header Row (Main Collapsed View) */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-right relative z-10">
-        {/* Right side: Badge, Title, Rating, Date */}
-        <div className="flex flex-col gap-1.5 flex-grow min-w-0">
-          <div className="flex items-center gap-2 flex-wrap">
-            {/* Dynamic Category Indicator Badge */}
-            <div className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider border ${theme.bg} ${theme.text} ${theme.border}`}>
-              <span className="w-1 h-1 rounded-full bg-current"></span>
-              <span>{categoryLabel}</span>
-            </div>
+      {/* Right accent border bar */}
+      <div className={`absolute top-0 right-0 w-1 h-full transition-all duration-300 group-hover:w-1.5 ${
+        item.isFeatured 
+          ? 'bg-primary' 
+          : darkMode ? 'bg-outline-variant/65' : 'bg-slate-350'
+      }`}></div>
 
-            {item.isFeatured && (
-              <span className="flex items-center gap-1 text-[8px] font-black text-amber-500 bg-amber-500/10 px-1.5 py-0.2 rounded border border-amber-500/20 shrink-0">
-                <Crown size={8} fill="currentColor" />
-                <span>מומלץ</span>
-              </span>
-            )}
+      {/* Top Left Controls Row */}
+      <div className="absolute top-4 left-4 flex gap-1 z-20">
+        {/* Copy Link */}
+        {item.url && (
+          <button 
+            onClick={copyLink} 
+            className="text-on-surface-variant/70 hover:text-primary transition-all p-1 rounded hover:bg-surface-variant/30 active:scale-[0.9]"
+            title="העתק קישור"
+          >
+            <Copy size={14} />
+          </button>
+        )}
 
-            {/* Date for updates/events */}
-            {item.eventDate && (
-              <div className="flex items-center gap-1 text-[9px] font-medium text-slate-400 dark:text-on-surface-variant/75">
-                <Calendar size={10} />
-                <span>{new Date(item.eventDate).toLocaleDateString('he-IL')}</span>
-              </div>
-            )}
-          </div>
+        {/* Pin Card */}
+        <button 
+          onClick={() => togglePin(item.id)} 
+          className={`transition-all p-1 rounded hover:bg-surface-variant/30 active:scale-[0.9] ${
+            isPinned ? 'text-primary' : 'text-on-surface-variant/70 hover:text-primary'
+          }`}
+          title={isPinned ? "הסר נעיצה" : "נעץ פריט"}
+        >
+          <Pin size={14} fill={isPinned ? "currentColor" : "none"} />
+        </button>
 
-          <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
-            <h4 className="text-sm font-black tracking-tight text-slate-900 dark:text-on-surface group-hover:text-primary transition-colors duration-200 truncate">
-              {item.title}
-            </h4>
-            
-            {/* Mini rating indicator */}
-            <div className="flex items-center gap-1 text-[10px] text-amber-500 font-bold shrink-0">
-              <Star size={10} fill="currentColor" />
-              <span>{avgRating}</span>
-              <span className="text-slate-450 dark:text-on-surface-variant/60 text-[8px]">({stats.count})</span>
-            </div>
-          </div>
+        {/* Admin Controls */}
+        {isAdmin && (
+          <>
+            {/* Toggle Featured */}
+            <button 
+              onClick={() => toggleGlobalFeatured(item)} 
+              className={`transition-all p-1 rounded hover:bg-surface-variant/30 active:scale-[0.9] ${
+                item.isFeatured ? 'text-amber-500' : 'text-on-surface-variant/70 hover:text-amber-400'
+              }`}
+              title="מומלץ מערכת"
+            >
+              <Crown size={14} fill={item.isFeatured ? "currentColor" : "none"} />
+            </button>
+
+            {/* Edit */}
+            <button 
+              onClick={() => { setEditingItem(item); setIsModalOpen(true); }} 
+              className="text-on-surface-variant/70 hover:text-primary transition-all p-1 rounded hover:bg-surface-variant/30 active:scale-[0.9]"
+              title="ערוך"
+            >
+              <Edit3 size={14} />
+            </button>
+
+            {/* Delete */}
+            <button 
+              onClick={() => handleDelete(item.id)} 
+              className="text-on-surface-variant/70 hover:text-red-400 transition-all p-1 rounded hover:bg-surface-variant/30 active:scale-[0.9]"
+              title="מחק"
+            >
+              <Trash2 size={14} />
+            </button>
+          </>
+        )}
+      </div>
+
+      {/* Main Info Row (Icon Box + Category badge + Title) */}
+      <div className="flex items-start gap-3.5 text-right mt-1">
+        {/* Icon Box */}
+        <div className={`w-11 h-11 rounded-lg flex items-center justify-center shrink-0 border transition-all duration-300 ${
+          darkMode 
+            ? 'bg-surface-container-high border-outline-variant/40 text-primary shadow-[0_0_10px_rgba(173,198,255,0.06)]' 
+            : 'bg-slate-50 border-slate-200 text-blue-600'
+        }`}>
+          {(() => {
+            const Icon = iconMap[categories.find(c => c.id === item.category)?.iconName || 'HelpCircle'];
+            return <Icon size={20} />;
+          })()}
         </div>
 
-        {/* Left side: Action Controls & Buttons */}
-        <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
-          {/* Quick launch button */}
+        {/* Badge & Title */}
+        <div className="flex flex-col min-w-0 pr-0.5">
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className={`px-2 py-0.5 rounded-sm font-label-sm text-[8px] font-black tracking-wider border uppercase ${theme.bg} ${theme.text} ${theme.border}`}>
+              {categoryLabel}
+            </span>
+            {item.eventDate && (
+              <span className="text-[8px] font-bold text-slate-400 dark:text-on-surface-variant/60 flex items-center gap-0.5">
+                <Calendar size={8} />
+                <span>{new Date(item.eventDate).toLocaleDateString('he-IL')}</span>
+              </span>
+            )}
+          </div>
+          <h3 className="text-xs md:text-sm font-black text-slate-900 dark:text-on-surface mt-1 truncate max-w-[160px] sm:max-w-xs leading-tight">
+            {item.title}
+          </h3>
+        </div>
+      </div>
+
+      {/* Card Description */}
+      <p 
+        onClick={() => { setViewItem(item); setIsViewModalOpen(true); }}
+        className="text-[11px] leading-relaxed text-slate-500 dark:text-on-surface-variant flex-1 line-clamp-3 pr-0.5 cursor-pointer hover:text-primary transition-colors text-right"
+        title="לחץ לקריאה מורחבת"
+      >
+        {item.description}
+      </p>
+
+      {/* Footer Section */}
+      <div className="flex items-center justify-between border-t border-slate-250/10 dark:border-outline-variant/20 pt-3 mt-auto">
+        {/* Rating column */}
+        <div className="flex flex-col items-start pr-0.5">
+          <div className="flex items-center text-amber-500 gap-0.5 font-bold">
+            <span className="text-[10px] text-slate-900 dark:text-on-surface">{avgRating}</span>
+            <Star size={10} fill="currentColor" />
+            <span className="text-slate-400 dark:text-on-surface-variant/65 text-[8px] font-medium mr-0.5">({stats.count})</span>
+          </div>
+          <button 
+            onClick={() => { setReviewsItem({ ...item, reviews: stats.reviews }); setIsReviewsModalOpen(true); }}
+            className="text-[9px] text-primary hover:underline mt-0.5 font-black text-right"
+          >
+            צפה בביקורות
+          </button>
+        </div>
+
+        {/* Buttons Controls */}
+        <div className="flex items-center gap-1.5">
+          {/* Rate Button */}
+          <button 
+            onClick={() => { setFeedbackItem(item); setIsFeedbackModalOpen(true); }}
+            className={`p-1.5 rounded-lg border transition-all active:scale-[0.93] ${
+              darkMode 
+                ? 'bg-surface-variant/40 hover:bg-surface-bright text-on-surface border-outline-variant/30' 
+                : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
+            }`}
+            title="דרג כלי"
+          >
+            <Star size={12} />
+          </button>
+
+          {/* Expand Toggle */}
+          <button 
+            onClick={() => setIsExpanded(!isExpanded)}
+            className={`p-1.5 rounded-lg border transition-all active:scale-[0.93] ${
+              darkMode 
+                ? 'bg-surface-variant/40 hover:bg-surface-bright text-on-surface border-outline-variant/30' 
+                : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
+            }`}
+            title={isExpanded ? "סגור פרטים" : "פתח פרטים נוספים"}
+          >
+            {isExpanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+          </button>
+
+          {/* Launch Button */}
           {item.url && (
             <a 
               href={item.url} 
               target="_blank" 
               rel="noopener noreferrer"
-              className={`flex items-center gap-1 px-3 py-1.5 rounded-xl font-black text-[10px] transition-all duration-200 shadow-sm shrink-0 active:scale-[0.97] ${
+              className={`btn-primary px-3.5 py-1.5 rounded font-label-md text-[10px] font-bold flex items-center gap-1 transition-all shadow-sm shrink-0 active:scale-[0.95] ${
                 darkMode 
-                  ? 'bg-primary/10 hover:bg-primary text-primary hover:text-[#002e6a] border border-primary/20 hover:shadow-[0_0_12px_rgba(173,198,255,0.15)]' 
-                  : 'bg-slate-900 text-white hover:bg-blue-600 border border-slate-900 hover:border-blue-500'
+                  ? 'bg-primary/20 hover:bg-primary text-primary hover:text-[#002e6a] border border-primary/30 hover:shadow-[0_0_12px_rgba(173,198,255,0.15)]' 
+                  : 'bg-slate-900 text-white hover:bg-blue-600 border border-slate-900'
               }`}
             >
               <span>
-                {item.category === 'training' || categoryLabel === 'הדרכות ומדריכים' ? 'פתח הדרכה' : 
-                 item.category === 'updates' || categoryLabel === 'הנחיות ונהלי עבודה' ? 'לפרטים' : 
-                 'הפעל'}
+                {item.category === 'training' ? 'פתח הדרכה' : 
+                 item.category === 'updates' ? 'לפרטים' : 
+                 'הפעל כלי'}
               </span>
               <ExternalLink size={10} />
             </a>
           )}
-
-          {/* Copy Link */}
-          {item.url && (
-            <button 
-              onClick={copyLink} 
-              className={`p-2 rounded-lg border transition-all duration-200 active:scale-[0.95] ${
-                darkMode 
-                  ? 'bg-surface-variant/40 hover:bg-surface-bright text-on-surface-variant hover:text-on-surface border-outline-variant/20' 
-                  : 'bg-slate-100 hover:bg-slate-200 text-slate-500 border-slate-200'
-              }`}
-              title="העתק קישור"
-            >
-              <Copy size={12} />
-            </button>
-          )}
-
-          {/* Pin Card */}
-          <button 
-            onClick={() => togglePin(item.id)} 
-            className={`p-2 rounded-lg border transition-all duration-200 active:scale-[0.95] ${
-              isPinned 
-                ? 'bg-primary/20 text-primary border-primary/30' 
-                : darkMode 
-                  ? 'bg-surface-variant/40 hover:bg-surface-bright text-on-surface-variant hover:text-on-surface border-outline-variant/20' 
-                  : 'bg-slate-105 hover:bg-slate-200 text-slate-505 border-slate-200'
-            }`}
-            title={isPinned ? "הסר נעיצה" : "נעץ פריט"}
-          >
-            <Pin size={12} fill={isPinned ? "currentColor" : "none"} />
-          </button>
-
-          {/* Admin Controls */}
-          {isAdmin && (
-            <div className="flex items-center gap-1 border-r border-slate-200/10 dark:border-outline-variant/20 pr-2 mr-1">
-              {/* Toggle Featured */}
-              <button 
-                onClick={() => toggleGlobalFeatured(item)} 
-                className={`p-2 rounded-lg border transition-all duration-200 active:scale-[0.95] ${
-                  item.isFeatured 
-                    ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' 
-                    : darkMode 
-                      ? 'bg-surface-variant/40 hover:bg-surface-bright text-on-surface-variant hover:text-amber-400 border-outline-variant/20' 
-                      : 'bg-slate-100 hover:bg-slate-200 text-slate-550 border-slate-200'
-                }`}
-                title="מומלץ מערכת"
-              >
-                <Crown size={12} />
-              </button>
-
-              {/* Edit */}
-              <button 
-                onClick={() => { setEditingItem(item); setIsModalOpen(true); }} 
-                className={`p-2 rounded-lg border transition-all duration-200 active:scale-[0.95] ${
-                  darkMode 
-                    ? 'bg-surface-variant/40 hover:bg-surface-bright text-on-surface-variant hover:text-primary border-outline-variant/20' 
-                    : 'bg-slate-100 hover:bg-slate-200 text-slate-550 border-slate-200'
-                }`}
-                title="ערוך"
-              >
-                <Edit3 size={12} />
-              </button>
-
-              {/* Delete */}
-              <button 
-                onClick={() => handleDelete(item.id)} 
-                className={`p-2 rounded-lg border transition-all duration-200 active:scale-[0.95] ${
-                  darkMode 
-                    ? 'bg-surface-variant/40 hover:bg-red-500/20 text-on-surface-variant hover:text-red-405 border-outline-variant/20' 
-                    : 'bg-slate-100 hover:bg-red-100 text-slate-550 border-slate-200 hover:text-red-650'
-                }`}
-                title="מחק"
-              >
-                <Trash2 size={12} />
-              </button>
-            </div>
-          )}
-
-          {/* Expand Chevron Toggle */}
-          <button 
-            onClick={() => setIsExpanded(!isExpanded)}
-            className={`p-2 rounded-lg border transition-all duration-200 active:scale-[0.95] ${
-              darkMode 
-                ? 'bg-surface-variant/40 hover:bg-surface-bright text-on-surface-variant hover:text-on-surface border-outline-variant/20' 
-                : 'bg-slate-100 hover:bg-slate-200 text-slate-650 border-slate-200'
-            }`}
-            aria-label={isExpanded ? "סגור פרטים" : "פתח פרטים"}
-            title={isExpanded ? "סגור פרטים" : "פתח פרטים"}
-          >
-            {isExpanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-          </button>
         </div>
       </div>
 
-      {/* Expanded Content Drawer */}
+      {/* Expanded Details Drawer */}
       {isExpanded && (
-        <div className="mt-4 pt-4 border-t border-slate-200/10 dark:border-outline-variant/20 animate-in fade-in slide-in-from-top-2 duration-200 space-y-4 text-right relative z-10">
-          
-          {/* Main Description Text */}
-          <p className="text-slate-650 dark:text-on-surface-variant text-xs leading-relaxed font-medium">
-            {item.description}
-          </p>
-
-          {/* Image preview support */}
+        <div className="mt-2 pt-3 border-t border-slate-200/10 dark:border-outline-variant/20 animate-in fade-in slide-in-from-top-1 duration-200 text-right text-[10px] text-slate-500 dark:text-on-surface-variant leading-relaxed">
           {item.imageUrl && (
-            <div className="pt-1">
+            <div className="mb-2">
               <button 
                 onClick={() => { setViewItem(item); setIsViewModalOpen(true); }}
-                className="text-[10px] font-black text-primary hover:text-secondary hover:underline flex items-center gap-1 transition-colors"
+                className="text-[9px] font-black text-primary hover:underline"
               >
-                <span>הצג תמונה ומפרט מלא</span>
+                הצג תמונה ומפרט מלא
               </button>
             </div>
           )}
-
-          {/* Card Footer Rating & Detailed Controls Area */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-200/5 dark:border-outline-variant/10">
-            <div className="flex items-center gap-1.5 font-bold">
-              <div className="flex items-center text-amber-400">
-                <Star size={13} fill="currentColor" />
-              </div>
-              <span className="text-xs text-slate-900 dark:text-on-surface">{avgRating}</span>
-              <span className="text-[10px] text-slate-400 dark:text-on-surface-variant/60">({stats.count} דירוגים)</span>
-            </div>
-
-            <div className="flex items-center gap-2">
-              {stats.reviews.length > 0 && (
-                <button 
-                  onClick={() => { setReviewsItem({ ...item, reviews: stats.reviews }); setIsReviewsModalOpen(true); }}
-                  className={`text-[10px] font-black px-3 py-1.5 rounded-lg transition-colors ${
-                    darkMode ? 'hover:bg-surface-variant/60 text-on-surface-variant hover:text-on-surface' : 'hover:bg-slate-100 text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  {stats.reviews.length} ביקורות
-                </button>
-              )}
-              <button 
-                onClick={() => { setFeedbackItem(item); setIsFeedbackModalOpen(true); }}
-                className={`text-[10px] font-black px-3 py-1.5 rounded-xl transition-all flex items-center gap-1.5 active:scale-[0.98] ${
-                  darkMode 
-                    ? 'bg-surface-variant/40 hover:bg-surface-bright text-on-surface border border-outline-variant/30 hover:shadow-[0_0_12px_rgba(173,198,255,0.08)]' 
-                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200'
-                }`}
-              >
-                <Star size={12} />
-                <span>דרג כלי</span>
-              </button>
-            </div>
-          </div>
+          <div>מזהה כלי: <span className="font-mono">{item.id}</span></div>
+          {item.updatedAt && (
+            <div>עודכן לאחרונה: {new Date(item.updatedAt).toLocaleString('he-IL')}</div>
+          )}
         </div>
       )}
     </div>
