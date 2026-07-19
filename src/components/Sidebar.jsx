@@ -155,7 +155,7 @@ const Sidebar = ({
             />
 
             {/* Dynamic tabs from Firestore */}
-            {categories.map(cat => (
+            {categories.filter(cat => cat.id !== 'updates').map(cat => (
               <SidebarItem 
                 key={cat.id}
                 id={cat.id}

@@ -319,7 +319,7 @@ const Modals = ({
                     value={formData.category} 
                     onChange={e => setFormData({...formData, category: e.target.value})}
                   >
-                    {categories.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
+                    {categories.filter(c => c.id !== 'updates').map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
                   </select>
                 </div>
                 

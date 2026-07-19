@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { 
   ExternalLink, Trash2, Edit3, Pin, Crown, Star, Copy, Calendar, ShieldAlert, ChevronDown, ChevronUp 
 } from 'lucide-react';
+import { iconMap } from './Sidebar.jsx';
 
 const ItemCard = ({ 
   item, 
